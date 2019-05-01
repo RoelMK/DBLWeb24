@@ -1,10 +1,3 @@
-var vis = new MatrixVisualization({
-  elementId: 'canvas'
-})
+const testData = [[1, 20, 30], [20, 1, 60], [30, 60, 1]]; // Constant data for testing purposes
 
-var matrix = new AdjacencyMatrix({
-  size: 10,
-  random: true
-})
-
-vis.drawAdjacencyMatrix(matrix)
+var vis = new MatrixVisualization(testData, 'canvas');
