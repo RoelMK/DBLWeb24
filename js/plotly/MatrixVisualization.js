@@ -9,7 +9,7 @@ class MatrixVisualization {
         this.baseData = this.convertDataToPlotlyData(dataToVisualize);  // Base data: the data without any reordering
         this.orderedData = this.baseData;                               // Ordered data: the data after reordering
         this.elementID = elementID;                                     // Element ID: id of the div
-        this.colorType = 'Electric';                                    // Color type: type of color to use for the heatmap
+        this.colorscale = 'Electric';                                   // Colorscale: colorscale to use for the heatmap
         this.draw();
     }
 
