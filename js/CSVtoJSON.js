@@ -1,4 +1,8 @@
-// the following program converts a CSV file (the variable csv) into the JSON format
+/**
+ * the following program converts a CSV file (the variable csv) into the JSON format
+ * @author Julian Vink
+ * @param {text file} csv 
+ */
 function CSVtoJSON(csv) {
 	// first we split the csv file into seperate rows, then we split the first row into an array of all keys.
 	var rows = csv.split("\n");
