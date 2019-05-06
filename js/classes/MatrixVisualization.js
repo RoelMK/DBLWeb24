@@ -2,15 +2,13 @@ class MatrixVisualization {
     /**
      * Initializes the matrix, automatically draws it.
      * @author Roel Koopman
-     * @param {Matrix} dataToVisualize Converted data by @Julian (TODO: specify input format)
+     * @param {Matrix} dataToVisualize Converted data
      * @param {string} elementID ID of the div to display the visualization in
      */
     constructor(dataToVisualize, elementID) {
-        this.plot = document.getElementById(elementID);
-        this.visualizationData = [dataToVisualize.asPlotly()];   // Base data (visualizationData[0])
-        //this.orderedData = this.baseData;                               // Ordered data: the data after reordering
-        this.elementID = elementID;                                     // Element ID: id of the div
-        //this.colorscale = 'Electric';                                   // Colorscale: colorscale to use for the heatmap
+        this.plot = document.getElementById(elementID);         // Plot
+        this.visualizationData = [dataToVisualize.asPlotly()];  // Base data (visualizationData[0])
+        this.elementID = elementID;                             // Element ID: id of the div
         this.draw();
     }
 
@@ -19,8 +17,6 @@ class MatrixVisualization {
      * @author Roel Koopman
      */
     draw() {
-        //var plotlyData = this.generatePlotlyVisualizationInput();
-        //Plotly.newPlot(this.plot, plotlyData, this.generateMenus()); // Plot using Plotly
         Plotly.newPlot(this.plot, this.generateData(), this.generateMenus());
         this.setInteraction();
     }
@@ -56,12 +52,24 @@ class MatrixVisualization {
             x: 0.2,
             buttons: [{
                 method: 'restyle',
-                args: ['visible', [true, false]],
+                args: ['visible', [true, false, false, false, false]],
                 label: 'Data set 0'
             }, {
                 method: 'restyle',
-                args: ['visible', [false, true]],
+                args: ['visible', [false, true, false, false, false]],
                 label: 'Data set 1'
+            }, {
+                method: 'restyle',
+                args: ['visible', [false, false, true, false, false]],
+                label: 'Data set 2'
+            }, {
+                method: 'restyle',
+                args: ['visible', [false, false, false, true, false]],
+                label: 'Data set 3'
+            }, {
+                method: 'restyle',
+                args: ['visible', [false, false, false, false, true]],
+                label: 'Data set 4'
             }]
         }]}
     }
@@ -73,7 +81,7 @@ class MatrixVisualization {
      */
     generateData() {
         var data = [];
-        for (var i = 0; i <= 1; i++) {
+        for (var i = 0; i < 5; i++) {       // 5 data sets
             data.push(this.makeTrace(i));   // Push every dataset
         }
         return data;
@@ -103,7 +111,7 @@ class MatrixVisualization {
      */
     getZData(i) {
         if (i < this.visualizationData.length) {
-            return this.visualizationData[i];
+            return this.visualizationData[i].z;
         } else {
             return [[i, i + 1, i + 2], [2*i, 2*i, 2*i]] // Test data
         }
@@ -116,20 +124,6 @@ class MatrixVisualization {
      */
     reorder(orderType) {
         // TODO: implement
-    }
-
-    /**
-    * Converts data from @Julian into usuable data for Plotly.
-    * @author
-    * @param {*} dataToConvert Data from @Julian  TODO: what is the data type of the input data going to be?
-    * @returns Converted data
-    */
-    convertDataToPlotlyData(dataToConvert) {
-        return dataToConvert;   // TODO: implement conversion
-
-        // !!!
-        // Done! See Matrix.asPlotly()
-        // !!!
     }
 
     /**

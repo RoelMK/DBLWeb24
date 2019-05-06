@@ -8,7 +8,7 @@ class MatrixInteraction {   // https://plot.ly/javascript/plotlyjs-events/
     }
 
     matrixClick(data) {    // https://plot.ly/javascript/click-events/
-
+        
     }
     
     matrixHover(data) {    // https://plot.ly/javascript/hover-events/
