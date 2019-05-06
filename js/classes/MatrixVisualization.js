@@ -2,12 +2,12 @@ class MatrixVisualization {
     /**
      * Initializes the matrix, automatically draws it.
      * @author Roel Koopman
-     * @param {*} dataToVisualize Converted data by @Julian (TODO: specify input format)
+     * @param {Matrix} dataToVisualize Converted data by @Julian (TODO: specify input format)
      * @param {string} elementID ID of the div to display the visualization in
      */
     constructor(dataToVisualize, elementID) {
         this.plot = document.getElementById(elementID);
-        this.visualizationData = [this.convertDataToPlotlyData(dataToVisualize)];   // Base data (visualizationData[0])
+        this.visualizationData = [dataToVisualize.asPlotly()];   // Base data (visualizationData[0])
         //this.orderedData = this.baseData;                               // Ordered data: the data after reordering
         this.elementID = elementID;                                     // Element ID: id of the div
         //this.colorscale = 'Electric';                                   // Colorscale: colorscale to use for the heatmap
@@ -19,7 +19,7 @@ class MatrixVisualization {
      * @author Roel Koopman
      */
     draw() {
-        //var plotlyData = this.generatePlotlyVisualizationInput(); 
+        //var plotlyData = this.generatePlotlyVisualizationInput();
         //Plotly.newPlot(this.plot, plotlyData, this.generateMenus()); // Plot using Plotly
         Plotly.newPlot(this.plot, this.generateData(), this.generateMenus());
         this.setInteraction();
@@ -76,7 +76,7 @@ class MatrixVisualization {
         for (var i = 0; i <= 1; i++) {
             data.push(this.makeTrace(i));   // Push every dataset
         }
-        return data; 
+        return data;
     }
 
     /**
@@ -110,7 +110,7 @@ class MatrixVisualization {
     }
 
         /**
-     * Reorder the data 
+     * Reorder the data
      * @author
      * @param {*} orderType Type to reorder the data into
      */
@@ -126,6 +126,10 @@ class MatrixVisualization {
     */
     convertDataToPlotlyData(dataToConvert) {
         return dataToConvert;   // TODO: implement conversion
+
+        // !!!
+        // Done! See Matrix.asPlotly()
+        // !!!
     }
 
     /**
