@@ -135,14 +135,13 @@ class Matrix {
   }
 
   /**
-   * Use the reorder library to sort by optimal leaf order. The object returned
-   * is a clone of the current one, nothing is done in-place.
-   * @author Jarno
-   * @return {Matrix} Reordered clone.
+   * Reorder the data and labels based on a given permutation. This gets
+   * calculated by functions like this.optimalLeafOrder
+   * @param  {number[]} permutation
+   * @return {Matrix} - A reordered clone of this matrix.
    */
-  reorderOptimalLeafOrder() {
+  permute(permutation) {
     var clone = this.clone()
-    var permutation = reorder.optimal_leaf_order()(clone.data)
     clone.data = reorder.permute(clone.data, permutation)
     clone.setTailLabels(
       reorder.permute(clone.tailLabels, permutation)
@@ -151,5 +150,15 @@ class Matrix {
       reorder.permute(clone.headLabels, permutation)
     )
     return clone
+  }
+
+  /**
+   * Use the reorder library to sort by optimal leaf order.
+   * @author Jarno
+   * @return {Matrix} Reordered clone.
+   */
+  optimalLeafOrder() {
+    var permutation = reorder.optimal_leaf_order()(this.data)
+    return this.permute(permutation)
   }
 }
