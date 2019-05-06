@@ -29,17 +29,21 @@ class Matrix {
     for (var x = 0; x < data.length; x++) {
       this.data.push(data[x].slice())
     }
+
+    // Set some default labels, we always assume they are defined.
+    this.setDefaultLabels()
   }
 
   /**
    * Fill the matrix with random data of size 10x10 for debug purposes.
    * @author Jarno
+   * @param {number} size - Dimensions of the matrix.
    */
-  randomize() {
+  randomize(size = 10) {
     var data = []
-    for (var x = 0; x < 10; x++) {
+    for (var x = 0; x < size; x++) {
       data[x] = []
-      for (var y = 0; y < 10; y++) {
+      for (var y = 0; y < size; y++) {
         data[x].push(Math.random())
       }
     }
@@ -83,10 +87,10 @@ class Matrix {
     var tailLabels = []
     var headLabels = []
     for (var x = 0; x < this.data.length; x++) {
-      tailLabels.push(x.toString())
+      tailLabels.push('Node ' + x.toString())
     }
     for (var y = 0; y < this.data[0].length; y++) {
-      headLabels.push(y.toString())
+      headLabels.push('Node' + y.toString())
     }
     this.setTailLabels(tailLabels)
     this.setHeadLabels(headLabels)
@@ -109,9 +113,9 @@ class Matrix {
    */
   asPlotly() {
     return {
-      z: this.data.slice(),       // Not sure if the array copies are neccesary,
-      x: this.headLabels.slice(), // but do them just in case.
-      y: this.tailLabels.slice(),
+      z: this.data,
+      x: this.headLabels,
+      y: this.tailLabels,
       type: 'heatmap'
     }
   }
@@ -139,18 +143,13 @@ class Matrix {
   reorderOptimalLeafOrder() {
     var clone = this.clone()
     var permutation = reorder.optimal_leaf_order()(clone.data)
-    clone.data = reorder.stablepermute(clone.data, permutation)
-
-    if (clone.tailLabels) {
-      clone.setTailLabels(
-        reorder.permute_inplace(clone.tailLabels, permutation)
-      )
-    }
-    if (clone.headLabels) {
-      clone.setHeadLabels(
-        reorder.permute_inplace(clone.headLabels, permutation)
-      )
-    }
+    clone.data = reorder.permute(clone.data, permutation)
+    clone.setTailLabels(
+      reorder.permute(clone.tailLabels, permutation)
+    )
+    clone.setHeadLabels(
+      reorder.permute(clone.headLabels, permutation)
+    )
     return clone
   }
 }
