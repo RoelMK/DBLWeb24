@@ -8,6 +8,7 @@ class MatrixVisualization {
     constructor(dataToVisualize, elementID) {
         this.plot = document.getElementById(elementID);
         this.visualizationData = [dataToVisualize.asPlotly()];   // Base data (visualizationData[0])
+        console.log(this.visualizationData)
         //this.orderedData = this.baseData;                               // Ordered data: the data after reordering
         this.elementID = elementID;                                     // Element ID: id of the div
         //this.colorscale = 'Electric';                                   // Colorscale: colorscale to use for the heatmap
@@ -21,7 +22,7 @@ class MatrixVisualization {
     draw() {
         //var plotlyData = this.generatePlotlyVisualizationInput();
         //Plotly.newPlot(this.plot, plotlyData, this.generateMenus()); // Plot using Plotly
-        Plotly.newPlot(this.plot, this.generateData(), this.generateMenus());
+        Plotly.newPlot(this.plot, this.visualizationData, this.generateMenus());
         this.setInteraction();
     }
 
