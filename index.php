@@ -10,6 +10,7 @@
 		<title>2IOA0 Group 24</title>
 
 		<!-- Script stuff -->
+		<script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
 		<script src="./js/libraries/science.v1.js"></script> <!-- reorder.js dependency -->
 		<script src="./js/libraries/tiny-queue.js"></script> <!-- reorder.js dependency -->
 		<script src="./js/libraries/reorder.v1.js"></script>
