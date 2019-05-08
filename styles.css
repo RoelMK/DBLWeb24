@@ -11,6 +11,8 @@ light green: c0dfa1
 	scroll-behavior: smooth;
 }
 body {
+	height: 100%;
+	width: 100%;
 	background-color: #82a3a1;
 	display: grid;
 	grid-template-columns: 100%;
@@ -30,13 +32,15 @@ body {
 #firstSection img {
 	grid-area: video;
 	height: 80%;
-	width: 80%;
+	width: 95%;
 	overflow: hidden;
 	vertical-align: top;
 	align-self: top;
 
 }
 #firstSection #textSection {
+	height: auto;
+	width: auto;
 	vertical-align: top;
 	overflow: hidden;
 	/*white-space: nowrap;*/
@@ -71,7 +75,7 @@ body {
   	text-decoration: none;
 }
 #secondSection {
-	height: 95%;
+	height: 100%;
 	width: 70%;
 	grid-area: secondSection;
 	display: grid;
@@ -87,22 +91,34 @@ body {
 	background-color: #c0dfa1;
 }
 #secondSection #PHPResult {
+	height: auto;
+	width: auto;
 	grid-area: PHPResult;
 }
 #secondSection #anchSection2 {
+	height: auto;
+	width: auto;
 	grid-area: anchSect2;
 }
 #secondSection h1 {
+	height: auto;
+	width: auto;
 	grid-area: titleSect2;
 	padding: 0 0 0 0;
 }
 #secondSection #textSect2 {
+	height: auto;
+	width: auto;
 	grid-area: textSect2;
 }
 #secondSection #imgSect2 {
+	height: auto;
+	width: auto;
 	grid-area: imgSect2;
 }
 #secondSection a {
+	height: auto;
+	width: auto;
 	border-radius: 30px 30px 30px 30px;
 	color: black;
 	font-size: 32px;

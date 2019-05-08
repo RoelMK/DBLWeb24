@@ -6,7 +6,7 @@
 <!-- Below code was written by Jeroen Gijsbers -->
 <html lang="html5">
 	<head>
-		<link href="CSS/styles.css" rel="stylesheet">
+		<link href="styles.css" rel="stylesheet">
 		<title>2IOA0 Group 24</title>
 
 		<!-- Script stuff -->
