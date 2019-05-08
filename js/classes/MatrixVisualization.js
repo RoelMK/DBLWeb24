@@ -7,17 +7,13 @@ class MatrixVisualization {
      */
     constructor(dataToVisualize, elementID) {
         this.plot = document.getElementById(elementID);         // Plot
-
-        // visualizationData[i] -- contains data for matrix visualization
-        this.visualizationData = [
-            dataToVisualize.asPlotly(),                         // i=0: base data
-            dataToVisualize.optimalLeafOrder().asPlotly()       // i=1: optimal leaf order
+        this.visualizationData = [                              // visualizationData[i] -- contains data for matrix visualization
+            dataToVisualize.asPlotly(),                         // i=0: Base data
+            //dataToVisualize.optimalLeafOrder().asPlotly()     // i=1: Optimal leaf order
+            //dataToVisualize.barycenterOrder().asPlotly()      // i=2: Bary center order
+            //dataToVisualize.sortOrder().asPlotly()            // i=3: Sort order
+            //dataToVisualize.pcaOrder().asPlotly()             // i=4: PCA order
         ];  
-        // i=2: TODO
-        // i=3: TODO
-        // i=4: TODO
-        // i=5: TODO
-
         this.draw();    // Draw the matrix
     }
 
@@ -25,63 +21,108 @@ class MatrixVisualization {
      * Draw the matrix
      * @author Roel Koopman
      */
-    draw() {
-        Plotly.newPlot(this.plot, this.generateData(), this.generateMenus());
+    draw() {       
+        Plotly.newPlot(this.plot, this.generateData(), this.generateLayout());
         this.setInteraction();
     }
 
     /**
-     * Generate the menus to show in the visualization
+     * Generate the layout of the visualization
      * @author Roel Koopman
-     * @returns Menus (for plotly)
+     * @returns Layout (for plotly)
      */
-    generateMenus() {
-        return {updatemenus: [
-        {   // Menu 1: color
-            xanchor: 'left',
-            yanchor: 'top',
-            y: 1.1,
-            x: 0,
-            buttons: [{
-                method: 'restyle',
-                args: ['colorscale', 'Electric'],
-                label: 'Electric'
-            }, {
-                method: 'restyle',
-                args: ['colorscale', 'Greens'],
-                label: 'Greens'
-            }, {
-                method: 'restyle',
-                args: ['colorscale', 'Greys'],
-                label: 'Greys'
+    generateLayout() {
+        return {
+            title: 'Adjacency Matrix',
+            annotations: [],
+            xaxis: {
+              ticks: '',
+              tickfont: {
+                size: 8
+                }
+            },
+            yaxis: {
+              ticks: '',
+              side: 'right', 
+              tickfont: {
+                  size: 8
+              }
+            },
+            updatemenus: [
+            {   // Menu 1: color
+                xanchor: 'left',
+                yanchor: 'top',
+                y: 1.1,
+                x: 0,
+                buttons: [{
+                   method: 'restyle',
+                    args: ['colorscale', 'Blackbody'],
+                    label: 'Blackbody'
+                }, {
+                    method: 'restyle',
+                    args: ['colorscale', 'Electric'],
+                    label: 'Electric'
+                }, {
+                    method: 'restyle',
+                    args: ['colorscale', 'Greens'],
+                    label: 'Greens'
+                }, {
+                    method: 'restyle',
+                    args: ['colorscale', 'Greys'],
+                    label: 'Greys'
+                }, {
+                    method: 'restyle',
+                    args: ['colorscale', 'Earth'],
+                    label: 'Earth'
+                }, {
+                    method: 'restyle',
+                    args: ['colorscale', 'Bluered'],
+                    label: 'Bluered'
+                }, {
+                    method: 'restyle',
+                    args: ['colorscale', 'Portland'],
+                    label: 'Portland'
+                }, {
+                    method: 'restyle',
+                    args: ['colorscale', 'Picnic'],
+                    label: 'Picnic'
+                }, {
+                    method: 'restyle',
+                    args: ['colorscale', 'Jet'],
+                    label: 'Jet'
+                }, {
+                    method: 'restyle',
+                    args: ['colorscale', 'Hot'],
+                    label: 'Hot'
+                }]
+            }, {    // Menu 2: data set
+                xanchor: 'left',
+                yanchor: 'top',
+                y: 1.1,
+                x: 0.24,
+                buttons: [{
+                    method: 'restyle',
+                    args: ['visible', [true, false, false, false, false]],
+                    label: 'Base data' 
+                }, {
+                    method: 'restyle',
+                    args: ['visible', [false, true, false, false, false]],
+                    label: 'Optimal leaf order'
+                }, {
+                    method: 'restyle',
+                    args: ['visible', [false, false, true, false, false]],
+                    label: 'Bary center order'
+                }, {
+                    method: 'restyle',
+                    args: ['visible', [false, false, false, true, false]],
+                    label: 'Sort order'
+                }, {
+                    method: 'restyle',
+                    args: ['visible', [false, false, false, false, true]],
+                    label: 'PCA order'
+                }]
             }]
-        }, {    // Menu 2: data set
-            xanchor: 'left',
-            yanchor: 'top',
-            y: 1.1,
-            x: 0.2,
-            buttons: [{
-                method: 'restyle',
-                args: ['visible', [true, false, false, false, false]],
-                label: 'Base data' 
-            }, {
-                method: 'restyle',
-                args: ['visible', [false, true, false, false, false]],
-                label: 'Optimal leaf order'
-            }, {
-                method: 'restyle',
-                args: ['visible', [false, false, true, false, false]],
-                label: 'Data set 2'
-            }, {
-                method: 'restyle',
-                args: ['visible', [false, false, false, true, false]],
-                label: 'Data set 3'
-            }, {
-                method: 'restyle',
-                args: ['visible', [false, false, false, false, true]],
-                label: 'Data set 4'
-            }]
-        }]}
+        }
     }
 
     /**
@@ -109,10 +150,13 @@ class MatrixVisualization {
             z: xyz.z,
             x: xyz.x,
             y: xyz.y,
-            visible: i === 0,       // Display data for default (i=0)
-            colorscale: 'Electric', // Default
+            visible: i === 0,           // Display data for default (i=0)
+            colorscale: 'Blackbody',    // Default
             name: 'Data set ' + i,
             type: 'heatmap',
+            colorbar: {x: -0.15},
+            xgap: 0.05,
+            ygap: 0.05
         };
     }
 
@@ -131,10 +175,8 @@ class MatrixVisualization {
             };
         } else {
             return {
-                z: [[i, i + 1, i + 2], [2*i, 2*i, 2*i]],
-                x: [1, 2],
-                y: [1, 2, 3],
-            };  // Test data
+                z: [[i, i + 1, i + 2], [2*i, 2*i, 2*i]]
+            };  
         }
     }
 
