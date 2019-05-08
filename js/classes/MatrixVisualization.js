@@ -11,7 +11,7 @@ class MatrixVisualization {
         // visualizationData[i] -- contains data for matrix visualization
         this.visualizationData = [
             dataToVisualize.asPlotly(),                         // i=0: base data
-            dataToVisualize.optimalLeafOrder().asPlotly()       // i=1: optimal leaf order
+            //dataToVisualize.optimalLeafOrder().asPlotly()       // i=1: optimal leaf order
         ];  
         // i=2: TODO
         // i=3: TODO
