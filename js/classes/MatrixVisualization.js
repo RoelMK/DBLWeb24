@@ -7,17 +7,13 @@ class MatrixVisualization {
      */
     constructor(dataToVisualize, elementID) {
         this.plot = document.getElementById(elementID);         // Plot
-
-        // visualizationData[i] -- contains data for matrix visualization
-        this.visualizationData = [
-            dataToVisualize.asPlotly(),                         // i=0: base data
-            //dataToVisualize.optimalLeafOrder().asPlotly()       // i=1: optimal leaf order
+        this.visualizationData = [                              // visualizationData[i] -- contains data for matrix visualization
+            dataToVisualize.asPlotly(),                         // i=0: Base data
+            //dataToVisualize.optimalLeafOrder().asPlotly()     // i=1: Optimal leaf order
+            //dataToVisualize.barycenterOrder().asPlotly()      // i=2: Bary center order
+            //dataToVisualize.sortOrder().asPlotly()            // i=3: Sort order
+            //dataToVisualize.pcaOrder().asPlotly()             // i=4: PCA order
         ];  
-        // i=2: TODO
-        // i=3: TODO
-        // i=4: TODO
-        // i=5: TODO
-
         this.draw();    // Draw the matrix
     }
 
@@ -47,7 +43,7 @@ class MatrixVisualization {
             },
             yaxis: {
               ticks: '',
-              side: 'right', // automargin: true
+              side: 'right', 
               tickfont: {
                   size: 8
               }
@@ -60,22 +56,50 @@ class MatrixVisualization {
                 x: 0,
                 buttons: [{
                    method: 'restyle',
-                    args: ['colorscale', 'Greens'],
-                    label: 'Greens'
+                    args: ['colorscale', 'Blackbody'],
+                    label: 'Blackbody'
                 }, {
                     method: 'restyle',
                     args: ['colorscale', 'Electric'],
                     label: 'Electric'
                 }, {
                     method: 'restyle',
+                    args: ['colorscale', 'Greens'],
+                    label: 'Greens'
+                }, {
+                    method: 'restyle',
                     args: ['colorscale', 'Greys'],
                     label: 'Greys'
+                }, {
+                    method: 'restyle',
+                    args: ['colorscale', 'Earth'],
+                    label: 'Earth'
+                }, {
+                    method: 'restyle',
+                    args: ['colorscale', 'Bluered'],
+                    label: 'Bluered'
+                }, {
+                    method: 'restyle',
+                    args: ['colorscale', 'Portland'],
+                    label: 'Portland'
+                }, {
+                    method: 'restyle',
+                    args: ['colorscale', 'Picnic'],
+                    label: 'Picnic'
+                }, {
+                    method: 'restyle',
+                    args: ['colorscale', 'Jet'],
+                    label: 'Jet'
+                }, {
+                    method: 'restyle',
+                    args: ['colorscale', 'Hot'],
+                    label: 'Hot'
                 }]
             }, {    // Menu 2: data set
                 xanchor: 'left',
                 yanchor: 'top',
                 y: 1.1,
-                x: 0.2,
+                x: 0.24,
                 buttons: [{
                     method: 'restyle',
                     args: ['visible', [true, false, false, false, false]],
@@ -87,15 +111,15 @@ class MatrixVisualization {
                 }, {
                     method: 'restyle',
                     args: ['visible', [false, false, true, false, false]],
-                    label: 'Data set 2'
+                    label: 'Bary center order'
                 }, {
                     method: 'restyle',
                     args: ['visible', [false, false, false, true, false]],
-                    label: 'Data set 3'
+                    label: 'Sort order'
                 }, {
                     method: 'restyle',
                     args: ['visible', [false, false, false, false, true]],
-                    label: 'Data set 4'
+                    label: 'PCA order'
                 }]
             }]
         }
@@ -126,8 +150,8 @@ class MatrixVisualization {
             z: xyz.z,
             x: xyz.x,
             y: xyz.y,
-            visible: i === 0,       // Display data for default (i=0)
-            colorscale: 'Greens',   // Default
+            visible: i === 0,           // Display data for default (i=0)
+            colorscale: 'Blackbody',    // Default
             name: 'Data set ' + i,
             type: 'heatmap',
             colorbar: {x: -0.15},
@@ -151,10 +175,8 @@ class MatrixVisualization {
             };
         } else {
             return {
-                z: [[i, i + 1, i + 2], [2*i, 2*i, 2*i]],
-                x: [1, 2],
-                y: [1, 2, 3],
-            };  // Test data
+                z: [[i, i + 1, i + 2], [2*i, 2*i, 2*i]]
+            };  
         }
     }
 
