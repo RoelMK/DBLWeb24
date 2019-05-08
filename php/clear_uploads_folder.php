@@ -8,6 +8,6 @@
 		unlink($file); // delete file
 	}
 	
-	$locatie = "index.php";
+	$locatie = "../index.php";
 	header("location:$locatie");
 ?>
