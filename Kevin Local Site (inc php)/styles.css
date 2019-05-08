@@ -1,0 +1,119 @@
+/* Below code was written by Jeroen Gijsbers */
+
+
+/* for global declarations, use this following box */
+* {
+	margin: 0;
+	padding: 0;
+	font-family: Helvetica;
+	scroll-behavior: smooth;
+}
+body {
+	background: #eeeeee;
+	padding: 0px;
+
+}
+h1 {
+	font-family: Helvetica;
+	color: #333333;
+	font-size: 50px;
+}
+footer {
+	position: relative;
+	clear: both;
+	height: 40px;
+	border: solid 4px black;
+	background: #eeeeee;
+	margin: -40px 0px 0px 0px;
+}
+/* margin: top right bottom left; */
+/* UPLOAD AND FIRST VISUALIZATION */
+#secondSection {
+	padding: 100px 100px;
+	height: 600px;
+	background-color: #545e6d;
+
+}
+#secondSection #vis1 #form {
+	float: left;
+	padding: 30px 0 0 0;
+
+}
+#secondSection #vis1 #canvas {
+	width: 600px;
+	height: 600px;
+	float: right;
+
+}
+#thirdSection {
+	height: 600px;
+	width: 100%;
+	padding: 100px 300px;
+}
+#thirdSection ul {
+	margin: 0 0 0 40px;
+}
+/* PROFILE AND IMAGE BLOCKS */
+#profile_block {
+	padding: 20px 30px 0px;
+	text-align: center;
+	height: 680px;
+  	background-color: #dddddd;
+  	text-overflow: auto;
+
+}
+.backgrImage {
+	object-fit: fill;
+	float: left;
+	width: 1100px;
+	height: 700px;
+}
+/* NAVIGATION BAR */
+#dividerNav {
+	width: 1px;
+	height: 100%;
+}
+#nav {
+	width: 100%;
+	/*position: fixed; */
+	overflow: auto;
+  	list-style-type: none;
+ 	margin: 0px; 	
+ 	padding: 8px 200px 32px;
+  	background-color: #dddddd;
+}
+#nav li {
+	float: left;
+	border-right: solid 4px #333;
+}
+#nav li a {
+  color: #000;
+  padding: 16px 32px;
+  text-decoration: none;
+  display: block;
+  background-color: #dddddd;
+}
+#nav li a:hover {
+  background-color: #555;
+  color: white;
+}
+
+
+/* to select a div with ID "tag":
+#tag {
+	
+}
+to select a div with class "class":
+.class {
+	
+}
+*/
+
+/* DESCENDANT SELECTORS FROM HERE ON */
+/*
+.class DESCENDANT DESCENDANT etc {
+	
+}
+*/
+ansform: translateY( -500px );
+}
