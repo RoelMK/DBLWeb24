@@ -44,7 +44,7 @@
 			<h1>Visualizations</h1>
 			<p id="textSect2">This text will explain a bit about these visualisations</p>
 			<img src="images/screenshot.jpg" id="imgSect2" alt="This is a preview of the visualisation you are about to see">
-			<form action="upload_code.php" method="post" enctype="multipart/form-data">Select file to upload: <br> 
+			<form action="php/upload_code.php" method="post" enctype="multipart/form-data">Select file to upload: <br> 
 				<input type="file" name="fileToUpload" id="fileToUpload">
 				<input type="submit" value="Upload csv file" name="submit">
 			</form>
