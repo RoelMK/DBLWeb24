@@ -79,6 +79,14 @@
 				<li><a href="People/JOttens.html">Jarno Ottens</a></li>
 				<li><a href="People/JVink.html">Julian Vink</a></li>
 			</ul>
+			Kevin's link list (to be implemented on different places)<br>
+			<a href = "php/clear_uploads_folder.php"> clear uploads folder </a> For later use <br>
+			<a href = "php/generate_share_code.php"> generate share code </a> For later use   <br>
+			<a href = "php/generate_share_code.php"> generate share code </a> For later use   <br>
+			<form action="php/load_share_code.php" method="post">Enter share code: <br> <!-- kevins work -->
+				<input type="text" name="code"> <br>
+				<input type="submit" value="Enter the code" name="submit">
+			</form>
 		</div>
 	</body>
 </html>
