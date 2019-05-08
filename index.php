@@ -1,6 +1,6 @@
 <?php
 	//sessie start etc.
-	include ("setup.inc.php"); 
+	include ("php/setup.inc.php"); 
 ?>
 
 <!-- Below code was written by Jeroen Gijsbers -->
