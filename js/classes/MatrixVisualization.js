@@ -2,14 +2,23 @@ class MatrixVisualization {
     /**
      * Initializes the matrix, automatically draws it.
      * @author Roel Koopman
-     * @param {Matrix} dataToVisualize Converted data
+     * @param {Matrix} dataToVisualize Converted unordered data
      * @param {string} elementID ID of the div to display the visualization in
      */
     constructor(dataToVisualize, elementID) {
         this.plot = document.getElementById(elementID);         // Plot
-        this.visualizationData = [dataToVisualize.asPlotly()];  // Base data (visualizationData[0])
-        this.elementID = elementID;                             // Element ID: id of the div
-        this.draw();
+
+        // visualizationData[i] -- contains data for matrix visualization
+        this.visualizationData = [
+            dataToVisualize.asPlotly(),                         // i=0: base data
+            dataToVisualize.optimalLeafOrder().asPlotly()       // i=1: optimal leaf order
+        ];  
+        // i=2: TODO
+        // i=3: TODO
+        // i=4: TODO
+        // i=5: TODO
+
+        this.draw();    // Draw the matrix
     }
 
     /**
@@ -24,6 +33,7 @@ class MatrixVisualization {
     /**
      * Generate the menus to show in the visualization
      * @author Roel Koopman
+     * @returns Menus (for plotly)
      */
     generateMenus() {
         return {updatemenus: [
@@ -53,11 +63,11 @@ class MatrixVisualization {
             buttons: [{
                 method: 'restyle',
                 args: ['visible', [true, false, false, false, false]],
-                label: 'Data set 0'
+                label: 'Base data' 
             }, {
                 method: 'restyle',
                 args: ['visible', [false, true, false, false, false]],
-                label: 'Data set 1'
+                label: 'Optimal leaf order'
             }, {
                 method: 'restyle',
                 args: ['visible', [false, false, true, false, false]],
@@ -81,7 +91,7 @@ class MatrixVisualization {
      */
     generateData() {
         var data = [];
-        for (var i = 0; i < 5; i++) {       // 5 data sets
+        for (var i = 0; i < 5; i++) {       // 5 data sets (every ordering, see definition in comment in the constructor)
             data.push(this.makeTrace(i));   // Push every dataset
         }
         return data;
@@ -94,8 +104,11 @@ class MatrixVisualization {
      * @returns Data for the specified ID
      */
     makeTrace(i) {
+        var xyz = this.getXYZData(i);
         return {
-            z: this.getZData(i),
+            z: xyz.z,
+            x: xyz.x,
+            y: xyz.y,
             visible: i === 0,       // Display data for default (i=0)
             colorscale: 'Electric', // Default
             name: 'Data set ' + i,
@@ -104,26 +117,25 @@ class MatrixVisualization {
     }
 
     /**
-     * Get the Z-data belonging to an ID
+     * Get the xyz-data belonging to an ID
      * @author Roel Koopman
      * @param {number} i ID of the dataset
-     * @returns Z-data
+     * @returns x,y,z-data
      */
-    getZData(i) {
+    getXYZData(i) {
         if (i < this.visualizationData.length) {
-            return this.visualizationData[i].z;
+            return {
+                z: this.visualizationData[i].z,
+                x: this.visualizationData[i].x,
+                y: this.visualizationData[i].y,
+            };
         } else {
-            return [[i, i + 1, i + 2], [2*i, 2*i, 2*i]] // Test data
+            return {
+                z: [[i, i + 1, i + 2], [2*i, 2*i, 2*i]],
+                x: [1, 2],
+                y: [1, 2, 3],
+            };  // Test data
         }
-    }
-
-        /**
-     * Reorder the data
-     * @author
-     * @param {*} orderType Type to reorder the data into
-     */
-    reorder(orderType) {
-        // TODO: implement
     }
 
     /**
