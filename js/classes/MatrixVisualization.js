@@ -25,63 +25,80 @@ class MatrixVisualization {
      * Draw the matrix
      * @author Roel Koopman
      */
-    draw() {
-        Plotly.newPlot(this.plot, this.generateData(), this.generateMenus());
+    draw() {       
+        Plotly.newPlot(this.plot, this.generateData(), this.generateLayout());
         this.setInteraction();
     }
 
     /**
-     * Generate the menus to show in the visualization
+     * Generate the layout of the visualization
      * @author Roel Koopman
-     * @returns Menus (for plotly)
+     * @returns Layout (for plotly)
      */
-    generateMenus() {
-        return {updatemenus: [
-        {   // Menu 1: color
-            xanchor: 'left',
-            yanchor: 'top',
-            y: 1.1,
-            x: 0,
-            buttons: [{
-                method: 'restyle',
-                args: ['colorscale', 'Electric'],
-                label: 'Electric'
-            }, {
-                method: 'restyle',
-                args: ['colorscale', 'Greens'],
-                label: 'Greens'
-            }, {
-                method: 'restyle',
-                args: ['colorscale', 'Greys'],
-                label: 'Greys'
+    generateLayout() {
+        return {
+            title: 'Adjacency Matrix',
+            annotations: [],
+            xaxis: {
+              ticks: '',
+              tickfont: {
+                size: 8
+                }
+            },
+            yaxis: {
+              ticks: '',
+              side: 'right', // automargin: true
+              tickfont: {
+                  size: 8
+              }
+            },
+            updatemenus: [
+            {   // Menu 1: color
+                xanchor: 'left',
+                yanchor: 'top',
+                y: 1.1,
+                x: 0,
+                buttons: [{
+                   method: 'restyle',
+                    args: ['colorscale', 'Greens'],
+                    label: 'Greens'
+                }, {
+                    method: 'restyle',
+                    args: ['colorscale', 'Electric'],
+                    label: 'Electric'
+                }, {
+                    method: 'restyle',
+                    args: ['colorscale', 'Greys'],
+                    label: 'Greys'
+                }]
+            }, {    // Menu 2: data set
+                xanchor: 'left',
+                yanchor: 'top',
+                y: 1.1,
+                x: 0.2,
+                buttons: [{
+                    method: 'restyle',
+                    args: ['visible', [true, false, false, false, false]],
+                    label: 'Base data' 
+                }, {
+                    method: 'restyle',
+                    args: ['visible', [false, true, false, false, false]],
+                    label: 'Optimal leaf order'
+                }, {
+                    method: 'restyle',
+                    args: ['visible', [false, false, true, false, false]],
+                    label: 'Data set 2'
+                }, {
+                    method: 'restyle',
+                    args: ['visible', [false, false, false, true, false]],
+                    label: 'Data set 3'
+                }, {
+                    method: 'restyle',
+                    args: ['visible', [false, false, false, false, true]],
+                    label: 'Data set 4'
+                }]
             }]
-        }, {    // Menu 2: data set
-            xanchor: 'left',
-            yanchor: 'top',
-            y: 1.1,
-            x: 0.2,
-            buttons: [{
-                method: 'restyle',
-                args: ['visible', [true, false, false, false, false]],
-                label: 'Base data' 
-            }, {
-                method: 'restyle',
-                args: ['visible', [false, true, false, false, false]],
-                label: 'Optimal leaf order'
-            }, {
-                method: 'restyle',
-                args: ['visible', [false, false, true, false, false]],
-                label: 'Data set 2'
-            }, {
-                method: 'restyle',
-                args: ['visible', [false, false, false, true, false]],
-                label: 'Data set 3'
-            }, {
-                method: 'restyle',
-                args: ['visible', [false, false, false, false, true]],
-                label: 'Data set 4'
-            }]
-        }]}
+        }
     }
 
     /**
@@ -110,9 +127,12 @@ class MatrixVisualization {
             x: xyz.x,
             y: xyz.y,
             visible: i === 0,       // Display data for default (i=0)
-            colorscale: 'Electric', // Default
+            colorscale: 'Greens',   // Default
             name: 'Data set ' + i,
             type: 'heatmap',
+            colorbar: {x: -0.15},
+            xgap: 0.05,
+            ygap: 0.05
         };
     }
 
