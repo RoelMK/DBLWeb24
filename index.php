@@ -1,6 +1,6 @@
 <?php
 	//sessie start etc.
-	include ("setup.inc.php"); 
+	include ("php/setup.inc.php"); 
 ?>
 
 <!-- Below code was written by Jeroen Gijsbers -->
@@ -44,7 +44,7 @@
 			<h1>Visualizations</h1>
 			<p id="textSect2">This text will explain a bit about these visualisations</p>
 			<img src="images/screenshot.jpg" id="imgSect2" alt="This is a preview of the visualisation you are about to see">
-			<form action="upload_code.php" method="post" enctype="multipart/form-data">Select file to upload: <br> 
+			<form action="php/upload_code.php" method="post" enctype="multipart/form-data">Select file to upload: <br> 
 				<input type="file" name="fileToUpload" id="fileToUpload">
 				<input type="submit" value="Upload csv file" name="submit">
 			</form>
@@ -79,6 +79,14 @@
 				<li><a href="People/JOttens.html">Jarno Ottens</a></li>
 				<li><a href="People/JVink.html">Julian Vink</a></li>
 			</ul>
+			Kevin's link list (to be implemented on different places)<br>
+			<a href = "php/clear_uploads_folder.php"> clear uploads folder </a> For later use <br>
+			<a href = "php/generate_share_code.php"> generate share code </a> For later use   <br>
+			<a href = "php/generate_share_code.php"> generate share code </a> For later use   <br>
+			<form action="php/load_share_code.php" method="post">Enter share code: <br> <!-- kevins work -->
+				<input type="text" name="code"> <br>
+				<input type="submit" value="Enter the code" name="submit">
+			</form>
 		</div>
 	</body>
 </html>

@@ -1,6 +1,6 @@
 <?php
 	//sessie start etc.
-	include ("php/setup.inc.php");
+	include ("setup.inc.php");
 
 	$target_dir = "Uploads/";
 	$target_file = $target_dir . basename($_FILES["fileToUpload"]["name"]);
@@ -11,7 +11,7 @@
 	// Allow certain file formats and no empty's
 	if($fileType != "csv") {
 		$_SESSION["upload_error"] = "Please upload a csv file";
-		$locatie = "index.php#anchorVis1";
+		$locatie = "../index.php#anchSection2";
 		header("location:$locatie");
 
 		echo "If you see this, please report. #1";
@@ -22,7 +22,7 @@
 	else if (file_exists($target_file)) {
 		$_SESSION["file_name"] = $target_file;
 		$_SESSION["upload_error"] = "";
-		$locatie = "index.php#anchorVis1";
+		$locatie = "../index.php#anchSection2";
 		header("location:$locatie");
 
 		echo "If you see this, please report. #2";
@@ -31,7 +31,7 @@
 
 	// Check if $uploadOk is set to 0 by an error
 	if ($uploadOk == 0) {
-		$locatie = "index.php#anchorVis1";
+		$locatie = "../index.php#anchSection2";
 		header("location:$locatie");
 
 		echo "If you see this, please report. #3";
@@ -40,14 +40,14 @@
 		if (move_uploaded_file($_FILES["fileToUpload"]["tmp_name"], $target_file)) {
 			$_SESSION["file_name"] = $target_file;
 			$_SESSION["upload_error"] = "";
-			$locatie = "index.php#anchorVis1";
+			$locatie = "../index.php#anchSection2";
 			header("location:$locatie");
 
 			echo "If you see this, please report. #4";
 
 		} else {
 			$_SESSION["upload_error"] = "Sorry, there was an error uploading your file. Please try again. If this keeps happening, please report this.";
-			$locatie = "index.php#anchorVis1";
+			$locatie = "../index.php#anchSection2";
 			header("location:$locatie");
 
 			echo "If you see this, please report. #5";
