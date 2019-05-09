@@ -146,9 +146,9 @@ class Matrix {
     clone.setTailLabels(
       reorder.permute(clone.tailLabels, permutation)
     )
-    clone.setHeadLabels(
+    /*clone.setHeadLabels(
       reorder.permute(clone.headLabels, permutation)
-    )
+    )*///commented out as it isn't correct in this version
     return clone
   }
 
@@ -195,13 +195,13 @@ class Matrix {
 	    //start permute
 	    var clone = this.clone()
 	    clone.data = reorder.permute(clone.data, permutation[0])			//apply permutation on rows
-	    /*clone.setTailLabels(
-	      reorder.permute(clone.tailLabels, permutation)
+	    clone.setTailLabels(											//row labels
+	      reorder.permute(clone.tailLabels, permutation[0])
 	    )
 	    
-	    clone.setHeadLabels(
-	      reorder.permute(clone.headLabels, permutation)
-	    )*///will be updated when it is clear what is a column and what is a row
+	      clone.setHeadLabels(											//column labels
+	      reorder.permute(clone.headLabels, permutation[1])
+	    )
 	    clone.data = reorder.permutetranspose(clone.data, permutation[1])	//apply permutation on columns (added to the source of permute)
 	    return clone
 	    //end permute						
