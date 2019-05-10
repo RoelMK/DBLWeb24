@@ -7,13 +7,24 @@ class MatrixVisualization {
      */
     constructor(dataToVisualize, elementID) {
         this.plot = document.getElementById(elementID);         // Plot
-        this.visualizationData = [                              // visualizationData[i] -- contains data for matrix visualization
-            dataToVisualize.asPlotly(),                         // i=0: Base data
-            //dataToVisualize.optimalLeafOrder().asPlotly()     // i=1: Optimal leaf order
-            //dataToVisualize.barycenterOrder().asPlotly()      // i=2: Bary center order
-            //dataToVisualize.sortOrder().asPlotly()            // i=3: Sort order
-            //dataToVisualize.pcaOrder().asPlotly()             // i=4: PCA order
-        ];  
+        
+        // Temporary: check size of matrix (too large matrices crash the browser)
+        if (dataToVisualize.data.length <= 100) {
+            this.visualizationData = [                              // visualizationData[i] -- contains data for matrix visualization
+                dataToVisualize.asPlotly(),                         // i=0: Base data
+                dataToVisualize.barycenterOrder().asPlotly(),       // i=1: Bary center order
+                dataToVisualize.optimalLeafOrder().asPlotly(),      // i=2: Optimal leaf order
+                dataToVisualize.sortOrder().asPlotly(),             // i=3: Sort order
+                dataToVisualize.pcaOrder().asPlotly()               // i=4: PCA order
+            ]; 
+        } else {
+            alert('Reorder algorithmes are currently not available for this matrix (size > 100x100).')
+            this.visualizationData = [                              // visualizationData[i] -- contains data for matrix visualization
+                dataToVisualize.asPlotly()
+            ];
+        }
+
+         
         this.draw();    // Draw the matrix
     }
 
@@ -107,11 +118,11 @@ class MatrixVisualization {
                 }, {
                     method: 'restyle',
                     args: ['visible', [false, true, false, false, false]],
-                    label: 'Optimal leaf order'
+                    label: 'Bary center order'
                 }, {
                     method: 'restyle',
                     args: ['visible', [false, false, true, false, false]],
-                    label: 'Bary center order'
+                    label: 'Optimal leaf order'
                 }, {
                     method: 'restyle',
                     args: ['visible', [false, false, false, true, false]],
