@@ -1,9 +1,26 @@
-const testData = [[1, 20, 30], [20, 1, 60], [30, 60, 1]]; // Constant data for testing purposes
-const testData2 = [[0, 6, 8, 9, 8, 8], [5, 6, 2, 7, 4, 0], [9, 7, 6, 2, 9, 8], [2, 6, 0, 3, 6, 1], [5, 8, 7, 6, 9, 7], [4, 1, 5, 3, 3, 1]]; // Constant data for testing purposes V2
+/**
+ * Load a local CSV file
+ * @author Roel Koopman
+ * @param {string} path Path to CSV file
+ * @param {string} elementID ID of the div to display the visualization in
+ */
+function visualizeCSVFile(path, elementID) {
+    var req = new XMLHttpRequest();
+    req.onload = function(){
+        var csv = new CSVData(this.responseText);
+        var vis1 = loadVisualization1(csv.getMatrix(), elementID);
+    };
+    req.open('GET', path); 
+    req.send();
+}
 
-var matrix = new Matrix()
-matrix.setData(testData2)
-//matrix.randomize()
-matrix = matrix.barycenterOrder()
-
-var vis = new MatrixVisualization(matrix, 'canvas');
+/**
+ * Load visualization 1
+ * @author Roel Koopman
+ * @param {Matrix} matrix Matrix to show
+ * @param {string} elementID ID of the div to display the visualization in
+ * @returns {MatrixVisualization} Loaded matrix
+ */
+function loadVisualization1(matrix, elementID) {
+    return new MatrixVisualization(matrix, elementID);
+}

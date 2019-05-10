@@ -8,6 +8,7 @@
 
 		<script src="./js/methods/CSVtoJSON.js"></script>
 
+        <script src="./js/classes/CSVData.js">               </script>
  		<script src="./js/classes/Matrix.js">               </script>
  		<script src="./js/classes/MatrixVisualization.js">  </script>
  		<script src="./js/classes/MatrixInteraction.js">    </script>
@@ -16,7 +17,9 @@
 </head>
 <body>
     <div id="canvas" style="width:600px;height:600px;">
-        <script src="./js/main.js"></script>
+        <script>
+            visualizeCSVFile('./data.csv', 'canvas');
+        </script>
     </div>
 </body>
 </html>
