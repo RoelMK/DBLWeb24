@@ -139,16 +139,16 @@ class Matrix {
    * calculated by functions like this.optimalLeafOrder
    * @param  {number[]} permutation
    * @return {Matrix} - A reordered clone of this matrix.
-   */
+   *///permute only switches rows not columns thus the label switching isn't correct
   permute(permutation) {
     var clone = this.clone()
     clone.data = reorder.permute(clone.data, permutation)
     clone.setTailLabels(
       reorder.permute(clone.tailLabels, permutation)
     )
-    clone.setHeadLabels(
+    /*clone.setHeadLabels(
       reorder.permute(clone.headLabels, permutation)
-    )
+    )*///commented out as it isn't correct in this version
     return clone
   }
 
@@ -161,4 +161,50 @@ class Matrix {
     var permutation = reorder.optimal_leaf_order()(this.data)
     return this.permute(permutation)
   }
+  
+  /**
+   * Use the reorder library to sort by sort order.
+   * @author Matthijs
+   * @return {Matrix} Reordered clone.
+   */
+  sortOrder() {
+	    var permutation = reorder.sort_order(this.data)			//compute permutation
+	    return this.permute(permutation)						//apply permutation and return the result
+	  }	
+  
+  /**
+   * Use the reorder library to sort by principal component analysis.
+   * @author Matthijs
+   * @return {Matrix} Reordered clone.
+   */
+  pcaOrder() {
+	  	var eps = 1e-9;											//eps is the approximation factor in computing the eigenvector
+	    var permutation = reorder.pca_order(this.data,eps)		//compute permutation
+	    return this.permute(permutation)						//apply permutation and return the result
+	  }	
+  
+  /**
+   * Use the reorder library to sort by barycenter order.
+   * @author Matthijs
+   * @return {Matrix} Reordered clone.
+   */
+  barycenterOrder() {
+	  	var graph = reorder.mat2graph(this.data, 1);
+	  	var comps = graph.components();
+	    var permutation = reorder.barycenter_order(graph, comps)	    //compute permutation
+	    //start permute
+	    var clone = this.clone()
+	    clone.data = reorder.permute(clone.data, permutation[0])			//apply permutation on rows
+	    clone.setTailLabels(											//row labels
+	      reorder.permute(clone.tailLabels, permutation[0])
+	    )
+	    
+	      clone.setHeadLabels(											//column labels
+	      reorder.permute(clone.headLabels, permutation[1])
+	    )
+	    clone.data = reorder.permutetranspose(clone.data, permutation[1])	//apply permutation on columns (added to the source of permute)
+	    return clone
+	    //end permute						
+	  }
+  
 }
