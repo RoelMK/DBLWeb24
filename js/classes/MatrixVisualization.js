@@ -154,8 +154,8 @@ class MatrixVisualization {
             colorscale: 'Blackbody',    // Default
             name: 'Data set ' + i,
             type: 'heatmap',
-            colorbar: {x: -0.15},
-            xgap: 0.05,
+            colorbar: {x: -0.15},       // Move the colorbar to the left side of the plot
+            xgap: 0.05,                 // Add a grid
             ygap: 0.05
         };
     }
@@ -175,7 +175,7 @@ class MatrixVisualization {
             };
         } else {
             return {
-                z: [[i, i + 1, i + 2], [2*i, 2*i, 2*i]]
+                z: [[i, i + 1, i + 2], [2*i, 2*i, 2*i]] // Dummy data
             };  
         }
     }
