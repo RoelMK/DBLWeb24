@@ -1,5 +1,3 @@
-visualizeCSVFile('./data.csv', 'canvas');   // Test
-
 /**
  * Load a local CSV file
  * @author Roel Koopman
