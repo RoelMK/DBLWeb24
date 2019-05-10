@@ -22,7 +22,7 @@ function CSVtoJSON(csv) {
 }	
 
 /**
- * NOT USED
+ * NOT USED (but please keep it)
  * @param {string} csv CSV file
  */
 function CSVtoCompactAdjacencyMatrixJSON(csv) {
