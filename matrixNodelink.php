@@ -1,7 +1,7 @@
 <!-- Below code was written by Jeroen Gijsbers -->
 <?php
 	//sessie start etc.
-	include ("setup.inc.php"); 
+	include ("php/setup.inc.php"); 
 ?>
 <html lang="html5">
 	<head>
@@ -32,7 +32,7 @@
 			</ul>
 		</div>
 		<div id="upload">
-			<form action="upload_code.php" method="post" enctype="multipart/form-data">Select file to upload: <br> 
+			<form action="./php/upload_code.php" method="post" enctype="multipart/form-data">Select file to upload: <br> 
 				<input type="file" name="fileToUpload" id="fileToUpload">
 				<input type="submit" value="Upload csv file" name="submit" id="submitBtn">
 			</form>
@@ -41,9 +41,9 @@
 				print("<br>");
 				if (!empty($_SESSION["file_name"])) {
 					print("You are now using ");
-					print($_SESSION["file_name"]);
+					print(basename($_SESSION["file_name"]));
 					print("<br>");
-					print("	<a href='clear_session.php'>
+					print("	<a href='./php/clear_session.php'>
 								remove selected csv file.
 							</a>");
 				}
@@ -56,7 +56,7 @@
 				<?php
 					if (!empty($_SESSION["file_name"])) {
 						echo "	<script>
-									visualizeCSVFile('./././" . $_SESSION["file_name"] . "', 'matrix')
+									visualizeCSVFile('./uploads/" . basename($_SESSION["file_name"]) . "', 'matrix')
 								</script>";
 					}
 				?>

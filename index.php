@@ -1,7 +1,7 @@
 <!-- Below code was written by Jeroen Gijsbers -->
 <?php
 	//sessie start etc.
-	include ("setup.inc.php"); 
+	include ("php/setup.inc.php"); 
 ?>
 <html lang="html5">
 	<head>
