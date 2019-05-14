@@ -11,7 +11,7 @@
 	<body>
 		<div id="navBar">
 			<ul>
-				<li><em><a href="">Welcome!</a></em></li>
+				<li><a href="">Welcome!</a></li>
 				<li><a href="matrixNodelink.php">Matrix and Nodelink</a></li>
 				<li><a href="aboutUs.html">About us</a></li>
 			</ul>
