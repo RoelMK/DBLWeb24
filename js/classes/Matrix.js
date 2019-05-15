@@ -32,6 +32,7 @@ class Matrix {
 
     // Set some default labels, we always assume they are defined.
     this.setDefaultLabels()
+    return this
   }
 
   /**
@@ -48,6 +49,29 @@ class Matrix {
       }
     }
     this.setData(data)
+    return this
+  }
+
+  /**
+   * Fill the matrix with random data that would make sense when visualized
+   * as a graph.
+   * @author Jarno
+   * @param  {Number} size
+   */
+  randomizeGraph(size = 10) {
+    var data = []
+    for (var x = 0; x < size; x++) {
+      data[x] = []
+      for (var y = 0; y < size; y++) {
+        if (x == y) {
+          data[x].push(0)
+        } else {
+          data[x].push(Math.random() < 0.9 ? 0 : 1)
+        }
+      }
+    }
+    this.setData(data)
+    return this
   }
 
   /**
@@ -76,6 +100,7 @@ class Matrix {
    */
   setTailLabels(labels) {
     this.tailLabels = labels.slice() // Pass by copy, not reference.
+    return this
   }
 
   /**
@@ -90,10 +115,11 @@ class Matrix {
       tailLabels.push('Node ' + x.toString())
     }
     for (var y = 0; y < this.data[0].length; y++) {
-      headLabels.push('Node' + y.toString())
+      headLabels.push('Node ' + y.toString())
     }
     this.setTailLabels(tailLabels)
     this.setHeadLabels(headLabels)
+    return this
   }
 
   /**
@@ -104,6 +130,7 @@ class Matrix {
    */
   setHeadLabels(labels) {
     this.headLabels = labels.slice() // Pass by copy, not reference.
+    return this
   }
 
   /**
@@ -118,6 +145,41 @@ class Matrix {
       y: this.tailLabels,
       type: 'heatmap'
     }
+  }
+
+  asVis() {
+    console.log(JSON.stringify(this.tailLabels))
+    console.log(JSON.stringify(this.headLabels))
+    if (JSON.stringify(this.tailLabels) != JSON.stringify(this.headLabels)) {
+      throw new Error("can't do this yet!")
+    }
+
+    var visData = {
+      nodes: [],
+      edges: []
+    }
+
+    for (var tailIndex = 0; tailIndex < this.data.length; tailIndex++) {
+      visData.nodes.push({
+        id: tailIndex,
+        label: this.tailLabels[tailIndex]
+      })
+    }
+
+    for (var tailIndex = 0; tailIndex < this.data.length; tailIndex++) {
+      for (var headIndex = 0; headIndex < this.data[0].length; headIndex++) {
+        if (this.data[tailIndex][headIndex] == 0) continue
+        visData.edges.push({
+          from: tailIndex,
+          to: headIndex,
+          arrows: 'to'
+        })
+      }
+    }
+
+    visData.nodes = new vis.DataSet(visData.nodes)
+    visData.edges = new vis.DataSet(visData.edges)
+    return visData
   }
 
   /**
