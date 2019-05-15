@@ -31,7 +31,7 @@
 			$_SESSION["upload_error"] = "";
 			
 			mysqli_close($db);
-			$locatie = "index.php#anchSection2";
+			$locatie = "../matrixNodelink.php";
 			header("location:$locatie");
 			
 			echo "If you see this, please report. #2";
