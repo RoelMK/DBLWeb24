@@ -1,8 +1,8 @@
-<!-- Below code was written by Jeroen Gijsbers -->
 <?php
 	//sessie start etc.
 	include ("php/setup.inc.php"); 
 ?>
+<!-- Below code was written by Jeroen Gijsbers -->
 <html lang="html5">
 	<head>
 		<link href="css/styles.css" rel="stylesheet">
@@ -59,8 +59,20 @@
 			</div>
 			<div id="divider2"></div>
 			<div id="nodelink"></div>
-
-
+			<?php
+				if(empty($_SESSION["share"])) {
+						print("	<a href='./php/generate_share_code.php'>
+								Generate a share code.
+								</a>");
+					}
+					else {
+						print("You share code is " . $_SESSION["share"]);
+					}
+			?>
+			<form action="php/load_share_code.php" method="post">Enter share code: <br> <!-- kevins work -->
+				<input type="text" name="input_share_code"> <br>
+				<input type="submit" value="Enter the code" name="submit">
+			</form>
 		</div>
 	</body>
 </html>
