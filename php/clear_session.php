@@ -1,10 +1,10 @@
 <?php
 	//standaard includes en session
-	include ("php/setup.inc.php"); 
-
+	include ("setup.inc.php"); 
+	
 	session_unset();
 	session_destroy();
-
-	$locatie = "index.php#anchorVis1";;
+	
+	$locatie = "../matrixNodelink.php";;
 	header("location:$locatie");
 ?>

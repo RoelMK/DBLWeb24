@@ -13,11 +13,14 @@
  		<script src="./js/classes/MatrixVisualization.js">  </script>
  		<script src="./js/classes/MatrixInteraction.js">    </script>
         <script src="./js/classes/NodeLinkVisualization.js"></script>
+        <script src="./js/main.js"></script>
         <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
 </head>
 <body>
     <div id="canvas" style="width:600px;height:600px;">
-        <script src="./js/main.js"></script>
+        <script>
+            visualizeCSVFile('./data.csv', 'canvas');
+        </script>
     </div>
 </body>
 </html>

@@ -1,5 +1,3 @@
-visualizeCSVFile('./data.csv', 'canvas');   // Test
-
 /**
  * Load a local CSV file
  * @author Roel Koopman
@@ -10,7 +8,7 @@ function visualizeCSVFile(path, elementID) {
     var req = new XMLHttpRequest();
     req.onload = function(){
         var csv = new CSVData(this.responseText);
-        var vis1 = loadVisualization1(csv.getMatrix(), elementID);
+        var vis1 = loadVisualization1(csv.getMatrix(), elementID);   // csv.getMatrix()
     };
     req.open('GET', path); 
     req.send();
