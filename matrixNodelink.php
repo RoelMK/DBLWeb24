@@ -5,7 +5,7 @@
 ?>
 <html lang="html5">
 	<head>
-		<link href="styles.css" rel="stylesheet">
+		<link href="css/styles.css" rel="stylesheet">
 		<title>2IOA0 Group 24</title>
 
 		<!-- Script stuff -->
@@ -27,15 +27,11 @@
 		<div id="navBar">
 			<ul>
 				<li><em><a href="index.php">Welcome!</a></em></li>
-				<li><a href="matrixNodelink.php">Matrix and Nodelink</a></li>
+				<li><a href="upload.php">Visualizations</a></li>
 				<li><a href="aboutUs.html">About us</a></li>
 			</ul>
 		</div>
 		<div id="upload">
-			<form action="./php/upload_code.php" method="post" enctype="multipart/form-data">Select file to upload: <br> 
-				<input type="file" name="fileToUpload" id="fileToUpload">
-				<input type="submit" value="Upload csv file" name="submit" id="submitBtn">
-			</form>
 			<?php 
 				print($_SESSION["upload_error"]);
 				print("<br>");

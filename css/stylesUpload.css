@@ -6,20 +6,46 @@
 1: f4e7e9
 */
 * {
+	font-family: Arial;
 	margin: 0;
 	padding: 0;
-	color: white;
 }
 body {
 	display: grid;
 	background-color: #f4e7e9;
-	grid-template-columns: 80% 20%;
-	grid-template-rows: 10% 5% 85%;
-	grid-template-areas: "navBar navBar"
-						 "upload upload"
-						 "visBlock controlPanel";
+	grid-template-columns: 33% 33% 34%;
+	grid-template-rows: 10% 45% 45%;
+	grid-template-areas: "navBar navBar navBar"
+						 "definition uploadSelf chooseExisting"
+						 "definition uploadSelf sharecode";
 }
-
+#definition {
+	color: #000;
+	padding: 25% 5% 0 25%;
+	grid-area: definition;
+}
+#chooseExisting {
+	color: #000;
+	padding: 25% 25% 0 0;
+	grid-area: chooseExisting;
+}
+#sharecode {
+	color: #000;
+	padding: 10% 25% 0 0;
+	grid-area: sharecode;
+}
+#uploadSelf {
+	color: #000;
+	padding: 25% 0 0 0;
+	grid-area: uploadSelf;
+}
+#submitBtn {
+	color: white;
+	background-color: #01306d;
+	border-radius: 5px 5px 5px 5px;
+	padding: 5% 10% 5% 10%;
+	text-align: center;
+}
 #navBar {
 	grid-area: navBar;
 	background-color: #f4e7e9;
@@ -29,6 +55,7 @@ body {
 
 }
 #navBar li {
+	color: white;
 	background-color: #01306d;
 	border-radius: 5px 5px 5px 5px;
 	border: solid 2px #0e0c19;
@@ -39,6 +66,7 @@ body {
 	width: 33%;
 }
 #navBar li a {
+	color: white;
 	padding: 16px 32px;
 	text-decoration: none;
 	overflow: auto;
@@ -63,39 +91,5 @@ em {
 	grid-template-areas: "uploadForm phpResult phpResult";
 	grid-area: upload;
 	background-color: #7faaf4;
-}
-#upload #uploadForm {
-	grid-area: uploadForm;
-
-}
-#upload #phpResult {
-	grid-area: phpResult;
-}
-#upload form #submitBtn {
-	color: black;
-}
-#controlPanel {
-	border-radius: 15px 15px 15px 15px;
-	margin: 5% 5% 5% 0;
-	grid-area: controlPanel;
-	background-color: #17479e;
-
-}
-#visBlock {
-	grid-area: visBlock;
-	display: grid;
-	background-color: #f4e7e9;
-	grid-template-columns: 45% 10% 45%;
-	grid-template-rows: 100%;
-	grid-template-areas: "matrix divider2 nodelink";
-}
-#visBlock #matrix {
-	grid-area: matrix;
-}
-#visBlock #nodelink {
-	grid-area: nodelink;
-}
-#visBlock #divider2 {
-	grid-area: divider2;
 }
 
