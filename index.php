@@ -1,6 +1,6 @@
 <!-- Below code was written by Jeroen Gijsbers -->
 <?php
-	//sessie start etc.
+	//sessie start etc. 
 	include ("php/setup.inc.php"); 
 ?>
 <html lang="html5">
