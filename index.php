@@ -5,7 +5,7 @@
 ?>
 <html lang="html5">
 	<head>
-		<link href="stylesIndex.css" rel="stylesheet">
+		<link href="css/stylesIndex.css" rel="stylesheet">
 		<title>2IOA0 Group 24</title>
 	</head>
 	<body>
@@ -19,6 +19,8 @@
 		<div id="upload">
 		</div>
 		<div id="visBlock">
+			<h1>Welcome to our dynamic graph visualization tool</h1>
+			<p></p>
 		</div>
 	</body>
 </html>
