@@ -1,8 +1,8 @@
-<!-- Below code was written by Jeroen Gijsbers -->
 <?php
 	//sessie start etc.
 	include ("php/setup.inc.php"); 
 ?>
+<!-- Below code was written by Jeroen Gijsbers -->
 <html lang="html5">
 	<head>
 		<link href="css/stylesUpload.css" rel="stylesheet">
@@ -56,7 +56,7 @@
 		</div>
 		<div id="sharecode">
 			<h1>Share code</h1>
-			<form action="./php/upload_code.php" method="post" enctype="multipart/form-data">
+			<form action="./php/load_share_code.php" method="post" enctype="multipart/form-data">
 				Enter your share code here:
 				<br>
 				<input type="text" name="shareCode"><br>
@@ -64,7 +64,23 @@
 				<input type="submit" value="Check code" name="submit" id="submitBtn">
 				<br>
 				This is still a work in progress
-<			</form>
+			</form>
+			<?php 
+				echo $_SESSION["share_message"];
+				echo "<br>";
+				if(!empty($_SESSION["share_file"])){
+					echo '	<form method="post" action="php/check_share_code.php">
+								<input type = "hidden" name = "confirm" value = "yes">
+								<input type="submit" value="Yes" name="submit">
+							</form>
+							<form method="post" action="php/check_share_code.php">
+								<input type = "hidden" name = "confirm" value = "no">
+								<input type="submit" value="No" name="submit">
+							</form>';
+							
+				}
+				$_SESSION["share_message"] = "";
+			?>
 		</div>
 
 	</body>
