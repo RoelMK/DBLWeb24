@@ -11,15 +11,15 @@
 	<body>
 		<div id="navBar">
 			<ul>
-				<li><a href="">Welcome!</a></li>
-				<li><a href="matrixNodelink.php">Matrix and Nodelink</a></li>
+				<li><a href="index.php">Welcome!</a></li>
+				<li><a href="upload.php">Visualizations</a></li>
 				<li><a href="aboutUs.html">About us</a></li>
 			</ul>
 		</div>
 		<div id="upload">
 		</div>
 		<div id="visBlock">
-			<h1>Welcome to our dynamic graph visualization tool</h1>
+			<h1>We are currently deciding whether we want to keep a welcome page.</h1>
 			<p></p>
 		</div>
 	</body>
