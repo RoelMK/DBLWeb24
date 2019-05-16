@@ -60,19 +60,16 @@
 			<div id="divider2"></div>
 			<div id="nodelink"></div>
 			<?php
-				if(empty($_SESSION["share"])) {
+				if(empty($_SESSION["generated_share"])) {
 						print("	<a href='./php/generate_share_code.php'>
 								Generate a share code.
 								</a>");
 					}
 					else {
-						print("You share code is " . $_SESSION["share"]);
+						print("You share code is " . $_SESSION["generated_share"]);
+						$_SESSION["generated_share"] = "";
 					}
 			?>
-			<form action="php/load_share_code.php" method="post">Enter share code: <br> <!-- kevins work -->
-				<input type="text" name="input_share_code"> <br>
-				<input type="submit" value="Enter the code" name="submit">
-			</form>
 		</div>
 	</body>
 </html>
