@@ -68,7 +68,7 @@
 			<?php 
 				echo $_SESSION["share_message"];
 				echo "<br>";
-				if(!empty($_SESSION["share_message"])){
+				if(!empty($_SESSION["share_file"] && $_SESSION["share_message"])){
 					echo '	<form method="post" action="php/check_share_code.php">
 								<input type = "hidden" name = "confirm" value = "yes">
 								<input type="submit" value="Yes" name="submit">
@@ -77,7 +77,6 @@
 								<input type = "hidden" name = "confirm" value = "no">
 								<input type="submit" value="No" name="submit">
 							</form>';
-							
 				}
 				$_SESSION["share_message"] = "";
 			?>
