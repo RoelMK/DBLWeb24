@@ -33,13 +33,33 @@ class CSVData {
             var currentRow = this.rows[i].split(";");
             currentRow.shift(); // Remove first item (= label)
             currentRow.pop();   // For some reason split adds 1 extra element, remove it
+            currentRow = currentRow.map(Number);
             z.push(currentRow);
         }
 
         var matrix = new Matrix(); 
         matrix.setData(z);                  // Data is in the z-array
-        matrix.setTailLabels(this.columns); // Head and tail are the same in the default unordered dataset
-        matrix.setHeadLabels(this.columns);
+        matrix.setTailLabels(this.columns.reverse()); // Head and tail are the same in the default unordered dataset
+        matrix.setHeadLabels(this.columns.reverse());
         return matrix;
+    }
+
+    /**
+     * Get chord data from CSV
+     * @author Roel Koopman
+     * @returns Chord data, summarized
+     */
+    getChord() { 
+        var z = []; // Z-data for matrix
+
+        for (var i = 0; i < this.rows.length; i++) {
+            var currentRow = this.rows[i].split(";");
+            currentRow.shift(); // Remove first item (= label)
+            currentRow.pop();   // For some reason split adds 1 extra element, remove it
+            currentRow = currentRow.map(Number);
+            z.push(currentRow);
+        }
+
+        return getSummarizedChord(this.columns, z, 25); // Generate the chord data using the z-data and the column data
     }
 }
