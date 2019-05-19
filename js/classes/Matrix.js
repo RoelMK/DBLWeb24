@@ -207,4 +207,63 @@ class Matrix {
 	    //end permute						
 	  }
   
+  /**
+   * Sort by topological order using a depth-first search algorithm.
+   * @author Matthijs
+   * @return {Matrix} Reordered clone.
+   */
+  /**
+   * Sort by topological order using a depth-first search algorithm as found on wikipedia (https://en.wikipedia.org/wiki/Topological_sorting).
+   * @author Matthijs
+   * @return {Matrix} Reordered clone.
+   */
+  topologicalOrder() {
+	    var permutation = [];						//initiate permutation
+	    var data = this.data;
+	    var m_length = this.data.length;			// contains matrix length
+	    var to_visit = m_length; 					// counts how many nodes still have to be visited
+	    var node_to_visit = 0;						// the location in marks of the node to visit
+	    var nodes = [];								// the array containing the status of each node 0 = permanently marked, 1= temporary marked, 2 = no mark
+	    var marks = [];								// the array containing nodes that haven't been marked yet
+	    for (var x = 0; x < m_length; x++) {		//this for loop gives values to marks and nodes
+	    	marks = marks.concat(x);
+	    	nodes = nodes.concat(2);
+	    }
+	    while (to_visit > 0){
+	    	node_to_visit = Math.floor(Math.random() * to_visit);	// set node_to_visit to a random value in the range of the unmarked nodes
+	    	visit(marks[node_to_visit], this.data)					// visits a node that doesn't have a marker yet
+	    }
+	    //visits node n
+	    function visit(n){
+	      	if (nodes[n] == 0){return};
+	      	if (nodes[n] == 1){
+	      		console.log("this graph isn't a dag, topological sort only works with dags") //throw some sort of error
+	      		return								//quit
+	      	}; 
+	      	nodes[n] = 1; 							//mark with a temporary mark
+	      	marks.splice(n, 1)						//remove node n from marks
+	      	to_visit--;								//remove the amount of nodes that need to be visited
+	      	for (var y = 0; y < m_length; y++){
+	      		if (data[n][y] > 0){visit(y, data)}
+	      	}
+	      	nodes[n] = 0;							//mark with a permanent mark instead of a temporary one
+	      	permutation.unshift(n);					//insert n into the front of the permutation list
+	      }
+	    //end algorithm
+	    //start permute
+	    var clone = this.clone()
+	    clone.data = reorder.permute(clone.data, permutation)			//apply permutation on rows
+	    clone.setTailLabels(											//row labels
+	      reorder.permute(clone.tailLabels, permutation)
+	    )
+	    
+	      clone.setHeadLabels(											//column labels
+	      reorder.permute(clone.headLabels, permutation)
+	    )
+	    clone.data = reorder.permutetranspose(clone.data, permutation)	//apply permutation on columns (added to the source of permute)
+	    return clone
+	    //end permute
+	  }	
+  
+  
 }
