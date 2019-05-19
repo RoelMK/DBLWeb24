@@ -180,7 +180,19 @@ class Matrix {
   pcaOrder() {
 	  	var eps = 1e-9;											//eps is the approximation factor in computing the eigenvector
 	    var permutation = reorder.pca_order(this.data,eps)		//compute permutation
-	    return this.permute(permutation)						//apply permutation and return the result
+	    //start permute
+	    var clone = this.clone()
+	    clone.data = reorder.permute(clone.data, permutation)			//apply permutation on rows
+	    clone.setTailLabels(											//row labels
+	      reorder.permute(clone.tailLabels, permutation)
+	    )
+	    
+	      clone.setHeadLabels(											//column labels
+	      reorder.permute(clone.headLabels, permutation)
+	    )
+	    clone.data = reorder.permutetranspose(clone.data, permutation)	//apply permutation on columns (added to the source of permute)
+	    return clone
+	    //end permute						//apply permutation and return the result
 	  }	
   
   /**
