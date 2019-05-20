@@ -43,16 +43,21 @@
 			<form action="./php/upload_code.php" method="post" enctype="multipart/form-data">
 				Choose one of our existing files:
 				<br>
-				<select name="databases">
-					<option value="volvo">Author Similarity</option>
-					<option value="saab">Co-authorship</option>
-					<option value="fiat">Co-citation</option>
+				<select name="file_select">
+					<?php
+						$files = glob('./uploads/*'); // get all file names
+						foreach($files as $file){ // iterate files
+						  if(is_file($file)) {
+								echo "<option value='$file'>". basename($file) . "</option>"; // print file
+							}
+						}
+					?>
 				</select>
 				<br><br>
 				<input type="submit" value="Start visualization" name="submit" id="submitBtn">
 				<br>
 				This is still a work in progress
-<			</form>
+			</form>
 		</div>
 		<div id="sharecode">
 			<h1>Share code</h1>

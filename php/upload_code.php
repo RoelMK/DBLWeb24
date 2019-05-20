@@ -7,6 +7,10 @@
 	$uploadOk = 1;
 	$fileType = strtolower(pathinfo($target_file,PATHINFO_EXTENSION));
 	
+	if(!empty($_POST["file_select"])) {
+		$target_file = "." . $_POST["file_select"];
+		$fileType = strtolower(pathinfo($target_file,PATHINFO_EXTENSION));
+	}
 	
 	// Allow certain file formats and no empty's
 	if($fileType != "csv") {
