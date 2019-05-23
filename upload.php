@@ -44,7 +44,7 @@
 				Choose one of our existing files:
 				<br>
 				<select name="file_select">
-					<?php
+					<?php	
 						$files = glob('./uploads/*'); // get all file names
 						foreach($files as $file){ // iterate files
 						  if(is_file($file)) {
@@ -70,21 +70,23 @@
 				<br>
 				This is still a work in progress
 			</form>
-			<?php 
-				echo $_SESSION["share_message"];
-				echo "<br>";
-				if(!empty($_SESSION["share_file"]) && !empty($_SESSION["share_message"])){
-					echo '	<form method="post" action="php/check_share_code.php">
-								<input type = "hidden" name = "confirm" value = "yes">
-								<input type="submit" value="Yes" name="submit">
-							</form>
-							<form method="post" action="php/check_share_code.php">
-								<input type = "hidden" name = "confirm" value = "no">
-								<input type="submit" value="No" name="submit">
-							</form>';
-				}
-				$_SESSION["share_message"] = "";
-			?>
+			<div id="">
+				<?php 
+					echo $_SESSION["share_message"];
+					echo "<br>";
+					if(!empty($_SESSION["share_file"]) && !empty($_SESSION["share_message"])){
+						echo '	<form method="post" action="php/check_share_code.php">
+									<input type = "hidden" name = "confirm" value = "yes">
+									<input type="submit" value="Yes" name="submit">
+								</form>
+								<form method="post" action="php/check_share_code.php">
+									<input type = "hidden" name = "confirm" value = "no">
+									<input type="submit" value="No" name="submit">
+								</form>';
+					}
+					$_SESSION["share_message"] = "";
+				?>
+			</div>
 		</div>
 
 	</body>

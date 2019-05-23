@@ -59,17 +59,19 @@
 			</div>
 			<div id="divider2"></div>
 			<div id="nodelink"></div>
-			<?php
-				if(empty($_SESSION["generated_share"])) {
-						print("	<a href='./php/generate_share_code.php'>
-								Generate a share code.
-								</a>");
-					}
-					else {
-						print("You share code is " . $_SESSION["generated_share"]);
-						$_SESSION["generated_share"] = "";
-					}
-			?>
+			<div id="">
+				<?php
+					if(empty($_SESSION["generated_share"])) {
+							print("	<a href='./php/generate_share_code.php'>
+									Generate a share code.
+									</a>");
+						}
+						else {
+							print("You share code is " . $_SESSION["generated_share"]);
+							$_SESSION["generated_share"] = "";
+						}
+				?>
+			</div>
 		</div>
 	</body>
 </html>
