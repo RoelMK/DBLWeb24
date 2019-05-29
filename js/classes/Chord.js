@@ -1,7 +1,8 @@
 class Chord {
     constructor(columns, z, edgeWeightFactor) {
         this.columns = columns;
-        this.data = this.getData(z, edgeWeightFactor);   
+        this.average = getEdgeWeightAverage(columns, z);
+        this.data = this.getData(z, edgeWeightFactor); 
     }
 
     /**
@@ -14,17 +15,74 @@ class Chord {
      */
     getData(z, averageMultiplicationFactor)
     {
-        var average = getEdgeWeightAverage(this.columns, z);
         var data = [];  // [source, target, weight]
         for (var x = 0; x < this.columns.length; x++) {
             for (var y = 0; y < this.columns.length; y++) {
-                if (z[y][x] > averageMultiplicationFactor * average) {
+                if (z[y][x] > averageMultiplicationFactor * this.average) {
                     data.push([this.columns[x], this.columns[y], z[y][x]])
                 }
             }
         }
         return data;
     }    
+}
+
+/**
+ * Get a chord which shows all relations from one specific node
+ * @param {Array} columns Columns in matrix
+ * @param {Array} z Plotly-like z-data (not inversed like in Plotly!)
+ * @param {String} node Node to show all relations of
+ * @param {Number} maxNumberOfEdges Maximum number of edges to render: 100=very smooth, 200=pretty smooth, 300=slow, >500=crash/still slow (depending on size of matrix)
+ */
+function getChordForSingleNode(columns, z, node, maxNumberOfEdges) {
+    var idOfNode = -1;
+
+    // Find id of node
+    for (var i = 0; i < columns.length; i++) {
+        if (columns[i] == node) {
+            console.log(i);
+            idOfNode = i;
+            break;
+        }
+    }
+    if (idOfNode == -1) {
+        return new Chord([], [], 0); // If incorrect id: return a empty chord
+    }
+
+    // Empty the array with the z-data so that only nodes with a connection to the node specified are shown
+    var newZ = z.slice();
+    var zOrder = [];    // Contains elements {i, j}, ordered by values in newZ at [i,j]
+
+    for (var i = 0; i < columns.length; i++) {
+        for (var j = 0; j < columns.length; j++) {
+            if (i != idOfNode && j != idOfNode) {
+                newZ[i][j] = 0;
+            } else {
+                var insertedIntoOrder = false;
+
+                // Insert i,j into zOrder to keep track of number of elements
+                for (var k = 0; k < zOrder.length; k++) {
+                    if (newZ[i][j] > newZ[zOrder[k].i][zOrder[k].j]) {  // Is the element at i,j greater than the element at zOrder[k].i, zOrder[k].j?
+                        // Yes: insert
+                        zOrder.splice(k, 0, {i: i, j: j});
+                        insertedIntoOrder = true;
+                        break;
+                    }
+                }
+                // Not inserted yet? Add it to the end of the array
+                if (!insertedIntoOrder) {
+                    zOrder.push({i: i, j: j});
+                }
+                // Check if we do not have too many elements
+                if (zOrder.length > maxNumberOfEdges) {
+                    newZ[zOrder[zOrder.length - 1].i][zOrder[zOrder.length - 1].j] = 0;   // Remove element in newZ which is currently the last element in zOrder.
+                    zOrder.pop();   // Remove last element
+                }
+            }
+        }
+    }
+
+    return new Chord(columns, newZ, 0); // Return chord with all the specified data
 }
 
 /**
@@ -55,10 +113,11 @@ function getEdgeWeightAverage(columns, z) {
  * @author Roel Koopman
  * @param {Array} columns Columns in matrix
  * @param {Array} z Plotly-like z-data (not inversed like in Plotly!)
- * @param {number} maxNumberOfNodes Maximum number of nodes (starts with the nodes with most connections) which will be displayed, but not including the neighbours of these nodes (these will also be displayed)
+ * @param {Number} maxNumberOfNodes Maximum number of nodes (starts with the nodes with most connections) which will be displayed, but not including the neighbours of these nodes (these will also be displayed)
+ * @param {Number} maxNumberOfEdges Maximum number of edges to render: 300=very smooth, 500=pretty smooth, 800=slow, >1200=crash
  * @returns A chord dataset which can be rendered without crashing the browser
  */
-function getSummarizedChord(columns, z, maxNumberOfNodes) {
+function getSummarizedChord(columns, z, maxNumberOfNodes, maxNumberOfEdges) {
     // Only summarize if really required
     if (maxNumberOfNodes >= columns.length) {
         return new Chord(columns, z, 0);    // If max > number of nodes, just return a chord
@@ -128,8 +187,7 @@ function getSummarizedChord(columns, z, maxNumberOfNodes) {
             }
         }
     }
-    // 2. Find the factor to get the edges down to the required amount
-    var maxNumberOfEdges = 500;     // Max number of edges to render: 300=very smooth, 500=pretty smooth, 800=slow, >1200=crash
+    // 2. Find the factor to get the edges down to the required amount 
     var factor = 0;                 // Factor to filter least important edges
     if (numberOfEdgesWeightOverAverage > maxNumberOfEdges) {
         factor = numberOfEdgesWeightOverAverage / maxNumberOfEdges;   

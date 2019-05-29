@@ -47,9 +47,11 @@ class CSVData {
     /**
      * Get chord data from CSV
      * @author Roel Koopman
+     * @param {Number} maxNumberOfNodes Maximum number of nodes (starts with the nodes with most connections) which will be displayed, but not including the neighbours of these nodes (these will also be displayed)
+     * @param {Number} maxNumberOfEdges Maximum number of edges to render: 300=very smooth, 500=pretty smooth, 800=slow, >1200=crash
      * @returns Chord data, summarized
      */
-    getChord() { 
+    getChord(maxNumberOfNodes, maxNumberOfEdges) { 
         var z = []; // Z-data for matrix
 
         for (var i = 0; i < this.rows.length; i++) {
@@ -60,6 +62,25 @@ class CSVData {
             z.push(currentRow);
         }
 
-        return getSummarizedChord(this.columns, z, 25); // Generate the chord data using the z-data and the column data
+        return getSummarizedChord(this.columns, z, maxNumberOfNodes, maxNumberOfEdges); // Generate the chord data using the z-data and the column data
+    }
+
+    /**
+     * Get chord data from CSV, only show 1 node
+     * @param {String} node Node to show all relations of
+     * @param {Number} maxNumberOfEdges Maximum number of edges to render: 100=very smooth, 200=pretty smooth, 300=slow, >500=crash/still slow (depending on size of matrix)
+     */
+    getSingleChord(node, maxNumberOfEdges) {
+        var z = []; // Z-data for matrix
+
+        for (var i = 0; i < this.rows.length; i++) {
+            var currentRow = this.rows[i].split(";");
+            currentRow.shift(); // Remove first item (= label)
+            currentRow.pop();   // For some reason split adds 1 extra element, remove it
+            currentRow = currentRow.map(Number);
+            z.push(currentRow);
+        }
+
+        return getChordForSingleNode(this.columns, z, node, maxNumberOfEdges);
     }
 }

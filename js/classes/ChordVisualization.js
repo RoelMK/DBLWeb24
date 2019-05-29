@@ -22,20 +22,21 @@ class ChordVisualization {
         var width = document.getElementById(this.elementID).offsetWidth;
         var height = document.getElementById(this.elementID).offsetHeight;
         var smallestWidthHeight = Math.min(width, height);
-        
+
         // Generate the chord
-        var chord = viz.chord()
+        var chord = viz.ch()
             .data(this.data)    // Set the data
             .chordOpacity(0.5)  // Opacity of the edges
-            .labelPadding(1)    // Where the labels are displayed in the diagram 
-            .label(function(d) {if (d.value > 0) {return d.source} else {return ""}})   // Only display relevant labels
+            .padding(.01)
             .duration(0)        // Animation duration (keep 0, otherwise lot of lag)
-            .innerRadius(Math.round(smallestWidthHeight / 3) - 10)   // Inner radius of chord diagram 400
-            .outerRadius(Math.round(smallestWidthHeight / 3));   // Outer radius of chord diagram
+            .innerRadius(Math.round(smallestWidthHeight / 3) - 20)   // Inner radius of chord diagram 400
+            .outerRadius(Math.round(smallestWidthHeight / 3))   // Outer radius of chord diagram
+            //.sort(function(a,b){return d3.ascending(a.value, b.value)});
+            .fill(function(d) { return intToRGB(hashCode(d)); });
         
         // Set html for the svg and draw
         document.getElementById(this.elementID).innerHTML = chord_style + "<svg width=\"" + width + "\" height=\"" + height + "\"><g transform=\"translate(" + Math.round(width / 2) + "," + Math.round(height / 2) + ")\"></g></svg>"
-        d3.select("g").call(chord); // Draw in svg using D3
+        d3.select("g").call(chord);
     }
 }
 
@@ -57,3 +58,30 @@ svg .values text{
     font-weight:bold;
 }
 </style>`
+
+/**
+ * Convert a string into a hash
+ * @param {String} str String to get hash code for
+ * @returns Hash code of string
+ */
+function hashCode(str) { 
+    if(str == undefined) {
+        return 0;   // Undefined -> Return 0
+    }
+
+    var hash = 0;
+    for (var i = 0; i < str.length; i++) {
+       hash = str.charCodeAt(i) + ((hash << 5) - hash);
+    }
+    return hash;
+} 
+
+/**
+ * Convert a number into a color
+ * @param {Number} i Number to generate a color for
+ * @returns Generated color
+ */
+function intToRGB(i){
+    var c = (i & 0x00FFFFFF).toString(16).toUpperCase();
+    return "00000".substring(0, 6 - c.length) + c;
+}

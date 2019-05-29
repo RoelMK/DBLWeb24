@@ -11,7 +11,8 @@ function visualizeCSVFile(path, elementID_vis1, elementID_vis2, elementID_vis3) 
     req.onload = function(){
         var csv = new CSVData(this.responseText);
         if (elementID_vis1 != null) var vis1 = loadVisualization1(csv.getMatrix(), elementID_vis1); 
-        if (elementID_vis3 != null) var vis3 = loadVisualization3(csv.getChord(), elementID_vis3); 
+        if (elementID_vis3 != null) var vis3 = loadVisualization3(csv.getChord(25, 500), elementID_vis3); 
+        //if (elementID_vis3 != null) var vis3 = loadVisualization3(csv.getSingleChord("Edward_Tufte", 200), elementID_vis3);   
     };
     req.open('GET', path); 
     req.send();

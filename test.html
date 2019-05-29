@@ -18,10 +18,11 @@
         <script src="./js/main.js"></script>
         <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
         <script src="https://d3js.org/d3.v4.min.js"></script>
-        <script src="http://vizjs.org/viz.v1.3.0.min.js"></script>
+        <!--<script src="http://vizjs.org/viz.v1.3.0.min.js"></script>-->
+        <script type="text/javascript" src="./js/libraries/viz.js"></script>
 </head>
 <body>
-    <div id="canvas" style="width:600px;height:600px;">
+    <div id="canvas" style="width:600px;height:500px;">
         <script>
             visualizeCSVFile('./data3.csv', null, null, 'canvas');
         </script>
