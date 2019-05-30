@@ -158,7 +158,7 @@ class Matrix {
    * @param {'single', 'average', 'complete'} type of linkage (default parameter given should be complete)
    * @param {euclidean, manhattan, chebyshev, hamming, jaccard, braycurtis} distance type (optional if no parameter is given euclidean distance is used)
    * @return {Matrix} Reordered clone.
-   * linkage should be tested on further datasets to give differnt results
+   * linkage should be tested on further datasets to give different results
    */
   optimalLeafOrder(linkage_type, distance_name) {
 	var distance_type = reorder.distance.euclidean;				//set distance type to euclidean by default
