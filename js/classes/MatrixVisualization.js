@@ -8,7 +8,7 @@ class MatrixVisualization {
     constructor(dataToVisualize, elementID) {
         this.plot = document.getElementById(elementID);         // Plot
         
-        // Temporary: check size of matrix (too large matrices crash the browser)
+        // Temporary: check size of matrix (too large matrices crash the browser) TODO
         if (dataToVisualize.data.length <= 100) {
             this.visualizationData = [                              // visualizationData[i] -- contains data for matrix visualization
                 dataToVisualize.asPlotly(),                         // i=0: Base data
@@ -18,12 +18,11 @@ class MatrixVisualization {
                 dataToVisualize.pcaOrder().asPlotly()               // i=4: PCA order
             ]; 
         } else {
-            alert('Reorder algorithmes are currently not available for this matrix (size > 100x100).')
+            //alert('Reorder algorithmes are currently not available for this matrix (size > 100x100).')
             this.visualizationData = [                              // visualizationData[i] -- contains data for matrix visualization
                 dataToVisualize.asPlotly()
             ];
         }
-
          
         this.draw();    // Draw the matrix
     }
@@ -38,21 +37,144 @@ class MatrixVisualization {
     }
 
     /**
+     * Change the order of the data in the matrix
+     * @author Roel Koopman
+     * @param {String} order New order to use (base/barycenter/optimalleaf/sort/pca)
+     */
+    changeOrder(order) { 
+        // Check if visualization does not have too many matrices
+        if (this.dataToVisualize.data.length > 100) {
+            return; // Quit if so, do not change anything
+        }
+
+        // Check which order we should use
+        switch(order.toLowerCase()) {
+            case 'base':
+                this.updateData(this.dataToVisualize.asPlotly());
+                break;
+            case 'barycenter':
+                this.updateData(this.dataToVisualize.barycenterOrder().asPlotly());
+                break;
+            case 'optimalleaf':
+                this.updateData(this.dataToVisualize.optimalLeafOrder().asPlotly());
+                break;
+            case 'sort':
+                this.updateData(this.dataToVisualize.sortOrder().asPlotly());
+                break;
+            case 'pca':
+                this.updateData(this.dataToVisualize.pcaOrder().asPlotly());
+                break;
+        }
+    }
+
+    /**
+     * Update the content of the matrix
+     * @author Roel Koopman
+     * @param {Object} plotlyData Plotly matrix data
+     */
+    updateData(plotlyData) {
+        var update = {
+            z: plotlyData.z,
+            x: plotlyData.x,
+            y: plotlyData.y
+        };
+        Plotly.restyle(this.plot, update);
+    }
+
+    /**
+     * Change the color of the plot
+     * @author Roel Koopman
+     * @param {String} color New color
+     */
+    changeColor(color) {
+        var update = {
+            colorscale: color
+        };
+        Plotly.restyle(this.plot, update);
+    }
+
+    /**
+     * Focus on a node
+     * @param {String} node Node to fucus on
+     */
+    focusNode(node) {
+        focus(node, node);
+    }
+
+    /**
+     * Focus on an edge
+     * @author Roel Koopman
+     * @param {String} nodeFrom Node where the edge originates from
+     * @param {String} nodeTo Node where the edge goes to
+     */
+    focusEdge(nodeFrom, nodeTo) {
+        // Find x
+        var x_idOfNode = -1;
+        var x_extension = Math.min(5, this.visualizationData[0].x.length);
+        for (var i = 0; i < this.visualizationData[0].x.length; i++) {
+            if (nodeTo == this.visualizationData[0].x[i]) {
+                x_idOfNode = i;
+                break;
+            }
+        }
+
+        if (x_idOfNode == -1) {
+            return;
+        } 
+
+        // Find y
+        var y_idOfNode = -1;
+        var y_extension = Math.min(5, this.visualizationData[0].y.length); 
+        for (var i = 0; i < this.visualizationData[0].y.length; i++) {
+            if (nodeFrom == this.visualizationData[0].y[i]) {
+                y_idOfNode = i;
+                break;
+            }
+        }
+
+        if (y_idOfNode == -1) {
+            return;
+        } 
+
+        // Update the plot
+        Plotly.relayout(this.plot, this.generateLayout([x_idOfNode - x_extension, x_idOfNode + x_extension], [y_idOfNode - y_extension, y_idOfNode + y_extension]));
+    }
+
+    /**
+     * Unfocus
+     */
+    unfocus() {
+        Plotly.relayout(this.plot, this.generateLayout());
+    }
+
+    /**
      * Generate the layout of the visualization
      * @author Roel Koopman
      * @returns Layout (for plotly)
      */
     generateLayout() {
+        return generateLayout([], []);
+    }
+
+    /**
+     * Generate the layout of the visualization
+     * @author Roel Koopman
+     * @param {Array} xrange Range of ids to show on x-axis
+     * @param {Array} yrange Range of ids to show on y-axis
+     */
+    generateLayout(xrange, yrange) {
         return {
             title: 'Adjacency Matrix',
             annotations: [],
             xaxis: {
+              range: xrange,
               ticks: '',
               tickfont: {
                 size: 8
                 }
             },
             yaxis: {
+              range: yrange,
               ticks: '',
               side: 'right', 
               tickfont: {

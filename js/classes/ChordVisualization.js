@@ -7,17 +7,19 @@ class ChordVisualization {
      */
     constructor(dataToVisualize, elementID) {
         this.elementID = elementID;
-        this.data = dataToVisualize.data;
+        this.mainChord = dataToVisualize
+        this.focusChord = null;
 
         // Draw
-        this.draw();
+        this.draw(this.mainChord.data);
     }
 
     /**
      * Draw the chord diagram
+     * @param {Array} chordData Array of chord data
      * @author Roel Koopman
      */
-    draw() {
+    draw(chordData) {
         // Get width height of div
         var width = document.getElementById(this.elementID).offsetWidth;
         var height = document.getElementById(this.elementID).offsetHeight;
@@ -25,7 +27,7 @@ class ChordVisualization {
 
         // Generate the chord
         var chord = viz.ch()
-            .data(this.data)    // Set the data
+            .data(chordData)    // Set the data
             .chordOpacity(0.5)  // Opacity of the edges
             .padding(.01)
             .duration(0)        // Animation duration (keep 0, otherwise lot of lag)
@@ -38,7 +40,25 @@ class ChordVisualization {
         document.getElementById(this.elementID).innerHTML = chord_style + "<svg width=\"" + width + "\" height=\"" + height + "\"><g transform=\"translate(" + Math.round(width / 2) + "," + Math.round(height / 2) + ")\"></g></svg>"
         d3.select("g").call(chord);
     }
+
+    /**
+     * Focus on a node
+     * @param {String} node Node to focus on
+     */
+    focus(node) {     
+        this.focusChord = this.mainChord.getFocusData(node, 100); // TODO: 100 is a magic number
+        this.draw(this.focusChord.data); 
+    }
+
+    /**
+     * Restore chord diagram: unfocus
+     */
+    unfocus() {
+        this.focusChord = null;
+        this.draw(this.mainChord.data);
+    }
 }
+
 
 // CSS for chord diagram
 const chord_style = `<style scoped>

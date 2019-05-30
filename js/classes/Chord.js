@@ -1,6 +1,7 @@
 class Chord {
     constructor(columns, z, edgeWeightFactor) {
         this.columns = columns;
+        this.z = z;
         this.average = getEdgeWeightAverage(columns, z);
         this.data = this.getData(z, edgeWeightFactor); 
     }
@@ -10,7 +11,7 @@ class Chord {
      * Format: http://bl.ocks.org/NPashaP/ba4c802d5ef68f70c019a9706f77ebf1
      * @author Roel Koopman
      * @param {Array} z Plotly-like z-data (not inversed like in Plotly!)
-     * @param {*} averageMultiplicationFactor Factor to multiply the average with, only edges with weight > averageMultiplicationFactor * average will be returned
+     * @param {Float} averageMultiplicationFactor Factor to multiply the average with, only edges with weight > averageMultiplicationFactor * average will be returned
      * @returns Filtered data in Viz.js format
      */
     getData(z, averageMultiplicationFactor)
@@ -25,22 +26,48 @@ class Chord {
         }
         return data;
     }    
+
+    /**
+     * Get a chord of a focused chord diagram
+     * @param {String} node Node to focus on
+     * @param {*} maxNumberOfEdges Max number of edges to display in the focused diagram
+     * @returns Focused chord
+     */
+    getFocusData(node, maxNumberOfEdges) {
+        return getChordForSingleNode(this.columns, this.z, node, maxNumberOfEdges);
+    }
+}
+
+/**
+ * Clone a 2D-array (DO NOT USE .slice()! Does NOT work properly!!)
+ * @author Roel Koopman
+ * @param {Array} toClone Array to clone
+ * @returns {Array} Cloned array
+ */
+function clone2DArray(toClone) {
+    var cloned = [];
+    for (var i = 0; i < toClone.length; i++) {
+        cloned.push([]);
+        for (var j = 0; j < toClone.length; j++) {
+            cloned[i].push(toClone[i][j]);
+        }
+    }
+    return cloned;
 }
 
 /**
  * Get a chord which shows all relations from one specific node
  * @param {Array} columns Columns in matrix
- * @param {Array} z Plotly-like z-data (not inversed like in Plotly!)
- * @param {String} node Node to show all relations of
+ * @param {Array} z Plotly-like z-data (not inversed like 
  * @param {Number} maxNumberOfEdges Maximum number of edges to render: 100=very smooth, 200=pretty smooth, 300=slow, >500=crash/still slow (depending on size of matrix)
+ * @returns Focused chord
  */
 function getChordForSingleNode(columns, z, node, maxNumberOfEdges) {
     var idOfNode = -1;
-
+    
     // Find id of node
     for (var i = 0; i < columns.length; i++) {
         if (columns[i] == node) {
-            console.log(i);
             idOfNode = i;
             break;
         }
@@ -50,7 +77,7 @@ function getChordForSingleNode(columns, z, node, maxNumberOfEdges) {
     }
 
     // Empty the array with the z-data so that only nodes with a connection to the node specified are shown
-    var newZ = z.slice();
+    var newZ = clone2DArray(z);
     var zOrder = [];    // Contains elements {i, j}, ordered by values in newZ at [i,j]
 
     for (var i = 0; i < columns.length; i++) {
@@ -157,8 +184,7 @@ function getSummarizedChord(columns, z, maxNumberOfNodes, maxNumberOfEdges) {
     }
 
     // Convert z-data using the found data about the strongest nodes (only keep data related to the strongest nodes)
-    var numberOfEdges = 0;
-    var newZ = z.slice();   // Clone old z
+    var newZ = clone2DArray(z);   // Clone old z
     for (var i = 0; i < columns.length; i++) {
         for (var j = 0; j < columns.length; j++) {
             var keep = false;
@@ -170,8 +196,6 @@ function getSummarizedChord(columns, z, maxNumberOfNodes, maxNumberOfEdges) {
             // Keep only if it is a relation to one of the strongest nodes, else set to zero
             if (!keep) {
                 newZ[i][j] = 0; // Remove data
-            } else {
-                numberOfEdges++;
             }
         }
     }

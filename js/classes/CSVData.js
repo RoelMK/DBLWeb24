@@ -3,8 +3,10 @@ class CSVData {
      * CSV data constructor
      * @author Roel Koopman
      * @param {string} csv CSV file
+     * @param {string} path Path to this CSV file
      */
-    constructor(csv) {
+    constructor(csv, path) {
+        this.path = path;
         this.rows = csv.split("\n");    // .replace(/[^0-9a-z,_.;\n]/gi, '')  (not (yet) required)
         this.columns = this.rows[0].split(";");
         this.rows.shift();  // Remove first row (= column names)

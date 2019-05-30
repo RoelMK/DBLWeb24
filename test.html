@@ -15,16 +15,21 @@
         <script src="./js/classes/NodeLinkVisualization.js"></script>
         <script src="./js/classes/ChordVisualization.js"></script>
         <script src="./js/classes/Chord.js"></script>
+        <script src="./js/classes/Interactivity.js"></script>
         <script src="./js/main.js"></script>
         <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
         <script src="https://d3js.org/d3.v4.min.js"></script>
-        <!--<script src="http://vizjs.org/viz.v1.3.0.min.js"></script>-->
-        <script type="text/javascript" src="./js/libraries/viz.js"></script>
+        <script src="./js/libraries/viz.js"></script>
 </head>
 <body>
-    <div id="canvas" style="width:600px;height:500px;">
+    <div id="canvas1" style="width:600px;height:500px;">
         <script>
-            visualizeCSVFile('./data3.csv', null, null, 'canvas');
+            visualizeCSVFile('./data3.csv', 'chord', 'canvas1');
+        </script>
+    </div>
+    <div id="canvas2" style="width:600px;height:500px;">
+        <script>
+            visualizeCSVFile('./data3.csv', 'matrix', 'canvas2');
         </script>
     </div>
 </body>
