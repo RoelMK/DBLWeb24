@@ -154,11 +154,22 @@ class Matrix {
 
   /**
    * Use the reorder library to sort by optimal leaf order.
-   * @author Jarno
+   * @author Jarno & Matthijs
+   * @param {'single', 'average', 'complete'} type of linkage (default parameter given should be complete)
+   * @param {euclidean, manhattan, chebyshev, hamming, jaccard, braycurtis} distance type (optional if no parameter is given euclidean distance is used)
    * @return {Matrix} Reordered clone.
+   * linkage should be tested on further datasets to give differnt results
    */
-  optimalLeafOrder() {
-    var permutation = reorder.optimal_leaf_order()(this.data)
+  optimalLeafOrder(linkage_type, distance_name) {
+	var distance_type = reorder.distance.euclidean;				//set distance type to euclidean by default
+	//update the distance type if it is specified
+	if(distance_name == "manhattan"){distance_type = reorder.distance.manhattan;}
+	if(distance_name == "chebyshev"){distance_type = reorder.distance.chebyshev;}
+	if(distance_name == "hamming"){distance_type = reorder.distance.hamming;}
+	if(distance_name == "jaccard"){distance_type = reorder.distance.jaccard;}
+	if(distance_name == "braycurtis"){distance_type = reorder.distance.braycurtis;}
+	//end of potentially updating distance	
+    var permutation = reorder.optimal_leaf_order().linkage(linkage_type).distance(distance_type)(this.data)
     return this.permute(permutation)
   }
   
@@ -176,6 +187,7 @@ class Matrix {
    * Use the reorder library to sort by principal component analysis.
    * @author Matthijs
    * @return {Matrix} Reordered clone.
+   * perhaps only rows should be permuted 
    */
   pcaOrder() {
 	  	var eps = 1e-9;											//eps is the approximation factor in computing the eigenvector
@@ -219,11 +231,7 @@ class Matrix {
 	    //end permute						
 	  }
   
-  /**
-   * Sort by topological order using a depth-first search algorithm.
-   * @author Matthijs
-   * @return {Matrix} Reordered clone.
-   */
+  
   /**
    * Sort by topological order using a depth-first search algorithm as found on wikipedia (https://en.wikipedia.org/wiki/Topological_sorting).
    * @author Matthijs
@@ -276,6 +284,49 @@ class Matrix {
 	    return clone
 	    //end permute
 	  }	
+  
+  /**
+   * Use the reorder library to sort by hierarchical clustering without optimal leaf order.
+   * @author Matthijs
+   * @param {'single', 'average', 'complete'} type of linkage
+   * @param {euclidean, manhattan, chebyshev, hamming, jaccard, braycurtis} distance type (optional if no parameter is given euclidean distance is used) 
+   * @return {Matrix} Reordered clone.
+   */
+  hierarchicalOrder(linkage_type, distance_name){
+	  var permutation = []; 										//initiate permutation
+	  var distance_type = reorder.distance.euclidean;				//set distance type to euclidean by default
+	  //update the distance type if it is specified
+	  if(distance_name == "manhattan"){distance_type = reorder.distance.manhattan;}
+	  if(distance_name == "chebyshev"){distance_type = reorder.distance.chebyshev;}
+	  if(distance_name == "hamming"){distance_type = reorder.distance.hamming;}
+	  if(distance_name == "jaccard"){distance_type = reorder.distance.jaccard;}
+	  if(distance_name == "braycurtis"){distance_type = reorder.distance.braycurtis;}
+	  //end of potentially updating distance
+	  var hcluster = science.stats.hcluster().linkage(linkage_type).distanceMatrix((reorder.dist().distance(distance_type))(this.data));	//set hcluster with input linkage and distancematrix, with distance matrix having input distance and a matrix
+	  var dendrogram = hcluster(this.data);							//initiate the dendrogram and set it's value
+	  //DFS walk through dendrogram
+	  var to_visit = [];											//contains the parts of hte dendrogram that need to be visited
+	  var visiting;													//contains the part of the dendrogram we are currently visiting
+	  to_visit.push(dendrogram);									//start with visiting the entire dendrogram
+	  //start walk
+	  while(to_visit[0] != null){
+		visiting = to_visit[0];										//visit the part of the dendrogram
+		to_visit.shift();											//remove the part of the dendrogram from to_visit as it no longer needs to be visited
+	  	if(visiting.depth > 0){										//check if it not a leaf
+		  	if(visiting.left != null){								//check if it has a left child
+			  to_visit.unshift(visiting.left);						//add the left child at the front
+		  	}
+		  	if(visiting.right != null){								//check if it has a right child
+			  to_visit.unshift(visiting.right);						//add the right child at the front
+		  	}
+	  	} else {
+		  	permutation.push(visiting.id);							//add the id to permutation	
+	  	}
+	  	
+	  }
+	  //end walk
+	  return this.permute(permutation)
+  }
   
   
 }
