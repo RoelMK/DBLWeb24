@@ -6,6 +6,7 @@
 <html lang="html5">
 	<head>
 		<link href="css/stylesUpload.css" rel="stylesheet">
+		<link href="css/help_kevin_styles.css" rel="stylesheet">
 		<title>2IOA0 Group 24</title>
 	</head>
 	<body>
@@ -32,7 +33,11 @@
 		<div id="uploadSelf">
 			<h1>Upload your own file</h1>
 			<form action="./php/upload_code.php" method="post" enctype="multipart/form-data">Dataset has to be in .csv format<br>
-				Choose your file: <br>
+				Choose your file:
+				<div class="tooltip">Help me
+				  <span class="tooltiptext">Just press upload idiot</span>
+				</div>
+				<br>
 				<input type="file" name="fileToUpload" id="fileToUpload">
 				<br><br>
 				<input type="submit" value="Upload csv file" name="submit" id="submitBtn">
@@ -44,10 +49,10 @@
 				Choose one of our existing files:
 				<br>
 				<select name="file_select">
-					<?php	
+					<?php
 						$files = glob('./uploads/*'); // get all file names
 						foreach($files as $file){ // iterate files
-						  if(is_file($file)) {
+							if(is_file($file)) {
 								echo "<option value='$file'>". basename($file) . "</option>"; // print file
 							}
 						}
@@ -56,7 +61,6 @@
 				<br><br>
 				<input type="submit" value="Start visualization" name="submit" id="submitBtn">
 				<br>
-				This is still a work in progress
 			</form>
 		</div>
 		<div id="sharecode">
@@ -68,7 +72,6 @@
 				<br><br>
 				<input type="submit" value="Check code" name="submit" id="submitBtn">
 				<br>
-				This is still a work in progress
 			</form>
 			<div id="">
 				<?php 

@@ -32,21 +32,36 @@
 			</ul>
 		</div>
 		<div id="upload">
-			<?php 
-				print($_SESSION["upload_error"]);
-				print("<br>");
-				if (!empty($_SESSION["file_name"])) {
-					print("You are now using ");
-					print(basename($_SESSION["file_name"]));
-					print("<br>");
-					print("	<a href='./php/clear_session.php'>
-								remove selected csv file.
-							</a>");
-				}
-				$_SESSION["upload_error"] = "";
-			?>
+			
 		</div>
-		<div id="controlPanel"></div>
+		<div id="controlPanel">
+			<div id="">
+				<?php
+					if (!empty($_SESSION["file_name"])) {
+						print("You are now using ");
+						print(basename($_SESSION["file_name"]));
+						print("<br>");
+						echo "<br>";
+						print("	<a href='./php/clear_session.php'>
+									remove selected csv file.
+								</a>");
+					}
+					echo "<br>";
+					echo "<br>";
+					if(empty($_SESSION["generated_share"])) {
+							print("	<a href='./php/generate_share_code.php'>
+									Generate a share code.
+									</a>");
+							echo "<br>";
+						}
+					else {
+						print("You share code is " . $_SESSION["generated_share"]);
+						$_SESSION["generated_share"] = "";
+						echo "<br>";
+					}
+				?>
+			</div>
+		</div>
 		<div id="visBlock">
 			<div id="matrix">
 				<?php
@@ -59,19 +74,11 @@
 			</div>
 			<div id="divider2"></div>
 			<div id="nodelink"></div>
-			<div id="">
-				<?php
-					if(empty($_SESSION["generated_share"])) {
-							print("	<a href='./php/generate_share_code.php'>
-									Generate a share code.
-									</a>");
-						}
-						else {
-							print("You share code is " . $_SESSION["generated_share"]);
-							$_SESSION["generated_share"] = "";
-						}
-				?>
-			</div>
 		</div>
 	</body>
 </html>
+<!-- 
+<?php 
+				
+			?>
+-->

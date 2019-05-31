@@ -1,8 +1,8 @@
-<!-- Below code was written by Jeroen Gijsbers -->
 <?php
 	//sessie start etc. 
 	include ("php/setup.inc.php"); 
 ?>
+<!-- Below code was written by Jeroen Gijsbers -->
 <html lang="html5">
 	<head>
 		<link href="css/stylesIndex.css" rel="stylesheet">
@@ -21,6 +21,7 @@
 		<div id="visBlock">
 			<h1>We are currently deciding whether we want to keep a welcome page.</h1>
 			<p></p>
+			<a href = "help_page.php">help</a>
 		</div>
 	</body>
 </html>
