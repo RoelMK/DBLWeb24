@@ -2,7 +2,10 @@
 <head>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/vis/4.21.0/vis.min.css">
   <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/vis/4.21.0/vis.min.js"></script>
-  <script type="text/javascript" src="../js/classes/Matrix.js"></script>
+  <script type="text/javascript" src="../js/classes/Graph.js"></script>
+  <script type="text/javascript" src="../js/classes/NodeLinkVisualization.js"></script>
+  <script type="text/javascript" src="./csv.js"></script>
+  <script type="text/javascript" src="./csvsmall.js"></script>
 
     <style type="text/css">
         #mynetwork {
@@ -13,42 +16,39 @@
     </style>
 </head>
 <body>
-<div id="mynetwork"></div>
+
+<button id='button1'>Toggle Physics</button>
+<button id='button2'>Toggle Edge Smoothing</button>
+<button id='button3'>Toggle Edges</button>
+<input type='range' id='slider1' min='0' max='10' value='0'></input>
+<!-- TODO: set min and max value from the NodeLinkVisualization-->
+<label>Min. component size: <span id='slider1value'>0</span></label>
+<input type='range' id='slider2' min='0' max='10' value='0'>
+<label>Min. connectivity: <span id='slider2value'>0</span></label>
+<select id='select1'>
+  <option value="force">Force-Directed</option>
+  <option value="circular">Circular</option>
+  <option value="hierarchical">Hierarchical</option>
+</select>
+
+<div id="nodelink"></div>
 
 <script type="text/javascript">
-    // create an array with nodes
-    var nodes = new vis.DataSet([
-        {id: 1, label: 'Node 1'},
-        {id: 2, label: 'Node 2'},
-        {id: 3, label: 'Node 3'},
-        {id: 4, label: 'Node 4'},
-        {id: 5, label: 'Node 5'}
-    ]);
-
-    // create an array with edges
-    var edges = new vis.DataSet([
-        {from: 1, to: 3},
-        {from: 1, to: 2},
-        {from: 2, to: 4},
-        {from: 2, to: 5}
-    ]);
-
-    // create a network
-    var container = document.getElementById('mynetwork');
-
-    // provide the data in the vis format
-    var data = {
-        nodes: nodes,
-        edges: edges
-    };
-
-    var matrix = new Matrix()
-    matrix.randomizeGraph(20)
-    var data = matrix.asVis()
-    var options = {};
-
-    // initialize your network!
-    var network = new vis.Network(container, data, options);
+    var graph = new Graph()
+    graph.readCSV(csv)
+    var vis = new NodeLinkVisualization('nodelink', graph)
+    vis.assignButtons({
+      togglePhysics: document.getElementById('button1'),
+      toggleEdgeSmoothing: document.getElementById('button2'),
+      toggleEdges: document.getElementById('button3')
+    })
+    vis.assignSliders({
+      setMinComponentSize: document.getElementById('slider1'),
+      setMinConnectivity: document.getElementById('slider2')
+    })
+    vis.assignDropdowns({
+      setLayout: document.getElementById('select1')
+    })
 </script>
 </body>
 </html>

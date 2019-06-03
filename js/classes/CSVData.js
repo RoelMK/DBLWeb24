@@ -5,6 +5,7 @@ class CSVData {
      * @param {string} csv CSV file
      */
     constructor(csv) {
+        csv = csv.replace(/\r\n/g, '\n') // replace windows line endings with unix
         this.rows = csv.split("\n");    // .replace(/[^0-9a-z,_.;\n]/gi, '')  (not (yet) required)
         this.columns = this.rows[0].split(";");
         this.rows.shift();  // Remove first row (= column names)
@@ -36,7 +37,7 @@ class CSVData {
             z.push(currentRow);
         }
 
-        var matrix = new Matrix(); 
+        var matrix = new Matrix();
         matrix.setData(z);                  // Data is in the z-array
         matrix.setTailLabels(this.columns); // Head and tail are the same in the default unordered dataset
         matrix.setHeadLabels(this.columns);
