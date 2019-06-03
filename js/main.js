@@ -23,7 +23,7 @@ function visualizeCSVFile(csvPath, visualizationType, elementID, loop = false) {
                 nodeLink = null; // TODO: add
                 break;
             case 'chord':
-                chord = new ChordVisualization(csv.getChord(25, 500), elementID); 
+                chord = new ChordVisualization(csv.getChord(10, 300), elementID); 
                 break;
         }
     } else if(!loop) {

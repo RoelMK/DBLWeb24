@@ -1,27 +1,26 @@
 class Chord {
-    constructor(columns, z, edgeWeightFactor) {
+    constructor(columns, summarizedZ, unsummarizedZ) {
         this.columns = columns;
-        this.z = z;
-        this.average = getEdgeWeightAverage(columns, z);
-        this.data = this.getData(z, edgeWeightFactor); 
+        this.unsummarizedZ = unsummarizedZ;
+        this.average = getEdgeWeightAverage(columns, summarizedZ);    // Not used at the moment
+        this.data = this.getData(summarizedZ); 
     }
 
     /**
-     * Convert to Viz.js and filter data to only display most important edges
+     * Convert to Viz.js
      * Format: http://bl.ocks.org/NPashaP/ba4c802d5ef68f70c019a9706f77ebf1
      * @author Roel Koopman
      * @param {Array} z Plotly-like z-data (not inversed like in Plotly!)
-     * @param {Float} averageMultiplicationFactor Factor to multiply the average with, only edges with weight > averageMultiplicationFactor * average will be returned
-     * @returns Filtered data in Viz.js format
+     * @returns Data in Viz.js format
      */
-    getData(z, averageMultiplicationFactor)
+    getData(z)
     {
         var data = [];  // [source, target, weight]
         for (var x = 0; x < this.columns.length; x++) {
             for (var y = 0; y < this.columns.length; y++) {
-                if (z[y][x] > averageMultiplicationFactor * this.average) {
-                    data.push([this.columns[x], this.columns[y], z[y][x]])
-                }
+                if (z[y][x] > 0) {
+                    data.push([this.columns[x], this.columns[y], z[y][x]]);
+                } 
             }
         }
         return data;
@@ -34,7 +33,7 @@ class Chord {
      * @returns Focused chord
      */
     getFocusData(node, maxNumberOfEdges) {
-        return getChordForSingleNode(this.columns, this.z, node, maxNumberOfEdges);
+        return getChordForSingleNode(this.columns, this.unsummarizedZ, node, maxNumberOfEdges);
     }
 }
 
@@ -73,7 +72,7 @@ function getChordForSingleNode(columns, z, node, maxNumberOfEdges) {
         }
     }
     if (idOfNode == -1) {
-        return new Chord([], [], 0); // If incorrect id: return a empty chord
+        return new Chord([], [], []); // If incorrect id: return a empty chord
     }
 
     // Empty the array with the z-data so that only nodes with a connection to the node specified are shown
@@ -109,7 +108,7 @@ function getChordForSingleNode(columns, z, node, maxNumberOfEdges) {
         }
     }
 
-    return new Chord(columns, newZ, 0); // Return chord with all the specified data
+    return new Chord(columns, newZ, z); // Return chord with all the specified data
 }
 
 /**
@@ -141,13 +140,13 @@ function getEdgeWeightAverage(columns, z) {
  * @param {Array} columns Columns in matrix
  * @param {Array} z Plotly-like z-data (not inversed like in Plotly!)
  * @param {Number} maxNumberOfNodes Maximum number of nodes (starts with the nodes with most connections) which will be displayed, but not including the neighbours of these nodes (these will also be displayed)
- * @param {Number} maxNumberOfEdges Maximum number of edges to render: 300=very smooth, 500=pretty smooth, 800=slow, >1200=crash
+ * @param {Number} maxNumberOfEdges Maximum number of edges to render: 100=very smooth, 200=pretty smooth, 300=slow, >500=crash/still slow (depending on size of matrix)
  * @returns A chord dataset which can be rendered without crashing the browser
  */
 function getSummarizedChord(columns, z, maxNumberOfNodes, maxNumberOfEdges) {
     // Only summarize if really required
     if (maxNumberOfNodes >= columns.length) {
-        return new Chord(columns, z, 0);    // If max > number of nodes, just return a chord
+        return new Chord(columns, z, z);    // If max > number of nodes, just return a chord
     }
 
     // Calculate how much outgoing weight and ingoing weight each node has
@@ -200,23 +199,33 @@ function getSummarizedChord(columns, z, maxNumberOfNodes, maxNumberOfEdges) {
         }
     }
 
-    // Calculate the required factor for edge filtering so that it is possible for the chord to properly render
-    var average = getEdgeWeightAverage(columns, newZ);  // Find average z-value
-    // 1. Now, calculate the number of edges with z > average
-    var numberOfEdgesWeightOverAverage = 0;
+    // Reduce the size of the z-data array
+    var zOrder = [];    // Contains elements {i, j}, ordered by values in newZ at [i,j]
+
     for (var i = 0; i < columns.length; i++) {
         for (var j = 0; j < columns.length; j++) {
-            if (z[i][j] > average) {
-                numberOfEdgesWeightOverAverage++;
+            var insertedIntoOrder = false;
+            // Insert i,j into zOrder to keep track of number of elements
+            for (var k = 0; k < zOrder.length; k++) {
+                if (newZ[i][j] > newZ[zOrder[k].i][zOrder[k].j]) {  // Is the element at i,j greater than the element at zOrder[k].i, zOrder[k].j?
+                    // Yes: insert
+                    zOrder.splice(k, 0, {i: i, j: j});
+                    insertedIntoOrder = true;
+                    break;
+                }
+            }
+            // Not inserted yet? Add it to the end of the array
+            if (!insertedIntoOrder) {
+                zOrder.push({i: i, j: j});
+            }
+            // Check if we do not have too many elements
+            if (zOrder.length > maxNumberOfEdges) {
+                newZ[zOrder[zOrder.length - 1].i][zOrder[zOrder.length - 1].j] = 0;   // Remove element in newZ which is currently the last element in zOrder.
+                zOrder.pop();   // Remove last element
             }
         }
     }
-    // 2. Find the factor to get the edges down to the required amount 
-    var factor = 0;                 // Factor to filter least important edges
-    if (numberOfEdgesWeightOverAverage > maxNumberOfEdges) {
-        factor = numberOfEdgesWeightOverAverage / maxNumberOfEdges;   
-    }
 
     // Return the resulting chord
-    return new Chord(columns, newZ, factor); 
+    return new Chord(columns, newZ, z); 
 }

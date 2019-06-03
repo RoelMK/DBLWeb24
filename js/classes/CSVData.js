@@ -50,7 +50,7 @@ class CSVData {
      * Get chord data from CSV
      * @author Roel Koopman
      * @param {Number} maxNumberOfNodes Maximum number of nodes (starts with the nodes with most connections) which will be displayed, but not including the neighbours of these nodes (these will also be displayed)
-     * @param {Number} maxNumberOfEdges Maximum number of edges to render: 300=very smooth, 500=pretty smooth, 800=slow, >1200=crash
+     * @param {Number} maxNumberOfEdges Maximum number of edges to render: 100=very smooth, 200=pretty smooth, 300=slow, >500=crash/still slow (depending on size of matrix)
      * @returns Chord data, summarized
      */
     getChord(maxNumberOfNodes, maxNumberOfEdges) { 
@@ -63,7 +63,7 @@ class CSVData {
             currentRow = currentRow.map(Number);
             z.push(currentRow);
         }
-
+        
         return getSummarizedChord(this.columns, z, maxNumberOfNodes, maxNumberOfEdges); // Generate the chord data using the z-data and the column data
     }
 

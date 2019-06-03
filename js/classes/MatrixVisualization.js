@@ -7,23 +7,8 @@ class MatrixVisualization {
      */
     constructor(dataToVisualize, elementID) {
         this.plot = document.getElementById(elementID);         // Plot
-        
-        // Temporary: check size of matrix (too large matrices crash the browser) TODO
-        if (dataToVisualize.data.length <= 100) {
-            this.visualizationData = [                              // visualizationData[i] -- contains data for matrix visualization
-                dataToVisualize.asPlotly(),                         // i=0: Base data
-                dataToVisualize.barycenterOrder().asPlotly(),       // i=1: Bary center order
-                dataToVisualize.optimalLeafOrder().asPlotly(),      // i=2: Optimal leaf order
-                dataToVisualize.sortOrder().asPlotly(),             // i=3: Sort order
-                dataToVisualize.pcaOrder().asPlotly()               // i=4: PCA order
-            ]; 
-        } else {
-            //alert('Reorder algorithmes are currently not available for this matrix (size > 100x100).')
-            this.visualizationData = [                              // visualizationData[i] -- contains data for matrix visualization
-                dataToVisualize.asPlotly()
-            ];
-        }
-         
+        this.visualizationData = dataToVisualize;   // Copy the matrix data
+        this.visibleData = dataToVisualize.asPlotly();  // Visible data in the matrix in plotly format
         this.draw();    // Draw the matrix
     }
 
@@ -31,8 +16,21 @@ class MatrixVisualization {
      * Draw the matrix
      * @author Roel Koopman
      */
-    draw() {       
-        Plotly.newPlot(this.plot, this.generateData(), this.generateLayout());
+    draw() {      
+        var plotlyInput =  [{
+            z: this.visibleData.z,
+            x: this.visibleData.x,
+            y: this.visibleData.y,
+            name: 'Test',
+            visible: true,
+            colorscale: 'Blackbody',    // Default
+            type: 'heatmap',
+            colorbar: {x: -0.15},       // Move the colorbar to the left side of the plot
+            xgap: 0.05,                 // Add a grid
+            ygap: 0.05
+        }];
+
+        Plotly.newPlot(this.plot, plotlyInput, this.generateLayout());
         this.setInteraction();
     }
 
@@ -43,7 +41,7 @@ class MatrixVisualization {
      */
     changeOrder(order) { 
         // Check if visualization does not have too many matrices
-        if (this.dataToVisualize.data.length > 100) {
+        if (this.dataToVisualize.data.length > 100) {   // TODO: magic number 100
             return; // Quit if so, do not change anything
         }
 
@@ -73,6 +71,7 @@ class MatrixVisualization {
      * @param {Object} plotlyData Plotly matrix data
      */
     updateData(plotlyData) {
+        this.visibleData = plotlyData;
         var update = {
             z: plotlyData.z,
             x: plotlyData.x,
@@ -82,9 +81,9 @@ class MatrixVisualization {
     }
 
     /**
-     * Change the color of the plot
+     * Change the color of the plot 
      * @author Roel Koopman
-     * @param {String} color New color
+     * @param {String} color New color (Blackbody, Electric, Greens, Greys, Earth, Bluered, Portland, Picnic, Jet, Hot)
      */
     changeColor(color) {
         var update = {
@@ -110,9 +109,9 @@ class MatrixVisualization {
     focusEdge(nodeFrom, nodeTo) {
         // Find x
         var x_idOfNode = -1;
-        var x_extension = Math.min(5, this.visualizationData[0].x.length);
-        for (var i = 0; i < this.visualizationData[0].x.length; i++) {
-            if (nodeTo == this.visualizationData[0].x[i]) {
+        var x_extension = Math.min(5, this.visibleData.x.length);
+        for (var i = 0; i < this.visibleData.x.length; i++) {
+            if (nodeTo == this.visibleData.x[i]) {
                 x_idOfNode = i;
                 break;
             }
@@ -124,9 +123,9 @@ class MatrixVisualization {
 
         // Find y
         var y_idOfNode = -1;
-        var y_extension = Math.min(5, this.visualizationData[0].y.length); 
-        for (var i = 0; i < this.visualizationData[0].y.length; i++) {
-            if (nodeFrom == this.visualizationData[0].y[i]) {
+        var y_extension = Math.min(5, this.visibleData.y.length); 
+        for (var i = 0; i < this.visibleData.y.length; i++) {
+            if (nodeFrom == this.visibleData.y[i]) {
                 y_idOfNode = i;
                 break;
             }
@@ -180,84 +179,26 @@ class MatrixVisualization {
               tickfont: {
                   size: 8
               }
-            },
-            updatemenus: [
-            {   // Menu 1: color
-                xanchor: 'left',
-                yanchor: 'top',
-                y: 1.1,
-                x: 0,
-                buttons: [{
-                   method: 'restyle',
-                    args: ['colorscale', 'Blackbody'],
-                    label: 'Blackbody'
-                }, {
-                    method: 'restyle',
-                    args: ['colorscale', 'Electric'],
-                    label: 'Electric'
-                }, {
-                    method: 'restyle',
-                    args: ['colorscale', 'Greens'],
-                    label: 'Greens'
-                }, {
-                    method: 'restyle',
-                    args: ['colorscale', 'Greys'],
-                    label: 'Greys'
-                }, {
-                    method: 'restyle',
-                    args: ['colorscale', 'Earth'],
-                    label: 'Earth'
-                }, {
-                    method: 'restyle',
-                    args: ['colorscale', 'Bluered'],
-                    label: 'Bluered'
-                }, {
-                    method: 'restyle',
-                    args: ['colorscale', 'Portland'],
-                    label: 'Portland'
-                }, {
-                    method: 'restyle',
-                    args: ['colorscale', 'Picnic'],
-                    label: 'Picnic'
-                }, {
-                    method: 'restyle',
-                    args: ['colorscale', 'Jet'],
-                    label: 'Jet'
-                }, {
-                    method: 'restyle',
-                    args: ['colorscale', 'Hot'],
-                    label: 'Hot'
-                }]
-            }, {    // Menu 2: data set
-                xanchor: 'left',
-                yanchor: 'top',
-                y: 1.1,
-                x: 0.24,
-                buttons: [{
-                    method: 'restyle',
-                    args: ['visible', [true, false, false, false, false]],
-                    label: 'Base data' 
-                }, {
-                    method: 'restyle',
-                    args: ['visible', [false, true, false, false, false]],
-                    label: 'Bary center order'
-                }, {
-                    method: 'restyle',
-                    args: ['visible', [false, false, true, false, false]],
-                    label: 'Optimal leaf order'
-                }, {
-                    method: 'restyle',
-                    args: ['visible', [false, false, false, true, false]],
-                    label: 'Sort order'
-                }, {
-                    method: 'restyle',
-                    args: ['visible', [false, false, false, false, true]],
-                    label: 'PCA order'
-                }]
-            }]
+            }
         }
     }
 
+    /**
+     * Initialize the interaction class (always run after draw)
+     * @author Roel Koopman
+     */
+    setInteraction() {
+        this.interaction = new MatrixInteraction(this);
+        this.plot.on('plotly_click', this.interaction.matrixClick);
+        this.plot.on('plotly_hover', this.interaction.matrixHover);
+        this.plot.on('plotly_unhover', this.interaction.matrixUnhover);
+        this.plot.on('plotly_relayout', this.interaction.matrixZoom);
+    }
+
+
+    //
+    //
+    // ---------------------------------------- OBSOLETE ----------------------------------------
     /**
      * Generate the data for Plotly
      * @author Roel Koopman
@@ -265,7 +206,7 @@ class MatrixVisualization {
      */
     generateData() {
         var data = [];
-        for (var i = 0; i < 5; i++) {       // 5 data sets (every ordering, see definition in comment in the constructor)
+        for (var i = 0; i < this.visualizationData.length; i++) { // Obsolete, but left in the code because of it possible uses in the future
             data.push(this.makeTrace(i));   // Push every dataset
         }
         return data;
@@ -301,10 +242,11 @@ class MatrixVisualization {
      */
     getXYZData(i) {
         if (i < this.visualizationData.length) {
+            var plotlyData = this.visualizationData[i].asPlotly();
             return {
-                z: this.visualizationData[i].z,
-                x: this.visualizationData[i].x,
-                y: this.visualizationData[i].y,
+                z: plotlyData.z,
+                x: plotlyData.x,
+                y: plotlyData.y,
             };
         } else {
             return {
@@ -312,16 +254,7 @@ class MatrixVisualization {
             };  
         }
     }
-
-    /**
-     * Initialize the interaction class (always run after draw)
-     * @author Roel Koopman
-     */
-    setInteraction() {
-        this.interaction = new MatrixInteraction(this);
-        this.plot.on('plotly_click', this.interaction.matrixClick);
-        this.plot.on('plotly_hover', this.interaction.matrixHover);
-        this.plot.on('plotly_unhover', this.interaction.matrixUnhover);
-        this.plot.on('plotly_relayout', this.interaction.matrixZoom);
-    }
+    //
+    // END OBSOLETE
+    //
 }
