@@ -1,26 +1,49 @@
+var matrix = null;      // Current matrix 
+var nodeLink = null;    // Current node-link diagram
+var chord = null;       // Current chord diagram
+var csv = null;         // Current csv loaded
+var interactivity = new Interactivity();    // Interactivity manager
+
 /**
- * Load a local CSV file
+ * Visualize a CSV file
  * @author Roel Koopman
- * @param {string} path Path to CSV file
- * @param {string} elementID ID of the div to display the visualization in
+ * @param {String} csvPath Path to CSV file
+ * @param {String} visualizationType Type of visualization to load (matrix/nodelink/chord)
+ * @param {String} elementID ID of the div to show the visualization in
+ * @param {Boolean} loop Normally false, do not set true, except when executing this code in a loop to prevent crashes
  */
-function visualizeCSVFile(path, elementID) {
-    var req = new XMLHttpRequest();
-    req.onload = function(){
-        var csv = new CSVData(this.responseText);
-        var vis1 = loadVisualization1(csv.getMatrix(), elementID);   // csv.getMatrix()
-    };
-    req.open('GET', path); 
-    req.send();
+function visualizeCSVFile(csvPath, visualizationType, elementID, loop = false) {
+    if (csv != null && csv.path == csvPath) {
+        // Load specified visualization 
+        switch(visualizationType.toLowerCase()) {
+            case 'matrix':
+                matrix = new MatrixVisualization(csv.getMatrix(), elementID); 
+                break;
+            case 'nodelink':
+                nodeLink = null; // TODO: add
+                break;
+            case 'chord':
+                chord = new ChordVisualization(csv.getChord(10, 300), elementID); 
+                break;
+        }
+    } else if(!loop) {
+        loadCSV(csvPath, visualizationType, elementID); // Load the CSV, then re-execute this method
+    }
 }
 
 /**
- * Load visualization 1
+ * Load a CSV file
  * @author Roel Koopman
- * @param {Matrix} matrix Matrix to show
- * @param {string} elementID ID of the div to display the visualization in
- * @returns {MatrixVisualization} Loaded matrix
+ * @param {String} csvPath Path to the CSV file
+ * @param {String} visualizationType Type of visualization to load (matrix/nodelink/chord)
+ * @param {String} elementID ID of the div to show the visualization in
  */
-function loadVisualization1(matrix, elementID) {
-    return new MatrixVisualization(matrix, elementID);
+function loadCSV(csvPath, visualizationType, elementID) {
+    var req = new XMLHttpRequest();
+    req.onload = function() {
+        csv = new CSVData(this.responseText, csvPath); 
+        visualizeCSVFile(csvPath, visualizationType, elementID, true)
+    };
+    req.open('GET', csvPath); 
+    req.send();
 }
