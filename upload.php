@@ -1,12 +1,22 @@
+<<<<<<< HEAD
+=======
+<!-- Below code was written by Jeroen Gijsbers -->
+>>>>>>> origin/jeroen
 <?php
 	//sessie start etc.
 	include ("php/setup.inc.php"); 
 ?>
+<<<<<<< HEAD
 <!-- Below code was written by Jeroen Gijsbers -->
 <html lang="html5">
 	<head>
 		<link href="css/stylesUpload.css" rel="stylesheet">
 		<link href="css/help_kevin_styles.css" rel="stylesheet">
+=======
+<html lang="html5">
+	<head>
+		<link href="css/stylesUpload.css" rel="stylesheet">
+>>>>>>> origin/jeroen
 		<title>2IOA0 Group 24</title>
 	</head>
 	<body>
@@ -33,11 +43,15 @@
 		<div id="uploadSelf">
 			<h1>Upload your own file</h1>
 			<form action="./php/upload_code.php" method="post" enctype="multipart/form-data">Dataset has to be in .csv format<br>
+<<<<<<< HEAD
 				Choose your file:
 				<div class="tooltip">Help me
 				  <span class="tooltiptext">Just press upload idiot</span>
 				</div>
 				<br>
+=======
+				Choose your file: <br>
+>>>>>>> origin/jeroen
 				<input type="file" name="fileToUpload" id="fileToUpload">
 				<br><br>
 				<input type="submit" value="Upload csv file" name="submit" id="submitBtn">
@@ -48,6 +62,7 @@
 			<form action="./php/upload_code.php" method="post" enctype="multipart/form-data">
 				Choose one of our existing files:
 				<br>
+<<<<<<< HEAD
 				<select name="file_select">
 					<?php
 						$files = glob('./uploads/*'); // get all file names
@@ -57,21 +72,37 @@
 							}
 						}
 					?>
+=======
+				<select name="databases">
+					<option value="volvo">Author Similarity</option>
+					<option value="saab">Co-authorship</option>
+					<option value="fiat">Co-citation</option>
+>>>>>>> origin/jeroen
 				</select>
 				<br><br>
 				<input type="submit" value="Start visualization" name="submit" id="submitBtn">
 				<br>
+<<<<<<< HEAD
 			</form>
 		</div>
 		<div id="sharecode">
 			<h1>Share code</h1>
 			<form action="./php/load_share_code.php" method="post" enctype="multipart/form-data">
+=======
+				This is still a work in progress
+<			</form>
+		</div>
+		<div id="sharecode">
+			<h1>Share code</h1>
+			<form action="./php/upload_code.php" method="post" enctype="multipart/form-data">
+>>>>>>> origin/jeroen
 				Enter your share code here:
 				<br>
 				<input type="text" name="shareCode"><br>
 				<br><br>
 				<input type="submit" value="Check code" name="submit" id="submitBtn">
 				<br>
+<<<<<<< HEAD
 			</form>
 			<div id="">
 				<?php 
@@ -90,6 +121,10 @@
 					$_SESSION["share_message"] = "";
 				?>
 			</div>
+=======
+				This is still a work in progress
+<			</form>
+>>>>>>> origin/jeroen
 		</div>
 
 	</body>

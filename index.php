@@ -21,7 +21,10 @@
 		<div id="visBlock">
 			<h1>We are currently deciding whether we want to keep a welcome page.</h1>
 			<p></p>
+<<<<<<< HEAD
 			<a href = "help_page.php">help</a>
+=======
+>>>>>>> origin/jeroen
 		</div>
 	</body>
 </html>
