@@ -15,11 +15,12 @@
 
 		<script src="./js/methods/CSVtoJSON.js"></script>
 
-        <script src="./js/classes/CSVData.js">               </script>
+    <script src="./js/classes/CSVData.js">              </script>
  		<script src="./js/classes/Matrix.js">               </script>
  		<script src="./js/classes/MatrixVisualization.js">  </script>
  		<script src="./js/classes/MatrixInteraction.js">    </script>
-        <script src="./js/classes/NodeLinkVisualization.js"></script>
+    <script src="./js/classes/NodeLinkVisualization.js"></script>
+		<script src="./js/classes/Interactivity.js"></script>
 		<script src="./js/main.js"></script>
         <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
 	</head>
