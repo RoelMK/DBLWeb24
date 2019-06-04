@@ -5,6 +5,6 @@
 	session_unset();
 	session_destroy();
 	
-	$locatie = "../matrixNodelink.php";;
+	$locatie = "../upload.php";
 	header("location:$locatie");
 ?>

@@ -38,9 +38,19 @@
 			$stmt->close();
 	 
 		}
+		$_SESSION["generated_share"] = $code;
+
+		mysqli_close($db);
+		$locatie = "../matrixNodelink.php";
+		header("location:$locatie");
 		echo "New code = $code";
 	}
 	else {
+		$_SESSION["generated_share"] = $result;
+
+		mysqli_close($db);
+		$locatie = "../matrixNodelink.php";
+		header("location:$locatie");
 		echo "Old code = $result";
 	}
 	echo "<br> From now it is empty";

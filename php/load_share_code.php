@@ -3,7 +3,7 @@
 	include ("setup.inc.php");
 	include ("db_connect.inc.php");
 	
-	$code = $_POST["code"];
+	$code = $_POST["shareCode"];
 	//check if is already shared once
 	if ($stmt = $db->prepare("SELECT file_name FROM $codetable WHERE code=?")) 
 	{
@@ -23,24 +23,37 @@
 		$stmt->close();
 	}
 	if($result == "") { 	
-		echo "The file you look for has been deleted or the entered code is wrong.";
+		$_SESSION["share_message"] = "The code you entered was incorrect or the corresponding file has been deleted.";
+		$_SESSION["share_file"] = "";
+		
+		mysqli_close($db);
+		$locatie = "../upload.php";
+		header("location:$locatie");
 	}
 	else {
 		if (file_exists($result)) {
-			$_SESSION["file_name"] = $result;
+			$_SESSION["share_message"] = "Do you want to load ". basename($result) . "?";
+			$_SESSION["share_file"] = $result;
 			$_SESSION["upload_error"] = "";
 			
 			mysqli_close($db);
-			$locatie = "../matrixNodelink.php";
+			$locatie = "../upload.php";
 			header("location:$locatie");
 			
 			echo "If you see this, please report. #2";
 			$uploadOk = 0;
 		}
-		
+		else {
+			$_SESSION["share_message"] = "The file you are looking for has been deleted.";
+			$_SESSION["share_file"] = "";
+			
+			mysqli_close($db);
+			$locatie = "../upload.php";
+			header("location:$locatie");
+		}
 		//error handling.
 		
-		mysqli_close($db);
+		
 		echo "The file you looked for has been deleted.";
 	}
 	echo "<br> From now it is empty";

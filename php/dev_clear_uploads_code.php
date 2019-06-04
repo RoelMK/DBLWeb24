@@ -9,6 +9,5 @@
 		}
 	}
 	
-	$locatie = "../matrixNodelink.php";
-	header("location:$locatie");
+	echo "uploads folder cleared";
 ?>

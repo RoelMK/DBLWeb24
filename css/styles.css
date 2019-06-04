@@ -1,137 +1,103 @@
 /* color scheme:
-darkblue: 011936
-grey: 465362
-teal: 82a3a1
-green: 9fc490
-light green: c0dfa1
+5: 0e0c19
+4: 01306d
+3: 17479e
+2: 7faaf4
+1: f4e7e9
 */
 * {
+	font-family: Arial;
 	margin: 0;
 	padding: 0;
-	scroll-behavior: smooth;
+	color: white;
 }
 body {
-	background-color: #82a3a1;
 	display: grid;
-	grid-template-columns: 100%;
-	grid-template-rows: 100% 100% 100%;
-	grid-template-areas: "firstSection"
-						 "secondSection"
-						 "thirdSection";
-}
-#firstSection {
-	display: grid;
+	background-color: #f4e7e9;
 	grid-template-columns: 80% 20%;
-	grid-template-rows: 20% 80%;
-	grid-template-areas: "nav nav"
-						 "video textSection";
-	grid-area: firstSection;
+	grid-template-rows: 10% 5% 85%;
+	grid-template-areas: "navBar navBar"
+			     "upload upload"
+			     "visBlock controlPanel";
 }
-#firstSection img {
-	grid-area: video;
-	height: 80%;
-	width: 80%;
-	overflow: hidden;
-	vertical-align: top;
-	align-self: top;
+
+#navBar {
+	grid-area: navBar;
+	background-color: #f4e7e9;
+}
+#navBar ul {	
+	list-style-type: none;
 
 }
-#firstSection #textSection {
-	vertical-align: top;
-	overflow: hidden;
-	/*white-space: nowrap;*/
-	grid-area: textSection;
-}
-#firstSection #textSection .overflowText {
-	grid-area: textSection;
-	/*white-space: clip;*/
-}
-#firstSection #nav {
-	grid-area: nav;
-	width: 80%;
-	height: 15%;
-	/*position: fixed; */
-	overflow: auto;
-  	list-style-type: none;
- 	padding: 2% 0 3% 20%;
-}
-#firstSection #nav li {
+#navBar li {
+	background-color: #01306d;
+	border-radius: 5px 5px 5px 5px;
+	border: solid 2px #0e0c19;
+	padding: 2% 0 0 0;
 	float: left;
-	border-right: solid 4px #333;
-}
-#firstSection #nav li a {
-	text-decoration: none;
- 	color: #000;
-  	padding: 16px 32px;
-  	display: block;
-}
-#firstSection #nav li a:hover {
-	background-color: #465362;
-  	color: white;
-  	text-decoration: none;
-}
-#secondSection {
-	height: 95%;
-	width: 70%;
-	grid-area: secondSection;
-	display: grid;
-	grid-template-columns: 40% 60%;
-	grid-template-rows: 0% 15% 50% 10% 5% 20%;
-	grid-template-areas: "anchSect2 anchSect2"
-						 "titleSect2 titleSect2"
-						 "textSect2 imgSect2"
-						 "uploadForm imgSect2"
-						 "PHPResult imgSect2"
-						 "buttonSect2 imgSect2";
-	padding: 0 15% 0 15%;	
-	background-color: #c0dfa1;
-}
-#secondSection #PHPResult {
-	grid-area: PHPResult;
-}
-#secondSection #anchSection2 {
-	grid-area: anchSect2;
-}
-#secondSection h1 {
-	grid-area: titleSect2;
-	padding: 0 0 0 0;
-}
-#secondSection #textSect2 {
-	grid-area: textSect2;
-}
-#secondSection #imgSect2 {
-	grid-area: imgSect2;
-}
-#secondSection a {
-	border-radius: 30px 30px 30px 30px;
-	color: black;
-	font-size: 32px;
+	line-height: 100%;
 	text-align: center;
-	height: 25%;
-	background-color: #465362;
-	text-decoration: none;
-	grid-area: buttonSect2;
+	width: 33%;
 }
-#secondSection a:hover {
-	background-color: #011936;
-	color: white;
+#navBar li a {
+	padding: 16px 32px;
+	text-decoration: none;
+	overflow: auto;
+	display: block;
 
 }
-#secondSection form {
-	grid-area: uploadForm;
+em {
+	background-color: #0e0c19;
+
 }
-#thirdSection {
-	height: 100%;
-	grid-area: thirdSection;
-	width: 70%;
-	padding: 0 15% 0 15%;
-}
-#thirdSection ul {
-	width: 70%
-	padding: 0 15% 0 15%;
-	margin-left: 20%;
-}
-#thirdSection ul a {
+#navBar li a:hover {
+	background-color: #0e0c19;
+	color: white;
 	text-decoration: none;
-	color: #000;
+
 }
+#upload {
+	float: left;
+	display: grid;
+	grid-template-columns: 33% 33 34%;
+	grid-template-rows: 100%;
+	grid-template-areas: "uploadForm phpResult phpResult";
+	grid-area: upload;
+	background-color: #7faaf4;
+}
+#upload #uploadForm {
+	grid-area: uploadForm;
+
+}
+#upload #phpResult {
+	grid-area: phpResult;
+}
+#upload form #submitBtn {
+	color: black;
+}
+#controlPanel {
+	border-radius: 15px 15px 15px 15px;
+	margin: 5% 5% 5% 0;
+	grid-area: controlPanel;
+	background-color: #17479e;
+
+}
+#visBlock {
+	color: #000;
+	grid-area: visBlock;
+	display: grid;
+	background-color: #f4e7e9;
+	grid-template-columns: 45% 10% 45%;
+	grid-template-rows: 100%;
+	grid-template-areas: "matrix divider2 nodelink";
+}
+#visBlock #matrix {
+	grid-area: matrix;
+}
+#visBlock #nodelink {
+	grid-area: nodelink;
+}
+#visBlock #divider2 {
+	grid-area: divider2;
+}
+
