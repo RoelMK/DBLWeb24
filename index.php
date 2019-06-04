@@ -1,6 +1,6 @@
 <?php
-	//sessie start etc. 
-	include ("php/setup.inc.php"); 
+	//sessie start etc.
+	include ("php/setup.inc.php");
 ?>
 <!-- Below code was written by Jeroen Gijsbers -->
 <html lang="html5">
@@ -21,10 +21,7 @@
 		<div id="visBlock">
 			<h1>We are currently deciding whether we want to keep a welcome page.</h1>
 			<p></p>
-<<<<<<< HEAD
 			<a href = "help_page.php">help</a>
-=======
->>>>>>> origin/jeroen
 		</div>
 	</body>
 </html>

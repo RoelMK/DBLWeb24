@@ -1,6 +1,6 @@
 <?php
 	//sessie start etc.
-	include ("php/setup.inc.php"); 
+	include ("php/setup.inc.php");
 ?>
 <!-- Below code was written by Jeroen Gijsbers -->
 <html lang="html5">
@@ -32,8 +32,7 @@
 			</ul>
 		</div>
 		<div id="upload">
-<<<<<<< HEAD
-			
+
 		</div>
 		<div id="controlPanel">
 			<div id="">
@@ -62,21 +61,6 @@
 					}
 				?>
 			</div>
-=======
-			<?php 
-				print($_SESSION["upload_error"]);
-				print("<br>");
-				if (!empty($_SESSION["file_name"])) {
-					print("You are now using ");
-					print(basename($_SESSION["file_name"]));
-					print("<br>");
-					print("	<a href='./php/clear_session.php'>
-								remove selected csv file.
-							</a>");
-				}
-				$_SESSION["upload_error"] = "";
-			?>
->>>>>>> origin/jeroen
 		</div>
 		<div id="visBlock">
 			<div id="matrix">
@@ -93,8 +77,8 @@
 		</div>
 	</body>
 </html>
-<!-- 
-<?php 
-				
+<!--
+<?php
+
 			?>
 -->
