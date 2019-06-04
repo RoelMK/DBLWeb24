@@ -1,7 +1,9 @@
 class NodeLinkVisualization {
-  constructor(elementID, graph) {
-    this.graph = graph
-    this.graph.groupComponents()
+  constructor(elementID) {
+    this.nodes = new vis.DataSet()
+    this.edges = new vis.DataSet()
+
+    this.directed = false
 
     this.forcePositions = null
     this.circularPositions = null
@@ -10,14 +12,13 @@ class NodeLinkVisualization {
 
     this.minConnectivity = 0
     this.minComponentSize = 0
-    //this.graph.positionComponents()
 
     this.container = document.getElementById(elementID)
 
     this.options = {
       nodes: {
         shape: 'dot',
-        size: 10
+        size: 10 // this is the radius
       },
       layout: {
         improvedLayout: false
@@ -46,29 +47,180 @@ class NodeLinkVisualization {
         }
       }
     }
+  }
 
-    // initialize your network!
+  // this step is done after reading the CSV to drastically improve performance
+  setupNetwork() {
     this.network = new vis.Network(
       this.container,
       {
-        nodes: this.graph.nodes,
-        edges: this.graph.edges
+        nodes: this.nodes,
+        edges: this.edges
       },
       this.options
     )
 
+    this.groupComponents()
     this.initForceLayout()
-
-    this.network.on("stabilizationProgress", function(params) {
-      console.log(params.iterations, params.total)
-    })
   }
 
+  // might be removed in the future
+  setDirected(boolean) {
+    this.directed = boolean
+  }
+
+  // here be dragons
+  readCSV(csvString) {
+    csvString = csvString.replace(/\r\n/g, '\n')
+    var index = 0
+    var id    = 0
+    var substring = ''
+    if (csvString[0] === ';') index = 1
+
+    // add the nodes
+    for (; index < csvString.length; index++) {
+      var char = csvString[index]
+
+      if (char === ';' || char === '\n') {
+        this.nodes.add({
+          id: id,
+          label: substring,
+          neighbors: [],
+          group: null
+        })
+        if (char === '\n') {
+          index++
+          break
+        } else {
+          id++
+          substring = ''
+        }
+      } else {
+        substring = substring + char
+      }
+    }
+
+    // add the edges
+    var originID = 0
+    var targetID = 0
+    var substring = ''
+    for (; index < csvString.length; index++) {
+      var char = csvString[index]
+
+      if (char === ';' || char === '\n') {
+        if (/[a-zA-Z]/.test(substring)) {
+          // if the thing has letters, ignore it
+        } else {
+          var weight = +substring
+          if (weight !== 0) {
+            var edge = {
+              id: originID + '-' + targetID,
+              from: originID,
+              to: targetID,
+              value: weight
+            }
+            if (!this.directed && originID < targetID) {
+              edge.hidden = true
+              edge.physics = false
+            }
+            this.edges.add(edge)
+            this.nodes.get(originID).neighbors.push(this.nodes.get(targetID))
+          }
+          targetID++
+        }
+        substring = ''
+        if (char === '\n') {
+          originID++
+          targetID = 0
+        }
+      } else {
+        substring = substring + char
+      }
+    }
+
+    this.groupComponents()
+    this.setupNetwork()
+  }
+
+  // assign distinct groups to nodes that are in different components
+  groupComponents() {
+    var visited = {}
+    var group = 0
+    var groupCount = []
+    var lastGroupAdded = 0
+    var graph = this
+    var groupUpdate = []
+
+    function visitNode(node) {
+      if (!visited[node.id]) {
+        visited[node.id] = true
+        groupUpdate.push({id: node.id, group: group})
+        if (groupCount[group] === undefined) {
+          groupCount[group] = 1
+        } else {
+          groupCount[group]++
+        }
+        lastGroupAdded = group
+        node.neighbors.forEach(function(neighbor) {
+          visitNode(neighbor)
+        })
+      }
+    }
+
+    for (var n = 0; n < this.nodes.length; n++) {
+      var node = graph.nodes.get(n)
+      visitNode(node)
+      group = lastGroupAdded + 1
+    }
+
+    this.nodes.update(groupUpdate)
+    var groupCountUpdate = []
+
+    for (var n = 0; n < this.nodes.length; n++) {
+      var node = graph.nodes.get(n)
+      groupCountUpdate.push({id: node.id, groupSize: groupCount[node.group]})
+    }
+
+    graph.nodes.update(groupCountUpdate)
+  }
+
+  // utility function that returns groups of nodes
+  getGroups() {
+    var groups = []
+    this.nodes.forEach(function(node) {
+      if (groups[node.group] === undefined) {
+        groups[node.group] = [node]
+      } else {
+        groups[node.group].push(node)
+      }
+    })
+    groups.sort(function(a, b) {
+      return (a.length < b.length)
+    })
+    return groups
+  }
+
+  // returns array of nodes where adjacent entries are in the same group
+  // used by circular layout
+  getGroupsAsArray() {
+    var groups = this.getGroups()
+    var arr = []
+    groups.forEach((group) => {
+      group.forEach((node) => {
+        arr.push(node)
+      })
+    })
+    return arr
+  }
+
+  // gets passed an event from the dropdown box, changes the layout
   setLayout(e) {
     var type = e.target.value
+    this.currentLayout = type
+    /* MIGHT BE FIXED LATER
     // reload positions if calculated before
     if (this[type + 'Positions']) {
-      this.graph.nodes.update(this[type + 'Positions'])
+      this.nodes.update(this[type + 'Positions'])
       return
     }
 
@@ -83,6 +235,8 @@ class NodeLinkVisualization {
     }
 
     this[this.currentLayout + 'Positions'] = update
+    this.currentLayout = type
+    */
 
     if (type === 'force') {
       this.initForceLayout()
@@ -91,25 +245,110 @@ class NodeLinkVisualization {
     } else if (type === 'hierarchical') {
       this.initHierarchicalLayout()
     }
+
+    this.fitToScreen()
   }
 
+  // these calulate initial positions for each layout
+  // force layout is initially put in a gridlike layout to speed up stabilization
   initForceLayout() {
-    this.graph.groupComponents()
-    this.graph.gridPosition()
+    var groups = this.getGroups()
+
+    function calculatePositions() {
+        var positions = []
+        var n = 0
+        while (positions.length < groups.length * 2) {
+          walkAroundCenter(n, positions)
+          n++
+        }
+        return positions
+    }
+
+    function walkAroundCenter(n, positions) {
+      if (n === 0) {
+        positions.push(0, 0)
+        return
+      }
+      var x = n
+      var y = n
+      for (var i = 0; i < n * 2; i++) {
+        positions.push(x, y)
+        x--
+      }
+      for (var i = 0; i < n * 2; i++) {
+        positions.push(x, y)
+        y--
+      }
+      for (var i = 0; i < n * 2; i++) {
+        positions.push(x, y)
+        x++
+      }
+      for (var i = 0; i < n * 2; i++) {
+        positions.push(x, y)
+        y++
+      }
+    }
+
+    var positions = calculatePositions()
+
+    this.network.setOptions({layout: {hierarchical: false}})
+
+    var graph = this
+    var update = []
+    this.nodes.forEach(function(node) {
+      var groupX = positions[node.group * 2]
+      var groupY = positions[node.group * 2 + 1]
+      update.push({
+        id: node.id,
+        x: groupX * 300,
+        y: groupY * 300
+      })
+    })
+    graph.nodes.update(update)
+    this.togglePhysics(true)
   }
 
   initCircularLayout() {
-
+    this.togglePhysics(false)
+    this.network.setOptions({layout: {hierarchical: false}})
+    var circleRadius = this.nodes.length * 10
+    var nodeUpdate = []
+    var grouped = this.getGroupsAsArray()
+    for (var i = 0; i < this.nodes.length; i++) {
+      var rad = i / this.nodes.length * Math.PI * 2
+      var random = 1 + Math.random() / 100
+      var x   = Math.cos(rad) * circleRadius * random
+      var y   = Math.sin(rad) * circleRadius * random
+      nodeUpdate.push({id: grouped[i].id, x: x, y: y})
+    }
+    this.nodes.update(nodeUpdate)
   }
 
   initHierarchicalLayout() {
-
+    this.network.setOptions({
+      layout: {
+        hierarchical: {
+          direction: "UD",
+          sortMethod: "directed",
+          treeSpacing: 10,
+          nodeSpacing: 10
+        },
+      }
+    })
+    this.togglePhysics(true)
   }
 
-  togglePhysics() {
-    this.network.setOptions({
-      physics: !this.network.physics.physicsEnabled
-    })
+  // these just adjust global settings
+  togglePhysics(boolean) {
+    if (typeof boolean === 'boolean') {
+      this.network.setOptions({
+        physics: boolean
+      })
+    } else {
+      this.network.setOptions({
+        physics: !this.network.physics.physicsEnabled
+      })
+    }
   }
 
   toggleEdgeSmoothing() {
@@ -130,9 +369,13 @@ class NodeLinkVisualization {
     })
   }
 
+  fitToScreen() {
+    this.network.fit()
+  }
+
   // display/hide nodes based on sliders in the UI
   filterNodes() {
-    var nodes = this.graph.nodes
+    var nodes = this.nodes
     var nodeUpdate = []
     var edgeUpdate = []
     var vis = this
@@ -174,7 +417,7 @@ class NodeLinkVisualization {
     nodes.update(nodeUpdate)
 
     // make sure that hidden edges have no effect on gravity
-    var edges = this.graph.edges
+    var edges = this.edges
     edges.forEach(function(edge) {
       if (shouldShow[edge.from] && shouldShow[edge.to]) {
         edgeUpdate.push({id: edge.id, physics: true})
@@ -186,7 +429,7 @@ class NodeLinkVisualization {
     edges.update(edgeUpdate)
   }
 
-  // Accepts change event or just a value
+  // accepts change event or just a value
   setMinComponentSize(e) {
     var newValue
     if (typeof e === 'number') {
