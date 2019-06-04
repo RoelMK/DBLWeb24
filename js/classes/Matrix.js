@@ -216,11 +216,22 @@ class Matrix {
 
   /**
    * Use the reorder library to sort by optimal leaf order.
-   * @author Jarno
+   * @author Jarno & Matthijs
+   * @param {'single', 'average', 'complete'} type of linkage (default parameter given should be complete)
+   * @param {euclidean, manhattan, chebyshev, hamming, jaccard, braycurtis} distance type (optional if no parameter is given euclidean distance is used)
    * @return {Matrix} Reordered clone.
+   * linkage should be tested on further datasets to give different results
    */
-  optimalLeafOrder() {
-    var permutation = reorder.optimal_leaf_order()(this.data)
+  optimalLeafOrder(linkage_type, distance_name) {
+	var distance_type = reorder.distance.euclidean;				//set distance type to euclidean by default
+	//update the distance type if it is specified
+	if(distance_name == "manhattan"){distance_type = reorder.distance.manhattan;}
+	if(distance_name == "chebyshev"){distance_type = reorder.distance.chebyshev;}
+	if(distance_name == "hamming"){distance_type = reorder.distance.hamming;}
+	if(distance_name == "jaccard"){distance_type = reorder.distance.jaccard;}
+	if(distance_name == "braycurtis"){distance_type = reorder.distance.braycurtis;}
+	//end of potentially updating distance	
+    var permutation = reorder.optimal_leaf_order().linkage(linkage_type).distance(distance_type)(this.data)
     return this.permute(permutation)
   }
   
@@ -238,11 +249,24 @@ class Matrix {
    * Use the reorder library to sort by principal component analysis.
    * @author Matthijs
    * @return {Matrix} Reordered clone.
+   * perhaps only rows should be permuted 
    */
   pcaOrder() {
 	  	var eps = 1e-9;											//eps is the approximation factor in computing the eigenvector
 	    var permutation = reorder.pca_order(this.data,eps)		//compute permutation
-	    return this.permute(permutation)						//apply permutation and return the result
+	    //start permute
+	    var clone = this.clone()
+	    clone.data = reorder.permute(clone.data, permutation)			//apply permutation on rows
+	    clone.setTailLabels(											//row labels
+	      reorder.permute(clone.tailLabels, permutation)
+	    )
+	    
+	      clone.setHeadLabels(											//column labels
+	      reorder.permute(clone.headLabels, permutation)
+	    )
+	    clone.data = reorder.permutetranspose(clone.data, permutation)	//apply permutation on columns (added to the source of permute)
+	    return clone
+	    //end permute						//apply permutation and return the result
 	  }	
   
   /**
@@ -268,5 +292,103 @@ class Matrix {
 	    return clone
 	    //end permute						
 	  }
+  
+  
+  /**
+   * Sort by topological order using a depth-first search algorithm as found on wikipedia (https://en.wikipedia.org/wiki/Topological_sorting).
+   * @author Matthijs
+   * @return {Matrix} Reordered clone.
+   */
+  topologicalOrder() {
+	    var permutation = [];						//initiate permutation
+	    var data = this.data;
+	    var m_length = this.data.length;			// contains matrix length
+	    var to_visit = m_length; 					// counts how many nodes still have to be visited
+	    var node_to_visit = 0;						// the location in marks of the node to visit
+	    var nodes = [];								// the array containing the status of each node 0 = permanently marked, 1= temporary marked, 2 = no mark
+	    var marks = [];								// the array containing nodes that haven't been marked yet
+	    for (var x = 0; x < m_length; x++) {		//this for loop gives values to marks and nodes
+	    	marks = marks.concat(x);
+	    	nodes = nodes.concat(2);
+	    }
+	    while (to_visit > 0){
+	    	node_to_visit = Math.floor(Math.random() * to_visit);	// set node_to_visit to a random value in the range of the unmarked nodes
+	    	visit(marks[node_to_visit], this.data)					// visits a node that doesn't have a marker yet
+	    }
+	    //visits node n
+	    function visit(n){
+	      	if (nodes[n] == 0){return};
+	      	if (nodes[n] == 1){
+	      		console.log("this graph isn't a dag, topological sort only works with dags") //throw some sort of error
+	      		return								//quit
+	      	}; 
+	      	nodes[n] = 1; 							//mark with a temporary mark
+	      	marks.splice(n, 1)						//remove node n from marks
+	      	to_visit--;								//remove the amount of nodes that need to be visited
+	      	for (var y = 0; y < m_length; y++){
+	      		if (data[n][y] > 0){visit(y, data)}
+	      	}
+	      	nodes[n] = 0;							//mark with a permanent mark instead of a temporary one
+	      	permutation.unshift(n);					//insert n into the front of the permutation list
+	      }
+	    //end algorithm
+	    //start permute
+	    var clone = this.clone()
+	    clone.data = reorder.permute(clone.data, permutation)			//apply permutation on rows
+	    clone.setTailLabels(											//row labels
+	      reorder.permute(clone.tailLabels, permutation)
+	    )
+	    
+	      clone.setHeadLabels(											//column labels
+	      reorder.permute(clone.headLabels, permutation)
+	    )
+	    clone.data = reorder.permutetranspose(clone.data, permutation)	//apply permutation on columns (added to the source of permute)
+	    return clone
+	    //end permute
+	  }	
+  
+  /**
+   * Use the reorder library to sort by hierarchical clustering without optimal leaf order.
+   * @author Matthijs
+   * @param {'single', 'average', 'complete'} type of linkage
+   * @param {euclidean, manhattan, chebyshev, hamming, jaccard, braycurtis} distance type (optional if no parameter is given euclidean distance is used) 
+   * @return {Matrix} Reordered clone.
+   */
+  hierarchicalOrder(linkage_type, distance_name){
+	  var permutation = []; 										//initiate permutation
+	  var distance_type = reorder.distance.euclidean;				//set distance type to euclidean by default
+	  //update the distance type if it is specified
+	  if(distance_name == "manhattan"){distance_type = reorder.distance.manhattan;}
+	  if(distance_name == "chebyshev"){distance_type = reorder.distance.chebyshev;}
+	  if(distance_name == "hamming"){distance_type = reorder.distance.hamming;}
+	  if(distance_name == "jaccard"){distance_type = reorder.distance.jaccard;}
+	  if(distance_name == "braycurtis"){distance_type = reorder.distance.braycurtis;}
+	  //end of potentially updating distance
+	  var hcluster = science.stats.hcluster().linkage(linkage_type).distanceMatrix((reorder.dist().distance(distance_type))(this.data));	//set hcluster with input linkage and distancematrix, with distance matrix having input distance and a matrix
+	  var dendrogram = hcluster(this.data);							//initiate the dendrogram and set it's value
+	  //DFS walk through dendrogram
+	  var to_visit = [];											//contains the parts of hte dendrogram that need to be visited
+	  var visiting;													//contains the part of the dendrogram we are currently visiting
+	  to_visit.push(dendrogram);									//start with visiting the entire dendrogram
+	  //start walk
+	  while(to_visit[0] != null){
+		visiting = to_visit[0];										//visit the part of the dendrogram
+		to_visit.shift();											//remove the part of the dendrogram from to_visit as it no longer needs to be visited
+	  	if(visiting.depth > 0){										//check if it not a leaf
+		  	if(visiting.left != null){								//check if it has a left child
+			  to_visit.unshift(visiting.left);						//add the left child at the front
+		  	}
+		  	if(visiting.right != null){								//check if it has a right child
+			  to_visit.unshift(visiting.right);						//add the right child at the front
+		  	}
+	  	} else {
+		  	permutation.push(visiting.id);							//add the id to permutation	
+	  	}
+	  	
+	  }
+	  //end walk
+	  return this.permute(permutation)
+  }
+  
   
 }

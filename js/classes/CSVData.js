@@ -5,13 +5,9 @@ class CSVData {
      * @param {string} csv CSV file
      * @param {string} path Path to this CSV file
      */
-<<<<<<< HEAD
-    constructor(csv) {
-        csv = csv.replace(/\r\n/g, '\n') // replace windows line endings with unix
-=======
     constructor(csv, path) {
         this.path = path;
->>>>>>> origin/roel
+        csv = csv.replace(/\r\n/g, '\n')
         this.rows = csv.split("\n");    // .replace(/[^0-9a-z,_.;\n]/gi, '')  (not (yet) required)
         this.columns = this.rows[0].split(";");
         this.rows.shift();  // Remove first row (= column names)
@@ -50,9 +46,6 @@ class CSVData {
         matrix.setHeadLabels(this.columns.reverse());
         return matrix;
     }
-<<<<<<< HEAD
-}
-=======
 
     /**
      * Get chord data from CSV
@@ -61,7 +54,7 @@ class CSVData {
      * @param {Number} maxNumberOfEdges Maximum number of edges to render: 100=very smooth, 200=pretty smooth, 300=slow, >500=crash/still slow (depending on size of matrix)
      * @returns Chord data, summarized
      */
-    getChord(maxNumberOfNodes, maxNumberOfEdges) { 
+    getChord(maxNumberOfNodes, maxNumberOfEdges) {
         var z = []; // Z-data for matrix
 
         for (var i = 0; i < this.rows.length; i++) {
@@ -71,7 +64,7 @@ class CSVData {
             currentRow = currentRow.map(Number);
             z.push(currentRow);
         }
-        
+
         return getSummarizedChord(this.columns, z, maxNumberOfNodes, maxNumberOfEdges); // Generate the chord data using the z-data and the column data
     }
 
@@ -94,4 +87,3 @@ class CSVData {
         return getChordForSingleNode(this.columns, z, node, maxNumberOfEdges);
     }
 }
->>>>>>> origin/roel
