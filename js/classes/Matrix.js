@@ -197,32 +197,76 @@ class Matrix {
   }
 
   /**
-   * Reorder the data and labels based on a given permutation. This gets
+   * Reorder the rows and row labels based on a given permutation. This gets
    * calculated by functions like this.optimalLeafOrder
+   * @author Jarno
    * @param  {number[]} permutation
    * @return {Matrix} - A reordered clone of this matrix.
-   *///permute only switches rows not columns thus the label switching isn't correct
-  permute(permutation) {
+   */
+   permuteRows(permutation) {
+	    var clone = this.clone()
+	    clone.data = reorder.permute(clone.data, permutation)
+	    clone.setTailLabels(
+	      reorder.permute(clone.tailLabels, permutation)
+	    )
+	    return clone
+	  }
+   //the following function is kept for backward compatability
+   permute(permutation) {
     var clone = this.clone()
     clone.data = reorder.permute(clone.data, permutation)
     clone.setTailLabels(
       reorder.permute(clone.tailLabels, permutation)
     )
-    /*clone.setHeadLabels(
-      reorder.permute(clone.headLabels, permutation)
-    )*///commented out as it isn't correct in this version
     return clone
+  }
+  
+  /**
+   * Reorder the columns and column labels based on a given permutation. This gets
+   * calculated by functions like this.optimalLeafOrder
+   * @author Jarno, Matthijs
+   * @param  {number[]} permutation
+   * @return {Matrix} - A reordered clone of this matrix.
+   */
+  permuteColumns(permutation){
+	  var clone = this.clone()
+	  clone.data = reorder.permutetranspose(clone.data, permutation)
+	  clone.setHeadLabels(
+      reorder.permute(clone.headLabels, permutation)
+      )
+	  return clone	  
+  }
+  
+  /**
+   * Reorder the rows and columns and row and column labels based on a given permutation. This gets
+   * calculated by functions like this.optimalLeafOrder
+   * @author Jarno, Matthijs
+   * @param  {number[]} permutation
+   * @return {Matrix} - A reordered clone of this matrix.
+   */
+  permuteBoth(permutation){
+	  var clone = this.clone()
+	  clone.data = reorder.permute(clone.data, permutation)
+	  clone.setTailLabels(
+      reorder.permute(clone.tailLabels, permutation)
+	  )
+	  clone.data = reorder.permutetranspose(clone.data, permutation)
+	  clone.setHeadLabels(
+      reorder.permute(clone.headLabels, permutation)
+      )
+	  return clone	  
   }
 
   /**
    * Use the reorder library to sort by optimal leaf order.
    * @author Jarno & Matthijs
+   * @param {0, 1, 2} set what to permute (rows, columns, both)
    * @param {'single', 'average', 'complete'} type of linkage (default parameter given should be complete)
    * @param {euclidean, manhattan, chebyshev, hamming, jaccard, braycurtis} distance type (optional if no parameter is given euclidean distance is used)
    * @return {Matrix} Reordered clone.
    * linkage should be tested on further datasets to give different results
    */
-  optimalLeafOrder(linkage_type, distance_name) {
+  optimalLeafOrder(perm_type, linkage_type, distance_name) {
 	var distance_type = reorder.distance.euclidean;				//set distance type to euclidean by default
 	//update the distance type if it is specified
 	if(distance_name == "manhattan"){distance_type = reorder.distance.manhattan;}
@@ -232,41 +276,55 @@ class Matrix {
 	if(distance_name == "braycurtis"){distance_type = reorder.distance.braycurtis;}
 	//end of potentially updating distance	
     var permutation = reorder.optimal_leaf_order().linkage(linkage_type).distance(distance_type)(this.data)
-    return this.permute(permutation)
+    //decide what to permute
+    if (perm_type == 0){
+    	return this.permuteRows(permutation)
+    } else if (perm_type == 1){
+    	return this.permuteColumns(permutation)
+    } else if (perm_type == 2){
+    	return this.permuteBoth(permutation)
+    } else {
+    	console.log("No perm_type was defined, give a 0 to permute only rows, give a 1 to permute only columns, give a 2 to permute both.") //error
+    	return this.permuteRows(permutation)
+    	
+    }
+    
   }
   
   /**
    * Use the reorder library to sort by sort order.
    * @author Matthijs
-   * @return {Matrix} Reordered clone.
+   * @return {Matrix} Reordered clone. However it is reorderd to base data
    */
   sortOrder() {
 	    var permutation = reorder.sort_order(this.data)			//compute permutation
+	    console.log("sortOrder should be removed as it doesn't do anything")
 	    return this.permute(permutation)						//apply permutation and return the result
 	  }	
   
   /**
    * Use the reorder library to sort by principal component analysis.
    * @author Matthijs
+   * @param {0, 1, 2} set what to permute (rows, columns, both)
    * @return {Matrix} Reordered clone.
    * perhaps only rows should be permuted 
    */
-  pcaOrder() {
+  pcaOrder(perm_type) {
 	  	var eps = 1e-9;											//eps is the approximation factor in computing the eigenvector
 	    var permutation = reorder.pca_order(this.data,eps)		//compute permutation
-	    //start permute
-	    var clone = this.clone()
-	    clone.data = reorder.permute(clone.data, permutation)			//apply permutation on rows
-	    clone.setTailLabels(											//row labels
-	      reorder.permute(clone.tailLabels, permutation)
-	    )
+	    if (perm_type == 0){
+	    	return this.permuteRows(permutation)
+	    } else if (perm_type == 1){
+	    	return this.permuteColumns(permutation)
+	    } else if (perm_type == 2){
+	    	return this.permuteBoth(permutation)
+	    } else {
+	    	console.log("No perm_type was defined, give a 0 to permute only rows, give a 1 to permute only columns, give a 2 to permute both.") //error
+	    	return this.permuteBoth(permutation)
+	    	
+	    }
 	    
-	      clone.setHeadLabels(											//column labels
-	      reorder.permute(clone.headLabels, permutation)
-	    )
-	    clone.data = reorder.permutetranspose(clone.data, permutation)	//apply permutation on columns (added to the source of permute)
-	    return clone
-	    //end permute						//apply permutation and return the result
+	    
 	  }	
   
   /**
@@ -297,9 +355,10 @@ class Matrix {
   /**
    * Sort by topological order using a depth-first search algorithm as found on wikipedia (https://en.wikipedia.org/wiki/Topological_sorting).
    * @author Matthijs
+   * @param {0, 1, 2} set what to permute (rows, columns, both)
    * @return {Matrix} Reordered clone.
    */
-  topologicalOrder() {
+  topologicalOrder(perm_type) {
 	    var permutation = [];						//initiate permutation
 	    var data = this.data;
 	    var m_length = this.data.length;			// contains matrix length
@@ -332,29 +391,29 @@ class Matrix {
 	      	permutation.unshift(n);					//insert n into the front of the permutation list
 	      }
 	    //end algorithm
-	    //start permute
-	    var clone = this.clone()
-	    clone.data = reorder.permute(clone.data, permutation)			//apply permutation on rows
-	    clone.setTailLabels(											//row labels
-	      reorder.permute(clone.tailLabels, permutation)
-	    )
-	    
-	      clone.setHeadLabels(											//column labels
-	      reorder.permute(clone.headLabels, permutation)
-	    )
-	    clone.data = reorder.permutetranspose(clone.data, permutation)	//apply permutation on columns (added to the source of permute)
-	    return clone
-	    //end permute
+	    //decide what to permute
+	    if (perm_type == 0){
+	    	return this.permuteRows(permutation)
+	    } else if (perm_type == 1){
+	    	return this.permuteColumns(permutation)
+	    } else if (perm_type == 2){
+	    	return this.permuteBoth(permutation)
+	    } else {
+	    	console.log("No perm_type was defined, give a 0 to permute only rows, give a 1 to permute only columns, give a 2 to permute both.") //error
+	    	return this.permuteBoth(permutation)
+	    	
+	    }
 	  }	
   
   /**
    * Use the reorder library to sort by hierarchical clustering without optimal leaf order.
    * @author Matthijs
+   * @param {0, 1, 2} set what to permute (rows, columns, both)
    * @param {'single', 'average', 'complete'} type of linkage
    * @param {euclidean, manhattan, chebyshev, hamming, jaccard, braycurtis} distance type (optional if no parameter is given euclidean distance is used) 
    * @return {Matrix} Reordered clone.
    */
-  hierarchicalOrder(linkage_type, distance_name){
+  hierarchicalOrder(perm_type, linkage_type, distance_name){
 	  var permutation = []; 										//initiate permutation
 	  var distance_type = reorder.distance.euclidean;				//set distance type to euclidean by default
 	  //update the distance type if it is specified
@@ -387,7 +446,18 @@ class Matrix {
 	  	
 	  }
 	  //end walk
-	  return this.permute(permutation)
+	  //decide what to permute
+	    if (perm_type == 0){
+	    	return this.permuteRows(permutation)
+	    } else if (perm_type == 1){
+	    	return this.permuteColumns(permutation)
+	    } else if (perm_type == 2){
+	    	return this.permuteBoth(permutation)
+	    } else {
+	    	console.log("No perm_type was defined, give a 0 to permute only rows, give a 1 to permute only columns, give a 2 to permute both.") //error
+	    	return this.permuteRows(permutation)
+	    	
+	    }
   }
   
   
