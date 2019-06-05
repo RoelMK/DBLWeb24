@@ -36,7 +36,7 @@
 			<form action="./php/upload_code.php" method="post" enctype="multipart/form-data">Dataset has to be in .csv format<br>
 				Choose your file:
 				<div class="tooltip">Help me
-				  <span class="tooltiptext">Just press upload idiot</span>
+					<span class="tooltiptext">*insert helpfull text here*</span>
 				</div>
 				<br>
 				<input type="file" name="fileToUpload" id="fileToUpload">

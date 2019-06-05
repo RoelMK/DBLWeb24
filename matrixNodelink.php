@@ -8,6 +8,10 @@
 		<link href="css/styles.css" rel="stylesheet">
 		<title>2IOA0 Group 24</title>
 
+		<script src="./php/jquery-3.3.1.js"></script>
+		<link rel="stylesheet" type="text/css" href="./css/dropdown_kevin.css">
+		
+		
 		<!-- Script stuff -->
 		<script src="./js/libraries/science.v1.js"></script> <!-- reorder.js dependency -->
 		<script src="./js/libraries/tiny-queue.js"></script> <!-- reorder.js dependency -->
@@ -47,9 +51,10 @@
 						print("<br>");
 						echo "<br>";
 						print("	<a href='./php/clear_session.php'>
-									remove selected csv file.
+									Return to upload page.
 								</a>");
 					}
+					
 					echo "<br>";
 					echo "<br>";
 					if(empty($_SESSION["generated_share"])) {
@@ -63,6 +68,11 @@
 						$_SESSION["generated_share"] = "";
 						echo "<br>";
 					}
+					
+					echo "<br>";
+					print("	<a href='./php/delete_current_file_code.php'>
+									Remove current file from site.
+							</a>");
 				?>
 				<button id='button1'>Toggle Physics</button>
 				<button id='button2'>Toggle Edge Smoothing</button>
@@ -78,6 +88,104 @@
 					<option value="circular">Circular</option>
 					<option value="hierarchical">Hierarchical</option>
 				</select>
+				<br>
+				<br>
+				<form method="post" action="output.php" name="reorderForm">
+					<select style="color:black" name = "algorithm" id="selector3">
+						<option value="def" style="color:black">Select a reorder algorithm</option>
+						<option value="Bary" style="color:black">Barycenter</option>
+						<option value="PCA" style="color:black">PCA</option>
+						<option value="Topo" style="color:black">Topological sort</option>
+						<option value="Hier" style="color:black">Hierarchical clustering</option>
+						<option value="Opt" style="color:black">Optimal leaf order</option>
+					</select>
+					<br>
+					<br>
+					<div class="Bary s3">
+						No parameters needed.
+					</div>
+					<div class="PCA s3">
+						Permutation variables: 
+						<select name = "PCA permutation" style="color:black">
+							<option value="0" style="color:black">Rows only</option>
+							<option value="1" style="color:black">Columns only</option>
+							<option value="2" style="color:black">Both rows and columns</option>
+						</select>
+					</div>
+					<div class="Topo s3">
+						Permutation variables: 
+						<select name = "Topo permutation" style="color:black">
+							<option value="0" style="color:black">Rows only</option>
+							<option value="1" style="color:black">Columns only</option>
+							<option value="2" style="color:black">Both rows and columns</option>
+						</select>
+					</div>
+					<div class="Hier s3">
+						Permutation variables: 
+						<select name = "Hier permutation" style="color:black">
+							<option value="0" style="color:black">Rows only</option>
+							<option value="1" style="color:black">Columns only</option>
+							<option value="2" style="color:black">Both rows and columns</option>
+						</select>
+						<br>
+						<br>
+						Link type: 
+						<select name = "Hier link" style="color:black">
+							<option value="single" style="color:black">Single</option>
+							<option value="average" style="color:black">Average</option>
+							<option value="complete" style="color:black">Complete</option>
+						</select>
+						<br>
+						<br>
+						Distance type: 
+						<select name = "Hier distance" style="color:black">
+							<option value="euclidean" style="color:black">Euclidean</option>
+							<option value="manhattan" style="color:black">Manhattan</option>
+							<option value="chebyshev" style="color:black">Chebyshev</option>
+							<option value="hamming" style="color:black">Hamming</option>
+							<option value="jaccard" style="color:black">Jaccard</option>
+							<option value="braycurtis" style="color:black">Braycurtis</option>
+						</select>
+					</div>
+					<div class="Opt s3">
+						Permutation variables: 
+						<select name = "Opt permutation" style="color:black">
+							<option value="0" style="color:black">Rows only</option>
+							<option value="1" style="color:black">Columns only</option>
+							<option value="2" style="color:black">Both rows and columns</option>
+						</select>
+						<br>
+						<br>
+						Link type: 
+						<select name = "Opt link" style="color:black">
+							<option value="single" style="color:black">Single</option>
+							<option value="average" style="color:black">Average</option>
+							<option value="complete" style="color:black">Complete</option>
+						</select>
+						<br>
+						<br>
+						Distance type: 
+						<select name = "Opt distance" style="color:black">
+							<option value="euclidean" style="color:black">Euclidean</option>
+							<option value="manhattan" style="color:black">Manhattan</option>
+							<option value="chebyshev" style="color:black">Chebyshev</option>
+							<option value="hamming" style="color:black">Hamming</option>
+							<option value="jaccard" style="color:black">Jaccard</option>
+							<option value="braycurtis" style="color:black">Braycurtis</option>
+						</select>
+					</div>
+					<br>
+					<center><input type='submit' class = "s3 Bary PCA Topo Hier Opt" value = 'Apply algorithm' style="color:black"></center>
+				</form>
+				<script> 
+					$('#selector3').on('change',function()
+					{
+						var divClass = $(this).val();
+						$(".s3").hide();
+						$("."+divClass).slideDown('medium');
+						
+					});
+				</script>
 			</div>
 		</div>
 		<div id="visBlock">
