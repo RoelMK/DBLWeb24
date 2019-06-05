@@ -1,0 +1,54 @@
+<html>
+<head>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/vis/4.21.0/vis.min.css">
+  <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/vis/4.21.0/vis.min.js"></script>
+  <script type="text/javascript" src="../js/classes/NodeLinkVisualization.js"></script>
+  <script type="text/javascript" src="./csv.js"></script>
+  <script type="text/javascript" src="./csvsmall.js"></script>
+
+    <style type="text/css">
+        #mynetwork {
+            width: 100%;
+            height: 100%;
+            border: 1px solid lightgray;
+        }
+    </style>
+</head>
+<body>
+
+<button id='button1'>Toggle Physics</button>
+<button id='button2'>Toggle Edge Smoothing</button>
+<button id='button3'>Toggle Edges</button>
+<button id='button4'>Fit to Screen</button>
+<input type='range' id='slider1' min='0' max='10' value='0'></input>
+<!-- TODO: set min and max value from the NodeLinkVisualization-->
+<label>Min. component size: <span id='slider1value'>0</span></label>
+<input type='range' id='slider2' min='0' max='10' value='0'>
+<label>Min. connectivity: <span id='slider2value'>0</span></label>
+<select id='select1'>
+  <option value="force">Force-Directed</option>
+  <option value="circular">Circular</option>
+  <option value="hierarchical">Hierarchical</option>
+</select>
+
+<div id="nodelink"></div>
+
+<script type="text/javascript">
+    var visualization = new NodeLinkVisualization('nodelink')
+    visualization.readCSV(csv)
+    visualization.assignButtons({
+      togglePhysics: document.getElementById('button1'),
+      toggleEdgeSmoothing: document.getElementById('button2'),
+      toggleEdges: document.getElementById('button3'),
+      fitToScreen: document.getElementById('button4')
+    })
+    visualization.assignSliders({
+      setMinComponentSize: document.getElementById('slider1'),
+      setMinConnectivity: document.getElementById('slider2')
+    })
+    visualization.assignDropdowns({
+      setLayout: document.getElementById('select1')
+    })
+</script>
+</body>
+</html>

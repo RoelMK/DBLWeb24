@@ -6,9 +6,9 @@
 1: f4e7e9
 */
 * {
+	font-family: Arial;
 	margin: 0;
 	padding: 0;
-	color: white;
 }
 body {
 	display: grid;
@@ -17,7 +17,7 @@ body {
 	grid-template-rows: 10% 5% 85%;
 	grid-template-areas: "navBar navBar"
 						 "upload upload"
-						 "visBlock controlPanel";
+						 "visBlock visBlock";
 }
 
 #navBar {
@@ -29,6 +29,7 @@ body {
 
 }
 #navBar li {
+	color: white;
 	background-color: #01306d;
 	border-radius: 5px 5px 5px 5px;
 	border: solid 2px #0e0c19;
@@ -39,6 +40,7 @@ body {
 	width: 33%;
 }
 #navBar li a {
+	color: white;
 	padding: 16px 32px;
 	text-decoration: none;
 	overflow: auto;
@@ -82,6 +84,7 @@ em {
 
 }
 #visBlock {
+	color: black;
 	grid-area: visBlock;
 	display: grid;
 	background-color: #f4e7e9;
