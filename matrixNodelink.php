@@ -12,17 +12,20 @@
 		<script src="./js/libraries/science.v1.js"></script> <!-- reorder.js dependency -->
 		<script src="./js/libraries/tiny-queue.js"></script> <!-- reorder.js dependency -->
 		<script src="./js/libraries/reorder.v1.js"></script>
-
 		<script src="./js/methods/CSVtoJSON.js"></script>
-
-    <script src="./js/classes/CSVData.js">              </script>
+    <script src="./js/classes/CSVData.js">               </script>
  		<script src="./js/classes/Matrix.js">               </script>
  		<script src="./js/classes/MatrixVisualization.js">  </script>
  		<script src="./js/classes/MatrixInteraction.js">    </script>
     <script src="./js/classes/NodeLinkVisualization.js"></script>
-		<script src="./js/classes/Interactivity.js"></script>
-		<script src="./js/main.js"></script>
-        <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+    <script src="./js/classes/ChordVisualization.js"></script>
+    <script src="./js/classes/Chord.js"></script>
+    <script src="./js/classes/Interactivity.js"></script>
+    <script src="./js/main.js"></script>
+    <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+    <script src="https://d3js.org/d3.v4.min.js"></script>
+		<script src="./js/libraries/viz.js"></script>
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/vis/4.21.0/vis.min.js"></script>
 	</head>
 	<body>
 		<div id="navBar">
@@ -68,13 +71,21 @@
 				<?php
 					if (!empty($_SESSION["file_name"])) {
 						echo "	<script>
-									visualizeCSVFile('./uploads/" . basename($_SESSION["file_name"]) . "', 'matrix')
+									visualizeCSVFile('./uploads/" . basename($_SESSION["file_name"]) . "', 'matrix', 'matrix')
 								</script>";
 					}
 				?>
 			</div>
 			<div id="divider2"></div>
-			<div id="nodelink"></div>
+			<div id="nodelink">
+			<?php
+					if (!empty($_SESSION["file_name"])) {
+						echo "	<script>
+									visualizeCSVFile('./uploads/" . basename($_SESSION["file_name"]) . "', 'nodelink', 'nodelink')
+								</script>";
+					}
+				?>
+			</div>
 		</div>
 	</body>
 </html>

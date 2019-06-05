@@ -20,7 +20,8 @@ function visualizeCSVFile(csvPath, visualizationType, elementID, loop = false) {
                 matrix = new MatrixVisualization(csv.getMatrix(), elementID); 
                 break;
             case 'nodelink':
-                nodeLink = null; // TODO: add
+                nodeLink = new NodeLinkVisualization(elementID);
+                nodeLink.readCSV(csv.rawCSV);
                 break;
             case 'chord':
                 chord = new ChordVisualization(csv.getChord(10, 300), elementID); 

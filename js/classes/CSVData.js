@@ -7,6 +7,7 @@ class CSVData {
      */
     constructor(csv, path) {
         this.path = path;
+        this.rawCSV = csv;
         csv = csv.replace(/\r\n/g, '\n')
         this.rows = csv.split("\n");    // .replace(/[^0-9a-z,_.;\n]/gi, '')  (not (yet) required)
         this.columns = this.rows[0].split(";");
