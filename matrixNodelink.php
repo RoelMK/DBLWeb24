@@ -9,7 +9,7 @@
 		<title>2IOA0 Group 24</title>
 
 		<script src="./php/jquery-3.3.1.js"></script>
-		<link rel="stylesheet" type="text/css" href="./css/dropdown_kevin.css">
+		<link rel="stylesheet" type="text/css" href="./css/controll_kevin.css">
 		
 		
 		<!-- Script stuff -->
@@ -43,7 +43,7 @@
 
 		</div>
 		<div id="controlPanel">
-			<div id="">
+			<div id="controll_all">
 				<?php
 					if (!empty($_SESSION["file_name"])) {
 						print("You are now using ");
@@ -90,8 +90,14 @@
 				</select>
 				<br>
 				<br>
+				<input type="checkbox" name="vistypeM" id ="matrix_select"> Matrix
+				<input type="checkbox" name="vistypeN" id ="nodelink_select"> Nodelink
+				<input type="checkbox" name="vistypeC" id ="chord_select"> Chord<br>
+			</div>
+			<div class = "controll_matrix">
+				<br>
 				<form method="post" action="output.php" name="reorderForm">
-					<select style="color:black" name = "algorithm" id="selector3">
+					<select style="color:black" name = "algorithm" id="algorithm_selector">
 						<option value="def" style="color:black">Select a reorder algorithm</option>
 						<option value="Bary" style="color:black">Barycenter</option>
 						<option value="PCA" style="color:black">PCA</option>
@@ -101,10 +107,10 @@
 					</select>
 					<br>
 					<br>
-					<div class="Bary s3">
+					<div class="Bary algorithm_select">
 						No parameters needed.
 					</div>
-					<div class="PCA s3">
+					<div class="PCA algorithm_select">
 						Permutation variables: 
 						<select name = "PCA permutation" style="color:black">
 							<option value="0" style="color:black">Rows only</option>
@@ -112,7 +118,7 @@
 							<option value="2" style="color:black">Both rows and columns</option>
 						</select>
 					</div>
-					<div class="Topo s3">
+					<div class="Topo algorithm_select">
 						Permutation variables: 
 						<select name = "Topo permutation" style="color:black">
 							<option value="0" style="color:black">Rows only</option>
@@ -120,7 +126,7 @@
 							<option value="2" style="color:black">Both rows and columns</option>
 						</select>
 					</div>
-					<div class="Hier s3">
+					<div class="Hier algorithm_select">
 						Permutation variables: 
 						<select name = "Hier permutation" style="color:black">
 							<option value="0" style="color:black">Rows only</option>
@@ -147,7 +153,7 @@
 							<option value="braycurtis" style="color:black">Braycurtis</option>
 						</select>
 					</div>
-					<div class="Opt s3">
+					<div class="Opt algorithm_select">
 						Permutation variables: 
 						<select name = "Opt permutation" style="color:black">
 							<option value="0" style="color:black">Rows only</option>
@@ -175,18 +181,48 @@
 						</select>
 					</div>
 					<br>
-					<center><input type='submit' class = "s3 Bary PCA Topo Hier Opt" value = 'Apply algorithm' style="color:black"></center>
+					<center><input type='submit' class = "algorithm_select Bary PCA Topo Hier Opt" value = 'Apply algorithm' style="color:black"></center>
 				</form>
-				<script> 
-					$('#selector3').on('change',function()
-					{
-						var divClass = $(this).val();
-						$(".s3").hide();
-						$("."+divClass).slideDown('medium');
-						
-					});
-				</script>
+				
 			</div>
+			<div class = "controll_nodelink">
+				<br>insert controll nodelink
+			</div>
+			<div class = "controll_chord">
+				<br>insert controll chord
+			</div>
+			<script> 
+				$('#algorithm_selector').on('change',function()
+				{
+					var divClass = $(this).val();
+					$(".algorithm_select").hide();
+					$("."+divClass).slideDown('medium');
+					
+				});
+				$('#matrix_select').on('change',function () {
+					var selected = document.getElementById("matrix_select").checked;
+					$(".algorithm_select").hide();
+					$(".controll_matrix").hide();
+					$('#algorithm_selector').val('def').change();
+					if (selected == true) {
+						$(".controll_matrix").slideDown('medium');
+					}
+				});
+				$('#nodelink_select').on('change',function () {
+					var selected = document.getElementById("nodelink_select").checked;
+					$(".controll_nodelink").hide();
+					if (selected == true) {
+						$(".controll_nodelink").slideDown('medium');
+					}
+				});
+				$('#chord_select').on('change',function () {
+					var selected = document.getElementById("chord_select").checked;
+					$(".controll_chord").hide();
+					if (selected == true) {
+						$(".controll_chord").slideDown('medium');
+					}
+				});
+			</script>
 		</div>
 		<div id="visBlock">
 			<div id="matrix">
@@ -210,9 +246,4 @@
 			</div>
 		</div>
 	</body>
-</html>
-<!--
-<?php
-
-			?>
--->
+</html>	
