@@ -35,7 +35,7 @@ class Interactivity {
     }
 
     highlightNode(node) {
-        
+
     }
 
     unhighlight() {

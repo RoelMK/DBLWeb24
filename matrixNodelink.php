@@ -64,6 +64,20 @@
 						echo "<br>";
 					}
 				?>
+				<button id='button1'>Toggle Physics</button>
+				<button id='button2'>Toggle Edge Smoothing</button>
+				<button id='button3'>Toggle Edges</button>
+				<button id='button4'>Fit to Screen</button>
+				<input type='range' id='slider1' min='0' max='10' value='0'></input>
+				<!-- TODO: set min and max value from the NodeLinkVisualization-->
+				<label>Min. component size: <span id='slider1value'>0</span></label>
+				<input type='range' id='slider2' min='0' max='10' value='0'>
+				<label>Min. connectivity: <span id='slider2value'>0</span></label>
+				<select id='select1'>
+					<option value="force">Force-Directed</option>
+					<option value="circular">Circular</option>
+					<option value="hierarchical">Hierarchical</option>
+				</select>
 			</div>
 		</div>
 		<div id="visBlock">
