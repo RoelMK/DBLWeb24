@@ -378,7 +378,7 @@ class Matrix {
 	    function visit(n){
 	      	if (nodes[n] == 0){return};
 	      	if (nodes[n] == 1){
-	      		console.log("this graph isn't a dag, topological sort only works with dags") //throw some sort of error
+	      		window.alert("this graph isn't a dag, topological sort only works with dags. Please use another reordering algorithm or select another dataset.") //throw some sort of error
 	      		return								//quit
 	      	}; 
 	      	nodes[n] = 1; 							//mark with a temporary mark
