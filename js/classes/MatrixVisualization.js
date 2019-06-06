@@ -38,14 +38,15 @@ class MatrixVisualization {
      * Change the order of the data in the matrix
      * @author Roel Koopman
      * @param {String} order New order to use (base/barycenter/optimalleaf/sort/pca)
+     * @param {Object} args Arguments to apply when reordering (args.perm_type, args.linkage_type, args.distance_name), not for every ordering required
      */
-    changeOrder(order) { 
+    changeOrder(order, args) { 
         // Check if visualization does not have too many matrices
         if (this.dataToVisualize.data.length > 100) {   // TODO: magic number 100
             return; // Quit if so, do not change anything
         }
 
-        // Check which order we should use
+        // Check which order we should use and apply it
         switch(order.toLowerCase()) {
             case 'base':
                 this.updateData(this.dataToVisualize.asPlotly());
@@ -53,14 +54,17 @@ class MatrixVisualization {
             case 'barycenter':
                 this.updateData(this.dataToVisualize.barycenterOrder().asPlotly());
                 break;
-            case 'optimalleaf':
-                this.updateData(this.dataToVisualize.optimalLeafOrder().asPlotly());
+            case 'topological':
+                this.updateData(this.dataToVisualize.topologicalOrder(args.perm_type).asPlotly())
                 break;
-            case 'sort':
-                this.updateData(this.dataToVisualize.sortOrder().asPlotly());
+            case 'hierarchical': 
+                this.updateData(this.dataToVisualize.hierarchicalOrder(args.perm_type, args.linkage_type, args.distance_name).asPlotly())
+                break;
+            case 'optimalleaf':
+                this.updateData(this.dataToVisualize.optimalLeafOrder(args.perm_type, args.linkage_type, args.distance_name).asPlotly());
                 break;
             case 'pca':
-                this.updateData(this.dataToVisualize.pcaOrder().asPlotly());
+                this.updateData(this.dataToVisualize.pcaOrder(args.perm_type).asPlotly());
                 break;
         }
     }
@@ -193,6 +197,12 @@ class MatrixVisualization {
         this.plot.on('plotly_hover', this.interaction.matrixHover);
         this.plot.on('plotly_unhover', this.interaction.matrixUnhover);
         this.plot.on('plotly_relayout', this.interaction.matrixZoom);
+    }
+
+
+    assignUIComponents(components) {
+        components.btnApplyOrder.addEventListener("click", this.changeOrder('', {perm_type: null, linkage_type: null, distance_name: null}));
+        components.listColor.addEventListener('change', this.changeColor(''));
     }
 
 
