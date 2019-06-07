@@ -18,10 +18,23 @@ function visualizeCSVFile(csvPath, visualizationType, elementID, loop = false) {
         switch(visualizationType.toLowerCase()) {
             case 'matrix':
                 matrix = new MatrixVisualization(csv.getMatrix(), elementID);
+                matrix.assignUIComponents({
+                    btnApplyOrder: document.getElementById('applyOrdering'),
+                    btnApplyColor: document.getElementById(''), // TODO
+                    orderingsDropdown: document.getElementById('algorithm_selector'),
+                    colorDropdown: document.getElementById(''), // TODO
+                    topologicalPermutationDropdown: document.getElementById('topoPermutation'),
+                    hierachicalPermutationDropdown: document.getElementById('hierPermutation'),
+                    hierachicalLinkageDropdown: document.getElementById('hierLink'),
+                    hierachicalDistanceDropdown: document.getElementById('hierDistance'),
+                    optimalLeafPermutationDropdown: document.getElementById('optPermutation'),
+                    optimalLeafLinkageDropdown: document.getElementById('optLink'),
+                    optimalLeafDistanceDropdown: document.getElementById('optDistance'),
+                    pcaPermutationDropdown: document.getElementById('pcaPermutation')
+                });
                 break;
             case 'nodelink':
                 nodeLink = new NodeLinkVisualization(elementID);
-                debugger
                 nodeLink.readCSV(csv.rawCSV);
                 nodeLink.assignButtons({
                   togglePhysics: document.getElementById('button1'),

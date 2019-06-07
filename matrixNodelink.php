@@ -96,39 +96,43 @@
 			</div>
 			<div class = "controll_matrix">
 				<br>
-				<form method="post" action="output.php" name="reorderForm">
+				<form method="post" name="reorderForm">
 					<select style="color:black" name = "algorithm" id="algorithm_selector">
 						<option value="def" style="color:black">Select a reorder algorithm</option>
-						<option value="Bary" style="color:black">Barycenter</option>
-						<option value="PCA" style="color:black">PCA</option>
-						<option value="Topo" style="color:black">Topological sort</option>
-						<option value="Hier" style="color:black">Hierarchical clustering</option>
-						<option value="Opt" style="color:black">Optimal leaf order</option>
+						<option value="base" style="color:black">Base data</option>
+						<option value="barycenter" style="color:black">Barycenter</option>
+						<option value="pca" style="color:black">PCA</option>
+						<option value="topological" style="color:black">Topological sort</option>
+						<option value="hierarchical" style="color:black">Hierarchical clustering</option>
+						<option value="optimalleaf" style="color:black">Optimal leaf order</option>
 					</select>
 					<br>
 					<br>
-					<div class="Bary algorithm_select">
+					<div class="base algorithm_select">
 						No parameters needed.
 					</div>
-					<div class="PCA algorithm_select">
+					<div class="barycenter algorithm_select">
+						No parameters needed.
+					</div>
+					<div class="pca algorithm_select">
 						Permutation variables: 
-						<select name = "PCA permutation" style="color:black">
+						<select name = "PCA permutation" style="color:black" id="pcaPermutation">
 							<option value="0" style="color:black">Rows only</option>
 							<option value="1" style="color:black">Columns only</option>
 							<option value="2" style="color:black">Both rows and columns</option>
 						</select>
 					</div>
-					<div class="Topo algorithm_select">
+					<div class="topological algorithm_select">
 						Permutation variables: 
-						<select name = "Topo permutation" style="color:black">
+						<select name = "Topo permutation" style="color:black" id="topoPermutation">
 							<option value="0" style="color:black">Rows only</option>
 							<option value="1" style="color:black">Columns only</option>
 							<option value="2" style="color:black">Both rows and columns</option>
 						</select>
 					</div>
-					<div class="Hier algorithm_select">
+					<div class="hierarchical algorithm_select">
 						Permutation variables: 
-						<select name = "Hier permutation" style="color:black">
+						<select name = "Hier permutation" style="color:black" id="hierPermutation">
 							<option value="0" style="color:black">Rows only</option>
 							<option value="1" style="color:black">Columns only</option>
 							<option value="2" style="color:black">Both rows and columns</option>
@@ -136,7 +140,7 @@
 						<br>
 						<br>
 						Link type: 
-						<select name = "Hier link" style="color:black">
+						<select name = "Hier link" style="color:black" id="hierLink">
 							<option value="single" style="color:black">Single</option>
 							<option value="average" style="color:black">Average</option>
 							<option value="complete" style="color:black">Complete</option>
@@ -144,7 +148,7 @@
 						<br>
 						<br>
 						Distance type: 
-						<select name = "Hier distance" style="color:black">
+						<select name = "Hier distance" style="color:black" id="hierDistance">
 							<option value="euclidean" style="color:black">Euclidean</option>
 							<option value="manhattan" style="color:black">Manhattan</option>
 							<option value="chebyshev" style="color:black">Chebyshev</option>
@@ -153,9 +157,9 @@
 							<option value="braycurtis" style="color:black">Braycurtis</option>
 						</select>
 					</div>
-					<div class="Opt algorithm_select">
+					<div class="optimalleaf algorithm_select">
 						Permutation variables: 
-						<select name = "Opt permutation" style="color:black">
+						<select name = "Opt permutation" style="color:black" id="optPermutation">
 							<option value="0" style="color:black">Rows only</option>
 							<option value="1" style="color:black">Columns only</option>
 							<option value="2" style="color:black">Both rows and columns</option>
@@ -163,7 +167,7 @@
 						<br>
 						<br>
 						Link type: 
-						<select name = "Opt link" style="color:black">
+						<select name = "Opt link" style="color:black" id="optLink">
 							<option value="single" style="color:black">Single</option>
 							<option value="average" style="color:black">Average</option>
 							<option value="complete" style="color:black">Complete</option>
@@ -171,7 +175,7 @@
 						<br>
 						<br>
 						Distance type: 
-						<select name = "Opt distance" style="color:black">
+						<select name = "Opt distance" style="color:black" id="optDistance">
 							<option value="euclidean" style="color:black">Euclidean</option>
 							<option value="manhattan" style="color:black">Manhattan</option>
 							<option value="chebyshev" style="color:black">Chebyshev</option>
@@ -181,7 +185,7 @@
 						</select>
 					</div>
 					<br>
-					<center><input type='submit' class = "algorithm_select Bary PCA Topo Hier Opt" value = 'Apply algorithm' style="color:black"></center>
+					<center><input type='button' class = "algorithm_select base barycenter pca topological hierarchical optimalleaf" value = 'Apply algorithm' style="color:black" id="applyOrdering"></center>
 				</form>
 				
 			</div>

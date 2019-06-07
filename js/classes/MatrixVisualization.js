@@ -42,29 +42,30 @@ class MatrixVisualization {
      */
     changeOrder(order, args) { 
         // Check if visualization does not have too many matrices
-        if (this.dataToVisualize.data.length > 100) {   // TODO: magic number 100
-            return; // Quit if so, do not change anything
+        if (this.visualizationData.data.length > 100) {   
+            // TODO: do something to prevent crashes!
+            //return; // Quit if so, do not change anything
         }
 
         // Check which order we should use and apply it
         switch(order.toLowerCase()) {
             case 'base':
-                this.updateData(this.dataToVisualize.asPlotly());
+                this.updateData(this.visualizationData.asPlotly());
                 break;
             case 'barycenter':
-                this.updateData(this.dataToVisualize.barycenterOrder().asPlotly());
+                this.updateData(this.visualizationData.barycenterOrder().asPlotly());
                 break;
             case 'topological':
-                this.updateData(this.dataToVisualize.topologicalOrder(args.perm_type).asPlotly())
+                this.updateData(this.visualizationData.topologicalOrder(args.perm_type).asPlotly())
                 break;
             case 'hierarchical': 
-                this.updateData(this.dataToVisualize.hierarchicalOrder(args.perm_type, args.linkage_type, args.distance_name).asPlotly())
+                this.updateData(this.visualizationData.hierarchicalOrder(args.perm_type, args.linkage_type, args.distance_name).asPlotly())
                 break;
             case 'optimalleaf':
-                this.updateData(this.dataToVisualize.optimalLeafOrder(args.perm_type, args.linkage_type, args.distance_name).asPlotly());
+                this.updateData(this.visualizationData.optimalLeafOrder(args.perm_type, args.linkage_type, args.distance_name).asPlotly());
                 break;
             case 'pca':
-                this.updateData(this.dataToVisualize.pcaOrder(args.perm_type).asPlotly());
+                this.updateData(this.visualizationData.pcaOrder(args.perm_type).asPlotly());
                 break;
         }
     }
@@ -76,12 +77,13 @@ class MatrixVisualization {
      */
     updateData(plotlyData) {
         this.visibleData = plotlyData;
-        var update = {
+        this.draw();
+        /*var update = {
             z: plotlyData.z,
             x: plotlyData.x,
             y: plotlyData.y
         };
-        Plotly.restyle(this.plot, update);
+        Plotly.restyle(this.plot, update);*/
     }
 
     /**
@@ -199,12 +201,81 @@ class MatrixVisualization {
         this.plot.on('plotly_relayout', this.interaction.matrixZoom);
     }
 
-
+    /**
+     * Assigns listeners to the UI controls
+     * @author Roel Koopman
+     * @param {JSON} components JSON with references to all the UI controls
+     * Controls which should be supplied in the JSON:
+     * - btnApplyOrder
+     * - btnApplyColor
+     * - orderingsDropdown
+     * - colorDropdown
+     * - topologicalPermutationDropdown
+     * - hierachicalPermutationDropdown
+     * - hierachicalLinkageDropdown
+     * - hierachicalDistanceDropdown
+     * - optimalLeafPermutationDropdown
+     * - optimalLeafLinkageDropdown
+     * - optimalLeafDistanceDropdown
+     * - pcaPermutationDropdown
+     */
     assignUIComponents(components) {
-        components.btnApplyOrder.addEventListener("click", this.changeOrder('', {perm_type: null, linkage_type: null, distance_name: null}));
-        components.listColor.addEventListener('change', this.changeColor(''));
+        if (components.btnApplyOrder != null) {
+            components.btnApplyOrder.addEventListener("click", function(){
+                var orderSelected = components.orderingsDropdown.options[components.orderingsDropdown.selectedIndex].value;
+                if (orderSelected != 'def') {
+                    var dropdowns = this.getDropdownsCorrespondingToOrder(components, orderSelected);
+                    this.changeOrder(orderSelected, this.getOrderingArgsFromUI(dropdowns.permutationDropdown, dropdowns.linkageDropdown, dropdowns.distanceDropdown));
+                }
+            }.bind(this));
+        }
+        
+        if (components.btnApplyColor != null) {
+            components.btnApplyColor.addEventListener("click", function(){
+                var colorSelected = components.colorDropdown.options[components.colorDropdown.selectedIndex].value;
+                this.changeColor(colorSelected);
+            }.bind(this));
+        }
     }
 
+    /**
+     * Get the UI controls corresponding to the selected order
+     * @author Roel Koopman
+     * @param {JSON} components JSON with references to all the UI controls
+     * @param {String} order Selected order
+     * @returns {JSON} JSON with references to the UI controls corresponding to the selected order
+     */
+    getDropdownsCorrespondingToOrder(components, order) {
+        switch(order.toLowerCase()) {
+            case 'base':
+                return {permutationDropdown: null, linkageDropdown: null, distanceDropdown: null};
+            case 'barycenter':
+                return {permutationDropdown: null, linkageDropdown: null, distanceDropdown: null};
+            case 'topological':
+                return {permutationDropdown: components.topologicalPermutationDropdown, linkageDropdown: null, distanceDropdown: null};
+            case 'hierarchical': 
+                return {permutationDropdown: components.hierachicalPermutationDropdown, linkageDropdown: components.hierachicalLinkageDropdown, distanceDropdown: components.hierachicalDistanceDropdown};
+            case 'optimalleaf':
+                return {permutationDropdown: components.optimalLeafPermutationDropdown, linkageDropdown: components.optimalLeafLinkageDropdown, distanceDropdown: components.optimalLeafDistanceDropdown};
+            case 'pca':
+                return {permutationDropdown: components.pcaPermutationDropdown, linkageDropdown: null, distanceDropdown: null};
+        }
+    }
+
+    /**
+     * Get order args from UI
+     * @author Roel Koopman
+     * @param {Dropdown} permutationDropdown Reference to the dropdown with the permutation info
+     * @param {Dropdown} linkageDropdown Reference to the dropdown with the linkage info
+     * @param {Dropdown} distanceDropdown Reference to the dropdown with the distance info
+     * @returns {JSON} JSON with info about how to order
+     */
+    getOrderingArgsFromUI(permutationDropdown, linkageDropdown, distanceDropdown) {
+        if (permutationDropdown != null) {var perm_type = permutationDropdown.options[permutationDropdown.selectedIndex].value;} else {var perm_type = null;}
+        if (linkageDropdown != null) {var linkage_type = linkageDropdown.options[linkageDropdown.selectedIndex].value;} else {var linkage_type = null;}
+        if (distanceDropdown != null) {var distance_name = distanceDropdown.options[distanceDropdown.selectedIndex].value;} else {var distance_name = null;}
+        return {perm_type: perm_type, linkage_type: linkage_type, distance_name: distance_name}
+    }
 
     //
     //
