@@ -40,7 +40,7 @@
 			</ul>
 		</div>
 		<div id="upload">
-
+			
 		</div>
 		<div id="controlPanel">
 			<div id="controll_all">
@@ -74,25 +74,11 @@
 									Remove current file from site.
 							</a>");
 				?>
-				<button id='button1'>Toggle Physics</button>
-				<button id='button2'>Toggle Edge Smoothing</button>
-				<button id='button3'>Toggle Edges</button>
-				<button id='button4'>Fit to Screen</button>
-				<input type='range' id='slider1' min='0' max='10' value='0'></input>
-				<!-- TODO: set min and max value from the NodeLinkVisualization-->
-				<label>Min. component size: <span id='slider1value'>0</span></label>
-				<input type='range' id='slider2' min='0' max='10' value='0'>
-				<label>Min. connectivity: <span id='slider2value'>0</span></label>
-				<select id='select1'>
-					<option value="force">Force-Directed</option>
-					<option value="circular">Circular</option>
-					<option value="hierarchical">Hierarchical</option>
-				</select>
-				<br>
 				<br>
 				<input type="checkbox" name="vistypeM" id ="matrix_select"> Matrix
 				<input type="checkbox" name="vistypeN" id ="nodelink_select"> Nodelink
 				<input type="checkbox" name="vistypeC" id ="chord_select"> Chord<br>
+				<hr>
 			</div>
 			<div class = "controll_matrix">
 				<br>
@@ -187,13 +173,30 @@
 					<br>
 					<center><input type='button' class = "algorithm_select base barycenter pca topological hierarchical optimalleaf" value = 'Apply algorithm' style="color:black" id="applyOrdering"></center>
 				</form>
-				
+				<hr>
 			</div>
 			<div class = "controll_nodelink">
-				<br>insert controll nodelink
+				<button id='button1' style="color:black">Toggle Physics</button>				<br>
+				<button id='button2' style="color:black">Toggle Edge Smoothing</button>			<br>
+				<button id='button3' style="color:black">Toggle Edges</button>					<br>
+				<button id='button4' style="color:black">Fit to Screen</button>					<br>
+				<input type='range' id='slider1' min='0' max='10' value='0'></input>			<br>
+				<!-- TODO: set min and max value from the NodeLinkVisualization-->
+				<label>Min. component size: <span id='slider1value'>0</span></label>			<br>
+				<input type='range' id='slider2' min='0' max='10' value='0'>					<br>
+				<label>Min. connectivity: <span id='slider2value'>0</span></label>				<br>
+				<select id='select1' style="color:black">															<br>
+					<option value="force" style="color:black">Force-Directed</option>
+					<option value="circular" style="color:black">Circular</option>
+					<option value="hierarchical" style="color:black">Hierarchical</option>
+				</select>
+				<br>
+				<br>
+				<hr>
 			</div>
 			<div class = "controll_chord">
 				<br>insert controll chord
+				<hr>
 			</div>
 			<script> 
 				$('#algorithm_selector').on('change',function()
