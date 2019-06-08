@@ -9,6 +9,7 @@ class MatrixVisualization {
         this.plot = document.getElementById(elementID);         // Plot
         this.visualizationData = dataToVisualize;   // Copy the matrix data
         this.visibleData = dataToVisualize.asPlotly();  // Visible data in the matrix in plotly format
+        this.color = 'Blackbody';
         this.draw();    // Draw the matrix
     }
 
@@ -21,15 +22,15 @@ class MatrixVisualization {
             z: this.visibleData.z,
             x: this.visibleData.x,
             y: this.visibleData.y,
-            name: 'Test',
+            //name: 'Test',
             visible: true,
-            colorscale: 'Blackbody',    // Default
+            colorscale: this.color.charAt(0).toUpperCase() + this.color.slice(1),    // Capitalize first letter
             type: 'heatmap',
             colorbar: {x: -0.15},       // Move the colorbar to the left side of the plot
             xgap: 0.05,                 // Add a grid
             ygap: 0.05
         }];
-
+        
         Plotly.newPlot(this.plot, plotlyInput, this.generateLayout());
         this.setInteraction();
     }
@@ -76,14 +77,12 @@ class MatrixVisualization {
      * @param {Object} plotlyData Plotly matrix data
      */
     updateData(plotlyData) {
-        this.visibleData = plotlyData;
-        this.draw();
-        /*var update = {
-            z: plotlyData.z,
-            x: plotlyData.x,
-            y: plotlyData.y
-        };
-        Plotly.restyle(this.plot, update);*/
+        if (plotlyData != null && plotlyData.z.length > 0 && plotlyData.x.length > 0 && plotlyData.y.length > 0) {
+            this.visibleData = plotlyData;
+            this.draw();
+        } else {
+            console.warn("Failed to insert the new data into the matrix!");
+        }
     }
 
     /**
@@ -92,10 +91,8 @@ class MatrixVisualization {
      * @param {String} color New color (Blackbody, Electric, Greens, Greys, Earth, Bluered, Portland, Picnic, Jet, Hot)
      */
     changeColor(color) {
-        var update = {
-            colorscale: color
-        };
-        Plotly.restyle(this.plot, update);
+        this.color = color;
+        this.draw();
     }
 
     /**
@@ -169,7 +166,7 @@ class MatrixVisualization {
      */
     generateLayout(xrange, yrange) {
         return {
-            title: 'Adjacency Matrix',
+            //title: 'Adjacency Matrix',
             annotations: [],
             xaxis: {
               range: xrange,
@@ -207,7 +204,6 @@ class MatrixVisualization {
      * @param {JSON} components JSON with references to all the UI controls
      * Controls which should be supplied in the JSON:
      * - btnApplyOrder
-     * - btnApplyColor
      * - orderingsDropdown
      * - colorDropdown
      * - topologicalPermutationDropdown
@@ -230,9 +226,10 @@ class MatrixVisualization {
             }.bind(this));
         }
         
-        if (components.btnApplyColor != null) {
-            components.btnApplyColor.addEventListener("click", function(){
+        if (components.colorDropdown != null) {
+            components.colorDropdown.addEventListener("change", function(){
                 var colorSelected = components.colorDropdown.options[components.colorDropdown.selectedIndex].value;
+
                 this.changeColor(colorSelected);
             }.bind(this));
         }

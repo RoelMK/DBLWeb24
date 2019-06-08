@@ -5,6 +5,38 @@ var csv = null;         // Current csv loaded
 var interactivity = new Interactivity();    // Interactivity manager
 
 /**
+ * Assign events to checkboxes to select which visualizations are visible
+ * @param {String} csvPath Path to CSV file
+ */
+function assignVisualizationCheckboxes(csvPath) {
+    var chkMatrix = document.getElementById('matrix_select');
+    var chkNodeLink = document.getElementById('nodelink_select');
+    var chkChord = document.getElementById('chord_select');
+
+    chkMatrix.addEventListener('change', (event) => {
+        if (event.target.checked) {
+            if (matrix == null) visualizeCSVFile(csvPath, 'matrix', 'matrix')
+        } else {
+            removeVisualization('matrix', 'matrix');
+        }
+    });
+    chkNodeLink.addEventListener('change', (event) => {
+        if (event.target.checked) {
+            if (nodeLink == null) visualizeCSVFile(csvPath, 'nodelink', 'nodelink')
+        } else {
+            removeVisualization('nodelink', 'nodelink');
+        }
+    });
+    chkChord.addEventListener('change', (event) => {
+        if (event.target.checked) {
+            if (chord == null) visualizeCSVFile(csvPath, 'chord', 'chord')
+        } else {
+            removeVisualization('chord', 'chord');
+        }
+    });
+}
+
+/**
  * Visualize a CSV file
  * @author Roel Koopman
  * @param {String} csvPath Path to CSV file
@@ -20,9 +52,8 @@ function visualizeCSVFile(csvPath, visualizationType, elementID, loop = false) {
                 matrix = new MatrixVisualization(csv.getMatrix(), elementID);
                 matrix.assignUIComponents({
                     btnApplyOrder: document.getElementById('applyOrdering'),
-                    btnApplyColor: document.getElementById(''), // TODO
                     orderingsDropdown: document.getElementById('algorithm_selector'),
-                    colorDropdown: document.getElementById(''), // TODO
+                    colorDropdown: document.getElementById('color_selector'), // TODO
                     topologicalPermutationDropdown: document.getElementById('topoPermutation'),
                     hierachicalPermutationDropdown: document.getElementById('hierPermutation'),
                     hierachicalLinkageDropdown: document.getElementById('hierLink'),
@@ -56,6 +87,27 @@ function visualizeCSVFile(csvPath, visualizationType, elementID, loop = false) {
         }
     } else if(!loop) {
         loadCSV(csvPath, visualizationType, elementID); // Load the CSV, then re-execute this method
+    }
+}
+/**
+ * Remove a loaded visualization
+ * @param {String} visualizationType Type of visualization to remove (matrix/nodelink/chord)
+ * @param {String} elementID ID of the div where the visualization is shown
+ */
+function removeVisualization(visualizationType, elementID) {
+    var div = document.getElementById(elementID);
+    div.innerHTML = "";     // Reset div content
+
+    switch(visualizationType.toLowerCase()) {
+        case 'matrix':
+            matrix = null;
+            break;
+        case 'nodelink':
+            nodeLink = null;
+            break;
+        case 'chord':
+            chord = null;
+            break;
     }
 }
 
