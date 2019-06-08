@@ -81,6 +81,20 @@
 				<hr>
 			</div>
 			<div class = "controll_matrix">
+				<br>matrix color:
+				<select style="color:black" name = "color" id="color_selector">
+					<option value="blackbody" style="color:black">blackbody</option>
+					<option value="electric" style="color:black">electric</option>
+					<option value="greens" style="color:black">greens</option>
+					<option value="greys" style="color:black">greys</option>
+					<option value="earth" style="color:black">earth</option>
+					<option value="bluered" style="color:black">bluered</option>
+					<option value="portland" style="color:black">portland</option>
+					<option value="picnic" style="color:black">picnic</option>
+					<option value="jet" style="color:black">jet</option>
+					<option value="hot" style="color:black">hot</option>
+				</select>
+				<br>
 				<br>
 				<form method="post" name="reorderForm">
 					<select style="color:black" name = "algorithm" id="algorithm_selector">
