@@ -40,7 +40,13 @@
 				</div>
 				<br>
 				<input type="file" name="fileToUpload" id="fileToUpload">
-				<br><br>
+				<br>
+				<?php
+					print($_SESSION["upload_error"]);
+					$_SESSION["upload_error"] = "";
+				?>
+				<br>
+				
 				<input type="submit" value="Upload csv file" name="submit" id="submitBtn">
 			</form>
 		</div>

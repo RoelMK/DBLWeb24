@@ -7,15 +7,33 @@
 	$uploadOk = 1;
 	$fileType = strtolower(pathinfo($target_file,PATHINFO_EXTENSION));
 	
+	//count files in uploads folder
+	$filecount = 0;
+	$file_list = glob($target_dir . "*");
+	if ($files){
+	 $filecount = count($files);
+	}
+	
+	//check if you come from file selector
 	if(!empty($_POST["file_select"])) {
 		$target_file = "." . $_POST["file_select"];
 		$fileType = strtolower(pathinfo($target_file,PATHINFO_EXTENSION));
 	}
 	
+	
+	if (filecount >= 20) {
+		$_SESSION["upload_error"] = "Server is full, plz try again later.";
+		$locatie = "../upload.php";
+		header("location:$locatie");
+		
+		echo "If you see this, please report. #7";
+		$uploadOk = 0;
+	}
+	
 	// Allow certain file formats and no empty's
-	if($fileType != "csv") {
-		$_SESSION["upload_error"] = "Please upload a csv file";
-		$locatie = "../matrixNodelink.php";
+	else if($fileType != "csv") {
+		$_SESSION["upload_error"] = "File was not a .csv file.";
+		$locatie = "../upload.php";
 		header("location:$locatie");
 		
 		echo "If you see this, please report. #1";
@@ -26,7 +44,7 @@
 	else if (file_exists($target_file)) {
 		$_SESSION["file_name"] = $target_file;
 		$_SESSION["upload_error"] = "";
-		$locatie = "../matrixNodelink.php";
+		$locatie = "../upload.php";
 		header("location:$locatie");
 		
 		echo "If you see this, please report. #2";
@@ -35,7 +53,7 @@
 	
 	// Check if $uploadOk is set to 0 by an error
 	if ($uploadOk == 0) {
-		$locatie = "../matrixNodelink.php";
+		$locatie = "../upload.php";
 		header("location:$locatie");
 		
 		echo "If you see this, please report. #3";
@@ -50,8 +68,8 @@
 			echo "If you see this, please report. #4";		
 			
 		} else {
-			$_SESSION["upload_error"] = "Sorry, there was an error uploading your file. Please try again. If this keeps happening, please report this.";
-			$locatie = "../matrixNodelink.php";
+			$_SESSION["upload_error"] = "Sorry, there was an error uploading your file. Please try again. If this keeps happening, please report this. #6";
+			$locatie = "../upload.php";
 			header("location:$locatie");
 			
 			echo "If you see this, please report. #5";
