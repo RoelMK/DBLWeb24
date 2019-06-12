@@ -6,6 +6,7 @@ var interactivity = new Interactivity();    // Interactivity manager
 
 /**
  * Assign events to checkboxes to select which visualizations are visible
+ * @author Roel Koopman
  * @param {String} csvPath Path to CSV file
  */
 function assignVisualizationCheckboxes(csvPath) {
@@ -15,25 +16,64 @@ function assignVisualizationCheckboxes(csvPath) {
 
     chkMatrix.addEventListener('change', (event) => {
         if (event.target.checked) {
+            resizeDivs(chkMatrix, chkNodeLink, chkChord, csvPath);
             if (matrix == null) visualizeCSVFile(csvPath, 'matrix', 'matrix')
         } else {
             removeVisualization('matrix', 'matrix');
+            resizeDivs(chkMatrix, chkNodeLink, chkChord, csvPath);
         }
     });
     chkNodeLink.addEventListener('change', (event) => {
         if (event.target.checked) {
+            resizeDivs(chkMatrix, chkNodeLink, chkChord, csvPath);
             if (nodeLink == null) visualizeCSVFile(csvPath, 'nodelink', 'nodelink')
         } else {
             removeVisualization('nodelink', 'nodelink');
-        }
+            resizeDivs(chkMatrix, chkNodeLink, chkChord, csvPath);
+        } 
     });
     chkChord.addEventListener('change', (event) => {
         if (event.target.checked) {
-            if (chord == null) visualizeCSVFile(csvPath, 'chord', 'chord')
+            resizeDivs(chkMatrix, chkNodeLink, chkChord, csvPath);
+            if (chord == null) visualizeCSVFile(csvPath, 'chord', 'chord');
         } else {
             removeVisualization('chord', 'chord');
-        }
+            resizeDivs(chkMatrix, chkNodeLink, chkChord, csvPath);
+        }      
     });
+}
+
+/**
+ * Resize the divs
+ * @author Roel Koopman
+ * @param {Checkbox} chkMatrix Matrix checkbox
+ * @param {Checkbox} chkNodeLink NodeLink checkbox
+ * @param {Checkbox} chkChord Chord checkbox
+ * @param {String} csvPath Path to CSV file
+ */
+function resizeDivs(chkMatrix, chkNodeLink, chkChord, csvPath) {
+    var checked = 0;                    // Get the number of checked checks
+    if (chkMatrix.checked) checked++;
+    if (chkNodeLink.checked) checked++;
+    if (chkChord.checked) checked++;
+    var split = 100 / checked;          // Decide the new size of the selected divs
+
+    // Decide which div is getting which size
+    var splitMatrix = 0;
+    var splitNodelink = 0;
+    var splitChord = 0;
+    if (chkMatrix.checked) splitMatrix = split;
+    if (chkNodeLink.checked) splitNodelink = split;
+    if (chkChord.checked) splitChord = split;
+
+    // Split
+    var elem = document.getElementById("visBlock");
+    elem.style.gridTemplateColumns = splitMatrix + "% " + splitNodelink + "% " + splitChord + "%"
+
+    // Redraw (only required for matrix if chord is not visible (because of a bug workaround))
+    if (chord != null) chord.draw(chord.mainChord.data);
+    if (chord == null && matrix != null) matrix.draw();
+    if (nodeLink != null) nodeLink.fitToScreen();
 }
 
 /**
@@ -82,7 +122,7 @@ function visualizeCSVFile(csvPath, visualizationType, elementID, loop = false) {
                 })
                 break;
             case 'chord':
-                chord = new ChordVisualization(csv.getChord(10, 300), elementID);
+                chord = new ChordVisualization(csv.getChord(10, 300), elementID, csvPath);  
                 break;
         }
     } else if(!loop) {

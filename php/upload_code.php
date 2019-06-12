@@ -60,7 +60,7 @@
 	
 	// Check if $uploadOk is set to 0 by an error
 	if ($uploadOk == 0) {
-		$locatie = "../upload.php";
+		$locatie = "../matrixNodelink.php";
 		header("location:$locatie");
 		
 		echo "If you see this, please report. #3";

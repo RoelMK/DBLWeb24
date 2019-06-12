@@ -5,7 +5,8 @@ class ChordVisualization {
      * @param {Chord} dataToVisualize Data to visualize in the chord
      * @param {string} elementID ID of the div to display the visualization in
      */
-    constructor(dataToVisualize, elementID) {
+    constructor(dataToVisualize, elementID, csvPath) {
+        this.csvPath = csvPath;
         this.elementID = elementID;
         this.mainChord = dataToVisualize
         this.focusChord = null;
@@ -20,6 +21,9 @@ class ChordVisualization {
      * @author Roel Koopman
      */
     draw(chordData) {
+        var foundMatrix = (matrix != null);                         // Workaround to a super strange bug which causes the chord to not appear if there is already a Matrix
+        if (foundMatrix) removeVisualization('matrix', 'matrix');   // Remove the matrix
+
         // Get width height of div
         var width = document.getElementById(this.elementID).offsetWidth;
         var height = document.getElementById(this.elementID).offsetHeight;
@@ -39,6 +43,7 @@ class ChordVisualization {
         // Set html for the svg and draw
         document.getElementById(this.elementID).innerHTML = chord_style + "<svg width=\"" + width + "\" height=\"" + height + "\"><g transform=\"translate(" + Math.round(width / 2) + "," + Math.round(height / 2) + ")\"></g></svg>"
         d3.select("g").call(chord);
+        if (foundMatrix) visualizeCSVFile(this.csvPath, 'matrix', 'matrix');     // Redraw the matrix
     }
 
     /**
