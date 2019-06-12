@@ -39,12 +39,19 @@
 		echo "If you see this, please report. #1";
 		$uploadOk = 0;
 	}
+	else if ($_FILES["fileToUpload"]["size"] > 50000) { //max 50 kb
+		$_SESSION["upload_error"] = "File was too large, max file size is 50 kb";
+		$locatie = "../upload.php";
+		header("location:$locatie");
+		
+		echo "If you see this, please report. #8";
+	}
 
 	// Check if file already exists
 	else if (file_exists($target_file)) {
 		$_SESSION["file_name"] = $target_file;
 		$_SESSION["upload_error"] = "";
-		$locatie = "../upload.php";
+		$locatie = "../matrixNodelink.php";
 		header("location:$locatie");
 		
 		echo "If you see this, please report. #2";
