@@ -182,7 +182,9 @@ class MatrixVisualization {
               tickfont: {
                   size: 8
               }
-            }
+            },
+            paper_bgcolor: 'rgba(0,0,0,0)',
+            plot_bgcolor: 'rgba(0,0,0,0)'
         }
     }
 
@@ -273,66 +275,4 @@ class MatrixVisualization {
         if (distanceDropdown != null) {var distance_name = distanceDropdown.options[distanceDropdown.selectedIndex].value;} else {var distance_name = null;}
         return {perm_type: perm_type, linkage_type: linkage_type, distance_name: distance_name}
     }
-
-    //
-    //
-    // ---------------------------------------- OBSOLETE ----------------------------------------
-    /**
-     * Generate the data for Plotly
-     * @author Roel Koopman
-     * @returns Array with all data
-     */
-    generateData() {
-        var data = [];
-        for (var i = 0; i < this.visualizationData.length; i++) { // Obsolete, but left in the code because of it possible uses in the future
-            data.push(this.makeTrace(i));   // Push every dataset
-        }
-        return data;
-    }
-
-    /**
-     * Generate one of the datasets
-     * @author Roel Koopman
-     * @param {number} i ID of the dataset
-     * @returns Data for the specified ID
-     */
-    makeTrace(i) {
-        var xyz = this.getXYZData(i);
-        return {
-            z: xyz.z,
-            x: xyz.x,
-            y: xyz.y,
-            visible: i === 0,           // Display data for default (i=0)
-            colorscale: 'Blackbody',    // Default
-            name: 'Data set ' + i,
-            type: 'heatmap',
-            colorbar: {x: -0.15},       // Move the colorbar to the left side of the plot
-            xgap: 0.05,                 // Add a grid
-            ygap: 0.05
-        };
-    }
-
-    /**
-     * Get the xyz-data belonging to an ID
-     * @author Roel Koopman
-     * @param {number} i ID of the dataset
-     * @returns x,y,z-data
-     */
-    getXYZData(i) {
-        if (i < this.visualizationData.length) {
-            var plotlyData = this.visualizationData[i].asPlotly();
-            return {
-                z: plotlyData.z,
-                x: plotlyData.x,
-                y: plotlyData.y,
-            };
-        } else {
-            return {
-                z: [[i, i + 1, i + 2], [2*i, 2*i, 2*i]] // Dummy data
-            };  
-        }
-    }
-    //
-    // END OBSOLETE
-    //
 }

@@ -44,7 +44,7 @@
 	else if (file_exists($target_file)) {
 		$_SESSION["file_name"] = $target_file;
 		$_SESSION["upload_error"] = "";
-		$locatie = "../upload.php";
+		$locatie = "../matrixNodelink.php";
 		header("location:$locatie");
 		
 		echo "If you see this, please report. #2";
@@ -53,7 +53,7 @@
 	
 	// Check if $uploadOk is set to 0 by an error
 	if ($uploadOk == 0) {
-		$locatie = "../upload.php";
+		$locatie = "../matrixNodelink.php";
 		header("location:$locatie");
 		
 		echo "If you see this, please report. #3";

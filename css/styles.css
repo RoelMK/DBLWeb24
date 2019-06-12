@@ -87,9 +87,9 @@ em {
 	grid-area: visBlock;
 	display: grid;
 	background-color: #f4e7e9;
-	grid-template-columns: 45% 10% 45%;
+	grid-template-columns: 50% 50% 0%;
 	grid-template-rows: 100%;
-	grid-template-areas: "matrix divider2 nodelink";
+	grid-template-areas: "matrix nodelink chord";
 }
 #visBlock #matrix {
 	grid-area: matrix;
@@ -97,7 +97,7 @@ em {
 #visBlock #nodelink {
 	grid-area: nodelink;
 }
-#visBlock #divider2 {
-	grid-area: divider2;
+#visBlock #chord {
+	grid-area: chord;
 }
 

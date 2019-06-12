@@ -35,6 +35,10 @@
 				echo "	<script>
 						window.onload = function() {
 							assignVisualizationCheckboxes('./uploads/" . basename($_SESSION["file_name"]) . "')
+							var element = document.getElementById('matrix_select');
+							element.checked = true;
+							var event = new Event('change');
+							element.dispatchEvent(event);
 						}
 						</script>";
 			}
@@ -255,25 +259,9 @@
 			</script>
 		</div>
 		<div id="visBlock">
-			<div id="matrix">
-				<!--<?php
-					if (!empty($_SESSION["file_name"])) {
-						echo "	<script>
-									visualizeCSVFile('./uploads/" . basename($_SESSION["file_name"]) . "', 'matrix', 'matrix')
-								</script>";
-					}
-				?>-->
-			</div>
-			<div id="divider2"></div>
-			<div id="nodelink">
-			<!--<?php
-					if (!empty($_SESSION["file_name"])) {
-						echo "	<script>
-									visualizeCSVFile('./uploads/" . basename($_SESSION["file_name"]) . "', 'nodelink', 'nodelink')
-								</script>";
-					}
-				?>-->
-			</div>
+			<div id="matrix"></div>
+			<div id="nodelink"></div>
+			<div id="chord"></div>
 		</div>
 	</body>
 </html>	
