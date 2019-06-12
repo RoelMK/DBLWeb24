@@ -21,7 +21,7 @@
 	}
 	
 	
-	if (filecount >= 20) {
+	if ($filecount >= 20) {
 		$_SESSION["upload_error"] = "Server is full, plz try again later.";
 		$locatie = "../upload.php";
 		header("location:$locatie");
@@ -37,6 +37,14 @@
 		header("location:$locatie");
 		
 		echo "If you see this, please report. #1";
+		$uploadOk = 0;
+	}
+	else if ($_FILES["fileToUpload"]["size"] > 50000000) { //max 50 kb
+		$_SESSION["upload_error"] = "File was too large, max file size is 50 kb";
+		$locatie = "../upload.php";
+		header("location:$locatie");
+		
+		echo "If you see this, please report. #8";
 		$uploadOk = 0;
 	}
 

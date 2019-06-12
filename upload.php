@@ -1,4 +1,3 @@
-<!-- Below code was written by Jeroen Gijsbers -->
 <?php
 	//sessie start etc.
 	include ("php/setup.inc.php");
