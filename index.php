@@ -7,6 +7,10 @@
 	<head>
 		<link href="css/stylesIndex.css" rel="stylesheet">
 		<title>2IOA0 Group 24</title>
+		<?php
+			$redirect = "upload.php";
+			header("location:$redirect");
+		?>
 	</head>
 	<body>
 		<div id="navBar">

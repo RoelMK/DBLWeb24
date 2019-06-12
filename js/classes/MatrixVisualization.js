@@ -22,7 +22,6 @@ class MatrixVisualization {
             z: this.visibleData.z,
             x: this.visibleData.x,
             y: this.visibleData.y,
-            //name: 'Test',
             visible: true,
             colorscale: this.color.charAt(0).toUpperCase() + this.color.slice(1),    // Capitalize first letter
             type: 'heatmap',

@@ -12,76 +12,48 @@
 }
 body {
 	display: grid;
-	background-color: #f4e7e9;
-	grid-template-columns: 33% 33% 34%;
-	grid-template-rows: 10% 45% 45%;
-	grid-template-areas: "navBar navBar navBar"
-						 "definition uploadSelf chooseExisting"
+	background-color: #f1f1f2; /*#f8f1e5;*/
+	grid-template-columns: 33% 33% 33%;
+	grid-template-rows: 50% 50%;
+	grid-template-areas: "definition uploadSelf chooseExisting"
 						 "definition uploadSelf sharecode";
 }
+#canvas {
+	position: absolute;
+	display: block;
+	top: 0;
+	left: 0;
+	z-index: -1;
+}
 #definition {
-	color: #000;
+	color: black;
 	padding: 25% 5% 0 25%;
 	grid-area: definition;
 }
 #chooseExisting {
-	color: #000;
+	color: black;
 	padding: 25% 25% 0 0;
 	grid-area: chooseExisting;
 }
 #sharecode {
-	color: #000;
+	color: black;
 	padding: 10% 25% 0 0;
 	grid-area: sharecode;
 }
 #uploadSelf {
-	color: #000;
+	color: black;
 	padding: 25% 0 0 0;
 	grid-area: uploadSelf;
 }
 #submitBtn {
 	color: white;
-	background-color: #01306d;
+	background-color: #2f496e;/*#01306d;*/
 	border-radius: 5px 5px 5px 5px;
 	padding: 5% 10% 5% 10%;
 	text-align: center;
 }
-#navBar {
-	grid-area: navBar;
-	background-color: #f4e7e9;
-}
-#navBar ul {	
-	list-style-type: none;
-
-}
-#navBar li {
-	color: white;
-	background-color: #01306d;
-	border-radius: 5px 5px 5px 5px;
-	border: solid 2px #0e0c19;
-	padding: 2% 0 0 0;
-	float: left;
-	line-height: 100%;
-	text-align: center;
-	width: 33%;
-}
-#navBar li a {
-	color: white;
-	padding: 16px 32px;
-	text-decoration: none;
-	overflow: auto;
-	display: block;
-
-}
 em {
 	background-color: #0e0c19;
-
-}
-#navBar li a:hover {
-	background-color: #0e0c19;
-	color: white;
-	text-decoration: none;
-
 }
 #upload {
 	float: left;

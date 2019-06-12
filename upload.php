@@ -9,15 +9,16 @@
 		<link href="css/stylesUpload.css" rel="stylesheet">
 		<link href="css/help_kevin_styles.css" rel="stylesheet">
 		<title>2IOA0 Group 24</title>
+		<script>
+        window.onload = function() {
+            var tag = document.createElement("script");
+            tag.src = "./js/libraries/effects.js";
+            document.getElementsByTagName("head")[0].appendChild(tag);
+        }
+    	</script>
 	</head>
 	<body>
-		<div id="navBar">
-			<ul>
-				<li><a href="index.php">Welcome!</a></li>
-				<li><a href="upload.php">Visualizations</a></li>
-				<li><a href="aboutUs.html">About us</a></li>
-			</ul>
-		</div>
+		<canvas id="canvas"></canvas>
 		<div id="definition">
 			<h1>Definition</h1>
 			<p>To present graph visualization we must first explain what is a graph. Also called network, a graph is a collection of nodes

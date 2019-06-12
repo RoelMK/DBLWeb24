@@ -45,16 +45,6 @@
 		?>
 	</head>
 	<body>
-		<div id="navBar">
-			<ul>
-				<li><em><a href="index.php">Welcome!</a></em></li>
-				<li><a href="upload.php">Visualizations</a></li>
-				<li><a href="aboutUs.html">About us</a></li>
-			</ul>
-		</div>
-		<div id="upload">
-			
-		</div>
 		<div id="controlPanel">
 			<div id="controll_all">
 				<?php
@@ -222,7 +212,7 @@
 				<hr>
 			</div>
 			<div class = "controll_chord">
-				<br>insert controll chord
+				<br>Nothing to select
 				<hr>
 			</div>
 			<script> 

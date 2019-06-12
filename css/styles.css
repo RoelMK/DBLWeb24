@@ -13,81 +13,28 @@
 }
 body {
 	display: grid;
-	background-color: #f4e7e9;
-	grid-template-columns: 80% 20%;
-	grid-template-rows: 10% 5% 85%;
-	grid-template-areas: "navBar navBar"
-			     "upload upload"
-			     "visBlock controlPanel";
-}
-
-#navBar {
-	grid-area: navBar;
-	background-color: #f4e7e9;
-}
-#navBar ul {	
-	list-style-type: none;
-
-}
-#navBar li {
-	background-color: #01306d;
-	border-radius: 5px 5px 5px 5px;
-	border: solid 2px #0e0c19;
-	padding: 2% 0 0 0;
-	float: left;
-	line-height: 100%;
-	text-align: center;
-	width: 33%;
-}
-#navBar li a {
-	padding: 16px 32px;
-	text-decoration: none;
-	overflow: auto;
-	display: block;
-
+	background-color: #f1f1f2;
+	grid-template-columns: 82% 18%;
+	grid-template-rows: 100%;
+	grid-template-areas: "visBlock controlPanel";
 }
 em {
 	background-color: #0e0c19;
 
 }
-#navBar li a:hover {
-	background-color: #0e0c19;
-	color: white;
-	text-decoration: none;
-
-}
-#upload {
-	float: left;
-	display: grid;
-	grid-template-columns: 33% 33 34%;
-	grid-template-rows: 100%;
-	grid-template-areas: "uploadForm phpResult phpResult";
-	grid-area: upload;
-	background-color: #7faaf4;
-}
-#upload #uploadForm {
-	grid-area: uploadForm;
-
-}
-#upload #phpResult {
-	grid-area: phpResult;
-}
-#upload form #submitBtn {
-	color: black;
-}
 #controlPanel {
-	border-radius: 15px 15px 15px 15px;
-	margin: 5% 5% 5% 0;
+	border-radius: 0px, 0px, 0px, 0px;/*15px 15px 15px 15px;  #f8f1e5;*/
+	margin: 0% 0% 0% 0;
 	grid-area: controlPanel;
-	background-color: #17479e;
+	background-color: #2f496e;
 
 }
 #visBlock {
 	color: #000;
 	grid-area: visBlock;
 	display: grid;
-	background-color: #f4e7e9;
-	grid-template-columns: 50% 50% 0%;
+	background-color: #f1f1f2;
+	grid-template-columns: 100% 0% 0%;
 	grid-template-rows: 100%;
 	grid-template-areas: "matrix nodelink chord";
 }
@@ -100,4 +47,3 @@ em {
 #visBlock #chord {
 	grid-area: chord;
 }
-
