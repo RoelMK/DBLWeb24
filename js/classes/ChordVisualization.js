@@ -50,7 +50,7 @@ class ChordVisualization {
      * Focus on a node
      * @param {String} node Node to focus on
      */
-    focus(node) {     
+    focus(node) {    
         this.focusChord = this.mainChord.getFocusData(node, 100); // TODO: 100 is a magic number
         this.draw(this.focusChord.data); 
     }
