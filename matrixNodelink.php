@@ -84,6 +84,9 @@
 				<hr>
 			</div>
 			<div class = "controll_matrix">
+				<br>Select node with name: <input style="color:black" type="text" name="node_select" />
+				<input type='button' value = 'Search node' style="color:black">
+				<br>
 				<br>matrix color:
 				<select style="color:black" name = "color" id="color_selector">
 					<option value="blackbody" style="color:black">blackbody</option>
