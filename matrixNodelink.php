@@ -34,6 +34,7 @@
 			if (!empty($_SESSION["file_name"])) {
 				echo "	<script>
 						window.onload = function() {
+							assignSearchNodeControls();
 							assignVisualizationCheckboxes('./uploads/" . basename($_SESSION["file_name"]) . "')
 							var element = document.getElementById('matrix_select');
 							element.checked = true;
@@ -91,7 +92,13 @@
 				<hr>
 			</div>
 			<div class = "controll_matrix">
+<<<<<<< HEAD
 				
+=======
+				<br>Select node with name: <input style="color:black" type="text" id="node_select" />
+				<input type='button' value = 'Search node' style="color:black" id="btnSearchNode">
+				<br>
+>>>>>>> Added backend for search buttons
 				<br>matrix color:
 				<select style="color:black" name = "color" id="color_selector">
 					<option value="blackbody" style="color:black">blackbody</option>
