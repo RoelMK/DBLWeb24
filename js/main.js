@@ -5,6 +5,27 @@ var csv = null;         // Current csv loaded
 var interactivity = new Interactivity();    // Interactivity manager
 
 /**
+ * Assign controls to search for a node and to unfocus
+ * @author Roel Koopman
+ */
+function assignSearchNodeControls() {
+    var nodeTextbox = document.getElementById('node_select');
+    var btnNodeSearch = document.getElementById('btnSearchNode');
+    var btnUnfocus = document.getElementById('btnUnfocus');
+
+    btnNodeSearch.addEventListener('click', function() {
+        if (nodeTextbox != null && nodeTextbox.value != null) {
+            var text = nodeTextbox.value;
+            interactivity.focusNode(text);
+        }
+    });
+
+    btnUnfocus.addEventListener('click', function() {
+        interactivity.unfocus();
+    })
+}
+
+/**
  * Assign events to checkboxes to select which visualizations are visible
  * @author Roel Koopman
  * @param {String} csvPath Path to CSV file

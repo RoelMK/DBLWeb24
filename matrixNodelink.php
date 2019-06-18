@@ -35,6 +35,7 @@
 				echo "	<script>
 						window.onload = function() {
 							assignVisualizationCheckboxes('./uploads/" . basename($_SESSION["file_name"]) . "')
+							assignSearchNodeControls();
 							var element = document.getElementById('matrix_select');
 							element.checked = true;
 							var event = new Event('change');
@@ -78,11 +79,11 @@
 							</a>");
 				?>
 				<br>
-				<br>Select node with name: <input style="color:black" type="text" name="node_select" />
-				<input type='button' value = 'Search node' style="color:black">
+				<br>Select node with name: <input style="color:black" type="text" id="node_select" />
+				<input type='button' value = 'Search node' style="color:black" id="btnSearchNode">
 				<br>
 				<br>
-				<input type='button' value = 'Reset' style="color:black">
+				<input type='button' value = 'Reset' style="color:black" id="btnUnfocus">
 				<br>
 				<br>
 				<input type="checkbox" name="vistypeM" id ="matrix_select"> Matrix
@@ -90,8 +91,7 @@
 				<input type="checkbox" name="vistypeC" id ="chord_select"> Chord<br>
 				<hr>
 			</div>
-			<div class = "controll_matrix">
-				
+			<div class = "controll_matrix">				
 				<br>matrix color:
 				<select style="color:black" name = "color" id="color_selector">
 					<option value="blackbody" style="color:black">blackbody</option>

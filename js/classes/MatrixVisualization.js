@@ -99,7 +99,7 @@ class MatrixVisualization {
      * @param {String} node Node to fucus on
      */
     focusNode(node) {
-        focus(node, node);
+        this.focusEdge(node, node);
     }
 
     /**
@@ -113,7 +113,7 @@ class MatrixVisualization {
         var x_idOfNode = -1;
         var x_extension = Math.min(5, this.visibleData.x.length);
         for (var i = 0; i < this.visibleData.x.length; i++) {
-            if (nodeTo == this.visibleData.x[i]) {
+            if (nodeTo.toLowerCase() == this.visibleData.x[i].toLowerCase()) {
                 x_idOfNode = i;
                 break;
             }
@@ -127,7 +127,7 @@ class MatrixVisualization {
         var y_idOfNode = -1;
         var y_extension = Math.min(5, this.visibleData.y.length); 
         for (var i = 0; i < this.visibleData.y.length; i++) {
-            if (nodeFrom == this.visibleData.y[i]) {
+            if (nodeFrom.toLowerCase() == this.visibleData.y[i].toLowerCase()) {
                 y_idOfNode = i;
                 break;
             }
@@ -136,7 +136,7 @@ class MatrixVisualization {
         if (y_idOfNode == -1) {
             return;
         } 
-
+        
         // Update the plot
         Plotly.relayout(this.plot, this.generateLayout([x_idOfNode - x_extension, x_idOfNode + x_extension], [y_idOfNode - y_extension, y_idOfNode + y_extension]));
     }
