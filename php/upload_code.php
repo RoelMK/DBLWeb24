@@ -39,7 +39,7 @@
 		echo "If you see this, please report. #1";
 		$uploadOk = 0;
 	}
-	else if ($_FILES["fileToUpload"]["size"] > 50000000) { //max 50 kb
+	else if ($_FILES["fileToUpload"]["size"] > 50000000) { //max 50.000 kb
 		$_SESSION["upload_error"] = "File was too large, max file size is 50 kb";
 		$locatie = "../upload.php";
 		header("location:$locatie");
