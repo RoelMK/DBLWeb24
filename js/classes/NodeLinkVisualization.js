@@ -165,7 +165,8 @@ class NodeLinkVisualization {
             if (!this.directed && originID < targetID) {
               edge.hidden = true
               edge.physics = false
-            } else {
+            }
+            if (this.directed) {
               edge.arrows = {
                 to: {
                   enabled: true,
