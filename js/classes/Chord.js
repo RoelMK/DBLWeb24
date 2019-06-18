@@ -66,7 +66,7 @@ function getChordForSingleNode(columns, z, node, maxNumberOfEdges) {
     
     // Find id of node
     for (var i = 0; i < columns.length; i++) {
-        if (columns[i] == node) {
+        if (columns[i].toLowerCase() == node.toLowerCase()) {
             idOfNode = i;
             break;
         }

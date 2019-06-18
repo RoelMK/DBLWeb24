@@ -28,7 +28,8 @@ class NodeLinkVisualization {
         color: {inherit: 'from'},
         smooth: {
           enabled: false
-        }
+        },
+        selectionWidth: function (width) {return width * 2}
       },
       interaction: {
         hideEdgesOnDrag: false
@@ -49,6 +50,30 @@ class NodeLinkVisualization {
     }
   }
 
+  // used to communicate with matrix
+  assignInteractivity(interactivity) {
+    nodeLink = this
+
+    this.network.on('selectNode', function(e) {
+      interactivity.focusNode(nodeLink.nodes.get(e.nodes[0]).label, {nodeLink: true})
+    })
+
+    this.network.on('selectEdge', function(e) {
+      var edgeID    = e.edges[0]
+      var edge      = nodeLink.edges.get(edgeID)
+      var fromLabel = nodeLink.nodes.get(edge.from).label
+      var toLabel   = nodeLink.nodes.get(edge.to).label
+
+      interactivity.focusEdge(fromLabel, toLabel, {nodeLink: true})
+    })
+
+    this.network.on('click', function(e) {
+      if (e.nodes.length === 0 && e.edges.length === 0) {
+        interactivity.unfocus()
+      }
+    })
+  }
+
   // this step is done after reading the CSV to drastically improve performance
   setupNetwork() {
     this.network = new vis.Network(
@@ -64,9 +89,27 @@ class NodeLinkVisualization {
     this.initForceLayout()
   }
 
-  // might be removed in the future
-  setDirected(boolean) {
-    this.directed = boolean
+  // automatically detect whether the graph is directed. This is required
+  // before reading the csv!!
+  detectDirected(matrixData) {
+    var columnCutoff = 1 // to prevent looking at diagonals or double checks
+
+    // outer loops goes through rows
+    for (var row = 0; row < matrixData.length - 1; row++) {
+      // inner loops goes through columns
+      for (var column = 0; column < matrixData.length - columnCutoff; column++) {
+        var value         = matrixData[row][column]
+        var inverseRow    = matrixData.length - 1 - column
+        var inverseColumn = matrixData.length - 1 - row
+        var inverseValue  = matrixData[inverseRow][inverseColumn]
+        if (value !== inverseValue) {
+          this.directed = true
+          return
+        }
+      }
+      columnCutoff++
+    }
+    this.directed = false
   }
 
   // here be dragons
@@ -122,6 +165,13 @@ class NodeLinkVisualization {
             if (!this.directed && originID < targetID) {
               edge.hidden = true
               edge.physics = false
+            } else {
+              edge.arrows = {
+                to: {
+                  enabled: true,
+                  scaleFactor: 0.5
+                }
+              }
             }
             this.edges.add(edge)
             this.nodes.get(originID).neighbors.push(this.nodes.get(targetID))
@@ -482,5 +532,42 @@ class NodeLinkVisualization {
       var action  = vis[key]
       element.addEventListener('change', action.bind(vis))
     })
+  }
+
+  findNode(name) {
+    var nodesFound = this.nodes.get({
+      filter: function(node) {
+        return node.label === name
+      }
+    })
+    if (nodesFound) {
+      return nodesFound[0]
+    } else {
+      return null
+    }
+  }
+
+  focusEdge(edgeTail, edgeHead) {
+    var tailNode = this.findNode(edgeTail)
+    var headNode = this.findNode(edgeHead)
+    if (tailNode != null && headNode != null) {
+      this.network.focus(tailNode.id, {animation: true})
+      this.network.selectEdges([tailNode.id + '-' + headNode.id])
+    }
+  }
+
+  focusNode(node) {
+    if (typeof node === 'string') {
+      node = this.findNode(node)
+    }
+    if (node != null) {
+      this.network.focus(node.id, {animation: true})
+      this.network.selectNodes([node.id])
+    }
+  }
+
+  unfocus() {
+    this.fitToScreen()
+    this.network.selectNodes([])
   }
 }

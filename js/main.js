@@ -5,6 +5,27 @@ var csv = null;         // Current csv loaded
 var interactivity = new Interactivity();    // Interactivity manager
 
 /**
+ * Assign controls to search for a node and to unfocus
+ * @author Roel Koopman
+ */
+function assignSearchNodeControls() {
+    var nodeTextbox = document.getElementById('node_select');
+    var btnNodeSearch = document.getElementById('btnSearchNode');
+    var btnUnfocus = document.getElementById('btnUnfocus');
+
+    btnNodeSearch.addEventListener('click', function() {
+        if (nodeTextbox != null && nodeTextbox.value != null) {
+            var text = nodeTextbox.value;
+            interactivity.focusNode(text);
+        }
+    });
+
+    btnUnfocus.addEventListener('click', function() {
+        interactivity.unfocus();
+    })
+}
+
+/**
  * Assign events to checkboxes to select which visualizations are visible
  * @author Roel Koopman
  * @param {String} csvPath Path to CSV file
@@ -30,7 +51,7 @@ function assignVisualizationCheckboxes(csvPath) {
         } else {
             removeVisualization('nodelink', 'nodelink');
             resizeDivs(chkMatrix, chkNodeLink, chkChord, csvPath);
-        } 
+        }
     });
     chkChord.addEventListener('change', (event) => {
         if (event.target.checked) {
@@ -39,7 +60,7 @@ function assignVisualizationCheckboxes(csvPath) {
         } else {
             removeVisualization('chord', 'chord');
             resizeDivs(chkMatrix, chkNodeLink, chkChord, csvPath);
-        }      
+        }
     });
 }
 
@@ -78,7 +99,7 @@ function resizeDivs(chkMatrix, chkNodeLink, chkChord, csvPath) {
 
 /**
  * Visualize a CSV file
- * @author Roel Koopman
+ * @author Roel Koopman, Jarno Ottens
  * @param {String} csvPath Path to CSV file
  * @param {String} visualizationType Type of visualization to load (matrix/nodelink/chord)
  * @param {String} elementID ID of the div to show the visualization in
@@ -106,7 +127,9 @@ function visualizeCSVFile(csvPath, visualizationType, elementID, loop = false) {
                 break;
             case 'nodelink':
                 nodeLink = new NodeLinkVisualization(elementID);
-                nodeLink.readCSV(csv.rawCSV);
+                nodeLink.detectDirected(csv.getMatrix().data)
+                nodeLink.readCSV(csv.rawCSV)
+                nodeLink.assignInteractivity(interactivity)
                 nodeLink.assignButtons({
                   togglePhysics: document.getElementById('button1'),
                   toggleEdgeSmoothing: document.getElementById('button2'),
@@ -122,7 +145,7 @@ function visualizeCSVFile(csvPath, visualizationType, elementID, loop = false) {
                 })
                 break;
             case 'chord':
-                chord = new ChordVisualization(csv.getChord(10, 300), elementID, csvPath);  
+                chord = new ChordVisualization(csv.getChord(10, 300), elementID, csvPath);
                 break;
         }
     } else if(!loop) {
