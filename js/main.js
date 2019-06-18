@@ -99,7 +99,7 @@ function resizeDivs(chkMatrix, chkNodeLink, chkChord, csvPath) {
 
 /**
  * Visualize a CSV file
- * @author Roel Koopman
+ * @author Roel Koopman, Jarno Ottens
  * @param {String} csvPath Path to CSV file
  * @param {String} visualizationType Type of visualization to load (matrix/nodelink/chord)
  * @param {String} elementID ID of the div to show the visualization in
@@ -128,7 +128,8 @@ function visualizeCSVFile(csvPath, visualizationType, elementID, loop = false) {
             case 'nodelink':
                 nodeLink = new NodeLinkVisualization(elementID);
                 nodeLink.detectDirected(csv.getMatrix().data)
-                nodeLink.readCSV(csv.rawCSV);
+                nodeLink.readCSV(csv.rawCSV)
+                nodeLink.assignInteractivity(interactivity)
                 nodeLink.assignButtons({
                   togglePhysics: document.getElementById('button1'),
                   toggleEdgeSmoothing: document.getElementById('button2'),

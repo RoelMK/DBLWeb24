@@ -28,7 +28,8 @@ class NodeLinkVisualization {
         color: {inherit: 'from'},
         smooth: {
           enabled: false
-        }
+        },
+        selectionWidth: function (width) {return width * 2}
       },
       interaction: {
         hideEdgesOnDrag: false
@@ -47,6 +48,30 @@ class NodeLinkVisualization {
         }
       }
     }
+  }
+
+  // used to communicate with matrix
+  assignInteractivity(interactivity) {
+    nodeLink = this
+
+    this.network.on('selectNode', function(e) {
+      interactivity.focusNode(nodeLink.nodes.get(e.nodes[0]).label, {nodeLink: true})
+    })
+
+    this.network.on('selectEdge', function(e) {
+      var edgeID    = e.edges[0]
+      var edge      = nodeLink.edges.get(edgeID)
+      var fromLabel = nodeLink.nodes.get(edge.from).label
+      var toLabel   = nodeLink.nodes.get(edge.to).label
+
+      interactivity.focusEdge(fromLabel, toLabel, {nodeLink: true})
+    })
+
+    this.network.on('click', function(e) {
+      if (e.nodes.length === 0 && e.edges.length === 0) {
+        interactivity.unfocus()
+      }
+    })
   }
 
   // this step is done after reading the CSV to drastically improve performance
@@ -523,13 +548,18 @@ class NodeLinkVisualization {
   }
 
   focusEdge(edgeTail, edgeHead) {
-    var node = this.findNode(edgeTail)
-    if (node != null) {
-      this.focusNode(node)
+    var tailNode = this.findNode(edgeTail)
+    var headNode = this.findNode(edgeHead)
+    if (tailNode != null && headNode != null) {
+      this.network.focus(tailNode.id, {animation: true})
+      this.network.selectEdges([tailNode.id + '-' + headNode.id])
     }
   }
 
   focusNode(node) {
+    if (typeof node === 'string') {
+      node = this.findNode(node)
+    }
     if (node != null) {
       this.network.focus(node.id, {animation: true})
       this.network.selectNodes([node.id])

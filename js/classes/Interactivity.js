@@ -4,29 +4,32 @@ class Interactivity {
      * @param {String} edgeTail Name of the tail node of the edge
      * @param {String} edgeHead Name of the head node of the edge
      */
-    focusEdge(edgeTail, edgeHead) {
-        if (chord != null) chord.focus(edgeTail);
-        if (matrix != null) matrix.focusEdge(edgeTail, edgeHead);
-        if (nodeLink != null) nodeLink.focusEdge(edgeTail, edgeHead);
+    focusEdge(edgeTail, edgeHead, exclude) {
+        if (exclude === undefined) exclude = {}
+        if (chord != null && !exclude.chord) chord.focus(edgeTail);
+        if (matrix != null && !exclude.matrix) matrix.focusEdge(edgeTail, edgeHead);
+        if (nodeLink != null && !exclude.nodeLink) nodeLink.focusEdge(edgeTail, edgeHead);
     }
 
     /**
      * Focus on a node
      * @param {String} node Name of the node
      */
-    focusNode(node) {
-        if (chord != null) chord.focus(node);
-        if (matrix != null) matrix.focusNode(node);
-        if (nodeLink != null) nodeLink.focusNode(node);
+    focusNode(node, exclude) {
+        if (exclude === undefined) exclude = {}
+        if (chord != null && !exclude.chord) chord.focus(node);
+        if (matrix != null && !exclude.matrix) matrix.focusNode(node);
+        if (nodeLink != null && !exclude.nodeLink) nodeLink.focusNode(node);
     }
 
     /**
      * Unfocus
      */
-    unfocus() {
-        if (chord != null) chord.unfocus();
-        if (matrix != null) matrix.unfocus();
-        if (nodeLink != null) nodeLink.unfocus();
+    unfocus(exclude) {
+        if (exclude === undefined) exclude = {}
+        if (chord != null && !exclude.chord) chord.unfocus();
+        if (matrix != null && !exclude.matrix) matrix.unfocus();
+        if (nodeLink != null && !exclude.nodeLink) nodeLink.unfocus();
     }
 
 
