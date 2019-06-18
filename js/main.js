@@ -30,7 +30,7 @@ function assignVisualizationCheckboxes(csvPath) {
         } else {
             removeVisualization('nodelink', 'nodelink');
             resizeDivs(chkMatrix, chkNodeLink, chkChord, csvPath);
-        } 
+        }
     });
     chkChord.addEventListener('change', (event) => {
         if (event.target.checked) {
@@ -39,7 +39,7 @@ function assignVisualizationCheckboxes(csvPath) {
         } else {
             removeVisualization('chord', 'chord');
             resizeDivs(chkMatrix, chkNodeLink, chkChord, csvPath);
-        }      
+        }
     });
 }
 
@@ -106,6 +106,7 @@ function visualizeCSVFile(csvPath, visualizationType, elementID, loop = false) {
                 break;
             case 'nodelink':
                 nodeLink = new NodeLinkVisualization(elementID);
+                nodeLink.detectDirected(csv.getMatrix().data)
                 nodeLink.readCSV(csv.rawCSV);
                 nodeLink.assignButtons({
                   togglePhysics: document.getElementById('button1'),
@@ -122,7 +123,7 @@ function visualizeCSVFile(csvPath, visualizationType, elementID, loop = false) {
                 })
                 break;
             case 'chord':
-                chord = new ChordVisualization(csv.getChord(10, 300), elementID, csvPath);  
+                chord = new ChordVisualization(csv.getChord(10, 300), elementID, csvPath);
                 break;
         }
     } else if(!loop) {

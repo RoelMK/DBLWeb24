@@ -7,7 +7,7 @@ class Interactivity {
     focusEdge(edgeTail, edgeHead) {
         if (chord != null) chord.focus(edgeTail);
         if (matrix != null) matrix.focusEdge(edgeTail, edgeHead);
-        // if (nodeLink != null) nodeLink.focusEdge(edgeTail, edgeHead);
+        if (nodeLink != null) nodeLink.focusEdge(edgeTail, edgeHead);
     }
 
     /**
@@ -17,7 +17,7 @@ class Interactivity {
     focusNode(node) {
         if (chord != null) chord.focus(node);
         if (matrix != null) matrix.focusNode(node);
-        // if (nodeLink != null) nodeLink.focusNode(node);
+        if (nodeLink != null) nodeLink.focusNode(node);
     }
 
     /**
@@ -26,7 +26,7 @@ class Interactivity {
     unfocus() {
         if (chord != null) chord.unfocus();
         if (matrix != null) matrix.unfocus();
-        // if (nodeLink != null) nodeLink.unfocus();
+        if (nodeLink != null) nodeLink.unfocus();
     }
 
 

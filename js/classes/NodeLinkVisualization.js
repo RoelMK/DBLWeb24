@@ -64,9 +64,27 @@ class NodeLinkVisualization {
     this.initForceLayout()
   }
 
-  // might be removed in the future
-  setDirected(boolean) {
-    this.directed = boolean
+  // automatically detect whether the graph is directed. This is required
+  // before reading the csv!!
+  detectDirected(matrixData) {
+    var columnCutoff = 1 // to prevent looking at diagonals or double checks
+
+    // outer loops goes through rows
+    for (var row = 0; row < matrixData.length - 1; row++) {
+      // inner loops goes through columns
+      for (var column = 0; column < matrixData.length - columnCutoff; column++) {
+        var value         = matrixData[row][column]
+        var inverseRow    = matrixData.length - 1 - column
+        var inverseColumn = matrixData.length - 1 - row
+        var inverseValue  = matrixData[inverseRow][inverseColumn]
+        if (value !== inverseValue) {
+          this.directed = true
+          return
+        }
+      }
+      columnCutoff++
+    }
+    this.directed = false
   }
 
   // here be dragons
@@ -122,6 +140,13 @@ class NodeLinkVisualization {
             if (!this.directed && originID < targetID) {
               edge.hidden = true
               edge.physics = false
+            } else {
+              edge.arrows = {
+                to: {
+                  enabled: true,
+                  scaleFactor: 0.5
+                }
+              }
             }
             this.edges.add(edge)
             this.nodes.get(originID).neighbors.push(this.nodes.get(targetID))
@@ -482,5 +507,37 @@ class NodeLinkVisualization {
       var action  = vis[key]
       element.addEventListener('change', action.bind(vis))
     })
+  }
+
+  findNode(name) {
+    var nodesFound = this.nodes.get({
+      filter: function(node) {
+        return node.label === name
+      }
+    })
+    if (nodesFound) {
+      return nodesFound[0]
+    } else {
+      return null
+    }
+  }
+
+  focusEdge(edgeTail, edgeHead) {
+    var node = this.findNode(edgeTail)
+    if (node != null) {
+      this.focusNode(node)
+    }
+  }
+
+  focusNode(node) {
+    if (node != null) {
+      this.network.focus(node.id, {animation: true})
+      this.network.selectNodes([node.id])
+    }
+  }
+
+  unfocus() {
+    this.fitToScreen()
+    this.network.selectNodes([])
   }
 }
