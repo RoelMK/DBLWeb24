@@ -370,22 +370,26 @@ class Matrix {
 	    	marks = marks.concat(x);
 	    	nodes = nodes.concat(2);
 	    }
-	    while (to_visit > 0){
+	    var stop = 0;								//variable to check if you should continue
+	    while (to_visit > 0 & stop==0){				//check if there are nodes to visit and if you should
 	    	node_to_visit = Math.floor(Math.random() * to_visit);	// set node_to_visit to a random value in the range of the unmarked nodes
 	    	visit(marks[node_to_visit], this.data)					// visits a node that doesn't have a marker yet
 	    }
 	    //visits node n
-	    function visit(n){
+	    function visit(n, data){
 	      	if (nodes[n] == 0){return};
 	      	if (nodes[n] == 1){
-	      		console.log("this graph isn't a dag, topological sort only works with dags") //throw some sort of error
+	      		stop = 1;							//set stop to 1 to define that no more nodes should be visited
+	      		window.alert("this graph isn't a dag, topological sort only works with dags. Please use another reordering algorithm or select another dataset.") //throw some sort of error
 	      		return								//quit
 	      	}; 
 	      	nodes[n] = 1; 							//mark with a temporary mark
 	      	marks.splice(n, 1)						//remove node n from marks
 	      	to_visit--;								//remove the amount of nodes that need to be visited
 	      	for (var y = 0; y < m_length; y++){
-	      		if (data[n][y] > 0){visit(y, data)}
+	      		if (stop == 1){						//check if you should visit the next node
+	      			return							//if not return
+	      		}else if (data[n][y] > 0){visit(y, data)}			//if you should visit the node
 	      	}
 	      	nodes[n] = 0;							//mark with a permanent mark instead of a temporary one
 	      	permutation.unshift(n);					//insert n into the front of the permutation list
